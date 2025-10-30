@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-10-30
+
+### Added
+- Added `listDatabaseUsers()` method to retrieve database users for a server
+- Added `listDeployments()` method to retrieve deployment history for a site
+- Added `listDomains()` method to retrieve domains for a site
+
 ## [0.3.0] - 2025-10-30
 
 ### Added
@@ -45,7 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/releases/tag/v0.1.0
