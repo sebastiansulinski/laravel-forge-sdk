@@ -1,8 +1,8 @@
 # Laravel Forge API V2 SDK
 
-A modern Laravel package for interacting with the Laravel Forge API V2.
+An unofficial, type-safe Laravel package for interacting with the Laravel Forge API V2.
 
-> **Note:** This package is a work in progress. Additional actions and features will be added over time as the Forge documentation gets updated and the SDK evolves to provide more comprehensive coverage of the Forge API.
+> **Note:** This is an **unofficial SDK**. Laravel Forge's official SDK currently only supports API v1. This package is a work in progress and additional actions will be added over time as the Forge API v2 documentation gets updated.
 
 ## Requirements
 

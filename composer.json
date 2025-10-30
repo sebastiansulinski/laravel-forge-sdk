@@ -1,6 +1,6 @@
 {
   "name": "sebastiansulinski/laravel-forge-sdk",
-  "description": "A type-safe PHP SDK for Laravel Forge API v2 with fluent actions for managing servers, sites, deployments, and certificates.",
+  "description": "An unofficial, type-safe PHP SDK for Laravel Forge API v2 with fluent actions for managing servers, sites, deployments, and certificates.",
   "type": "library",
   "license": "MIT",
   "keywords": [
