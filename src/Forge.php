@@ -20,6 +20,9 @@ use SebastianSulinski\LaravelForgeSdk\Actions\GetEnvContent;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetNginxTemplateByName;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetServer;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetSite;
+use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseUsers;
+use SebastianSulinski\LaravelForgeSdk\Actions\ListDeployments;
+use SebastianSulinski\LaravelForgeSdk\Actions\ListDomains;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListServers;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListSites;
 use SebastianSulinski\LaravelForgeSdk\Actions\UpdateDeploymentScript;
@@ -37,6 +40,8 @@ use SebastianSulinski\LaravelForgeSdk\Payload\CreateCommandPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\UpdateDeploymentScriptPayload;
@@ -63,7 +68,7 @@ readonly class Forge
         ListServersPayload $payload = new ListServersPayload
     ): Collection {
         return $this->app->make(ListServers::class)
-            ->handle(payload: $payload);
+            ->handle($payload);
     }
 
     /**
@@ -263,6 +268,24 @@ readonly class Forge
     }
 
     /**
+     * List database users.
+     *
+     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser>
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function listDatabaseUsers(
+        int $serverId,
+        ListDatabaseUsersPayload $payload = new ListDatabaseUsersPayload
+    ): Collection {
+        return $this->app->make(ListDatabaseUsers::class)->handle(
+            serverId: $serverId, payload: $payload
+        );
+    }
+
+    /**
      * Delete database user.
      *
      * @throws \Illuminate\Http\Client\ConnectionException
@@ -272,7 +295,7 @@ readonly class Forge
     public function deleteDatabaseUser(int $serverId, int $databaseUserId): void
     {
         $this->app->make(DeleteDatabaseUser::class)
-            ->handle($serverId, $databaseUserId);
+            ->handle(serverId: $serverId, databaseUserId: $databaseUserId);
     }
 
     /**
@@ -350,6 +373,27 @@ readonly class Forge
     }
 
     /**
+     * List deployments.
+     *
+     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Deployment>
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    public function listDeployments(
+        int $serverId,
+        int $siteId,
+        ListDeploymentsPayload $payload = new ListDeploymentsPayload,
+    ): Collection {
+        return $this->app->make(ListDeployments::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            payload: $payload
+        );
+    }
+
+    /**
      * Create a domain.
      *
      * @throws \Illuminate\Http\Client\ConnectionException
@@ -367,6 +411,23 @@ readonly class Forge
                 siteId: $siteId,
                 payload: $payload
             );
+    }
+
+    /**
+     * List domains.
+     *
+     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Domain>
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    public function listDomains(int $serverId, int $siteId): Collection
+    {
+        return $this->app->make(ListDomains::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId
+        );
     }
 
     /**
