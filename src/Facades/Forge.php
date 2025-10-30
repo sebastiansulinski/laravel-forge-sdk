@@ -8,6 +8,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
+use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Forge as ForgeService;
@@ -42,6 +43,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
  * @method static string getDeploymentScript(int $serverId, int $siteId)
  * @method static void updateDeploymentScript(int $serverId, int $siteId, UpdateDeploymentScriptPayload $payload)
  * @method static void createDomain(int $serverId, int $siteId, CreateDomainPayload $payload)
+ * @method static ?NginxTemplate getNginxTemplateByName(int $serverId, string $templateName)
  *
  * @see \SebastianSulinski\LaravelForgeSdk\Forge
  */
