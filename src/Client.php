@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk;
 
+use Illuminate\Container\Attributes\Config;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
@@ -16,8 +17,11 @@ readonly class Client
      * Client constructor.
      */
     public function __construct(
+        #[Config('forge.token')]
         private string $token,
+        #[Config('forge.timeout')]
         private int $timeout,
+        #[Config('forge.organisation')]
         public string $organisation,
     ) {}
 

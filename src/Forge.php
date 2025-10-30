@@ -36,6 +36,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\UpdateDeploymentScriptPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\UpdateEnvContentPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
@@ -56,8 +57,9 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function listServers(ListServersPayload $payload): Collection
-    {
+    public function listServers(
+        ListServersPayload $payload = new ListServersPayload
+    ): Collection {
         return $this->app->make(ListServers::class)
             ->handle(payload: $payload);
     }
@@ -84,9 +86,13 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function listSites(int $serverId): Collection
-    {
-        return $this->app->make(ListSites::class)->handle($serverId);
+    public function listSites(
+        int $serverId,
+        ListSitesPayload $payload = new ListSitesPayload
+    ): Collection {
+        return $this->app->make(ListSites::class)->handle(
+            serverId: $serverId, payload: $payload
+        );
     }
 
     /**
