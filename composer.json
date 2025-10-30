@@ -1,0 +1,61 @@
+{
+    "name": "sebastiansulinski/laravel-forge-sdk",
+    "description": "A set of actions for Laravel Forge API V2",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "forge",
+        "sdk",
+        "api"
+    ],
+    "authors": [
+        {
+            "name": "Sebastian Sulinski",
+            "email": "sebastian@sulinski.co.uk"
+        }
+    ],
+    "require": {
+        "php": "^8.3|^8.4",
+        "illuminate/support": "^12.0",
+        "illuminate/http": "^12.0",
+        "illuminate/container": "^12.0",
+        "illuminate/config": "^12.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.25",
+        "orchestra/testbench": "^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SebastianSulinski\\LaravelForgeSdk\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SebastianSulinski\\LaravelForgeSdk\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SebastianSulinski\\LaravelForgeSdk\\ForgeServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

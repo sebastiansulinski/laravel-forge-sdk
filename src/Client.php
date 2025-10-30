@@ -1,0 +1,117 @@
+<?php
+
+namespace SebastianSulinski\LaravelForgeSdk;
+
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
+use JsonSerializable;
+
+readonly class Client
+{
+    private const string BASE_URL = 'https://forge.laravel.com/api';
+
+    /**
+     * Client constructor.
+     */
+    public function __construct(
+        private string $token,
+        private int $timeout,
+        public string $organisation,
+    ) {}
+
+    /**
+     * Perform GET request.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
+    public function get(
+        string $path,
+        string|array|null $query = null,
+        ?array $headers = null
+    ): Response {
+        return $this->http($headers)->get($path, $query);
+    }
+
+    /**
+     * Get an instance of the http client.
+     */
+    public function http(?array $headers = null): PendingRequest
+    {
+        $request = Http::baseUrl(self::BASE_URL)
+            ->asJson()
+            ->acceptJson()
+            ->withToken($this->token)
+            ->timeout($this->timeout);
+
+        if ($headers) {
+            return $request->withHeaders($headers);
+        }
+
+        return $request;
+    }
+
+    /**
+     * Perform POST request.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
+    public function post(
+        string $path,
+        array|Arrayable|JsonSerializable $data = [],
+        ?array $headers = null
+    ): Response {
+        return $this->http($headers)->post($path, $data);
+    }
+
+    /**
+     * Perform PATCH request.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
+    public function patch(
+        string $path,
+        array|Arrayable|JsonSerializable $data = [],
+        ?array $headers = null
+    ): Response {
+        return $this->http($headers)->patch($path, $data);
+    }
+
+    /**
+     * Perform PUT request.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
+    public function put(
+        string $path,
+        array|Arrayable|JsonSerializable $data = [],
+        ?array $headers = null
+    ): Response {
+        return $this->http($headers)->put($path, $data);
+    }
+
+    /**
+     * Perform DELETE request.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
+    public function delete(
+        string $path,
+        array|Arrayable|JsonSerializable $data = [],
+        ?array $headers = null
+    ): Response {
+        return $this->http($headers)->delete($path, $data);
+    }
+
+    /**
+     * Parse path by prepending organisation.
+     */
+    public function path(string $path): string
+    {
+        return vsprintf('/orgs/%s/%s', [
+            $this->organisation,
+            ltrim($path, '/'),
+        ]);
+    }
+}
