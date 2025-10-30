@@ -38,6 +38,7 @@ use SebastianSulinski\LaravelForgeSdk\Forge;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
 
 class DeploySiteJob
 {
@@ -45,14 +46,26 @@ class DeploySiteJob
 
     public function handle(): void
     {
-        // List all servers
-        $servers = $this->forge->listServers(new ListServersPayload());
+        // List all servers with filters
+        $servers = $this->forge->listServers(
+            new ListServersPayload(
+                filterProvider: 'digitalocean',
+                filterRegion: 'lon1',
+                pageSize: 20
+            )
+        );
 
         // Get a specific server
         $server = $this->forge->getServer(serverId: 123);
 
-        // List sites on a server
-        $sites = $this->forge->listSites(serverId: 123, payload: new ListSitesPayload());
+        // List sites on a server with includes
+        $sites = $this->forge->listSites(
+            serverId: 123,
+            payload: new ListSitesPayload(
+                filterName: 'example.com',
+                include: [SiteInclude::LatestDeployment, SiteInclude::Server]
+            )
+        );
 
         // Create a new site
         $site = $this->forge->createSite(
@@ -117,15 +130,28 @@ use SebastianSulinski\LaravelForgeSdk\Facades\Forge;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
 
-// List all servers
-$servers = Forge::listServers(new ListServersPayload());
+// List all servers with filters
+$servers = Forge::listServers(
+    new ListServersPayload(
+        filterProvider: 'digitalocean',
+        filterRegion: 'lon1',
+        pageSize: 20
+    )
+);
 
 // Get a specific server
 $server = Forge::getServer(serverId: 123);
 
-// List sites on a server
-$sites = Forge::listSites(serverId: 123, payload: new ListSitesPayload());
+// List sites on a server with includes
+$sites = Forge::listSites(
+    serverId: 123,
+    payload: new ListSitesPayload(
+        filterName: 'example.com',
+        include: [SiteInclude::LatestDeployment, SiteInclude::Server]
+    )
+);
 
 // Create a new site
 $site = Forge::createSite(
