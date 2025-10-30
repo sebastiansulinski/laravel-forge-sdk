@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-10-30
+
 ### Changed
 - **Breaking:** Updated `Forge::updateEnvContent()` method signature to accept `UpdateEnvContentPayload` instead of `string $content` for more flexible environment updates with optional parameters (cache, queues, encryption_key)
 
@@ -38,5 +40,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/releases/tag/v0.1.0
