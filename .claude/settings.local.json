@@ -3,7 +3,9 @@
     "allow": [
       "Bash(vendor/bin/pest:*)",
       "Bash(composer test:*)",
-      "Bash(php -r:*)"
+      "Bash(php -r:*)",
+      "WebFetch(domain:camberwellgreensurgery.nhs.uk)",
+      "WebFetch(domain:www.camberwellgreensurgery.nhs.uk)"
     ],
     "deny": [],
     "ask": []
