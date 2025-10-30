@@ -2,8 +2,12 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 
+/**
+ * @phpstan-type QueryArray array<string, string|int|null|array<string|int|null>>
+ */
 readonly class FetchAllPages
 {
     /**
@@ -13,6 +17,9 @@ readonly class FetchAllPages
 
     /**
      * Fetch all paginated results.
+     *
+     * @param  QueryArray  $query
+     * @return QueryArray
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -34,9 +41,12 @@ readonly class FetchAllPages
 
             $response = $this->client->get($path, $currentQuery)->throw();
 
+            /** @var QueryArray $data */
             $data = $response->json('data', []);
+
             $allResults = array_merge($allResults, $data);
 
+            /** @var string|null $cursor */
             $cursor = $response->json('meta.next_cursor');
 
             if ($cursor !== null) {
@@ -50,7 +60,7 @@ readonly class FetchAllPages
     /**
      * Handle rate limiting between pagination requests.
      */
-    private function handleRateLimiting($response): void
+    private function handleRateLimiting(Response $response): void
     {
         $remaining = (int) $response->header('X-RateLimit-Remaining');
         $resetTime = (int) $response->header('X-RateLimit-Reset');

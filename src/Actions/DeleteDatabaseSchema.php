@@ -20,7 +20,7 @@ readonly class DeleteDatabaseSchema
     public function handle(int $serverId, int $databaseId): void
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/database/schemas/%s', $serverId, $databaseId)
+            '/servers/%s/database/schemas/%s', $serverId, $databaseId
         );
 
         $this->client->delete($path)->throw();

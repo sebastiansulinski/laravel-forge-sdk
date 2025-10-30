@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
@@ -26,17 +27,32 @@ readonly class GetDomainCertificate
     public function handle(int $serverId, int $siteId, int $domainRecordId): Certificate
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/domains/%s/certificate', $serverId, $siteId, $domainRecordId)
+            '/servers/%s/sites/%s/domains/%s/certificate',
+            $serverId,
+            $siteId,
+            $domainRecordId
         );
 
         $response = $this->client->get($path)->throw();
 
-        $data = $response->json('data', []);
+        $data = $this->responseData($response);
 
         if (empty($data)) {
             throw new RequestFailed('Unable to get domain certificate.');
         }
 
         return $this->makeCertificate($serverId, $siteId, $domainRecordId, $data);
+    }
+
+    /**
+     * Get the response data.
+     *
+     * @return array<string, mixed>
+     */
+    private function responseData(Response $response): array
+    {
+        $data = $response->json('data', []);
+
+        return is_array($data) ? $data : [];
     }
 }

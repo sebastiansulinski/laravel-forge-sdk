@@ -2,8 +2,8 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
-use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use Carbon\Carbon;
+use SebastianSulinski\LaravelForgeSdk\Data\Server;
 
 trait HasServer
 {

@@ -2,9 +2,12 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Payload;
 
-use SebastianSulinski\LaravelForgeSdk\Enums\WwwRedirectType;
 use Illuminate\Contracts\Support\Arrayable;
+use SebastianSulinski\LaravelForgeSdk\Enums\WwwRedirectType;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 readonly class CreateDomainPayload implements Arrayable
 {
     /**

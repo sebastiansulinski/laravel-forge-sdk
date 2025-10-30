@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 
 readonly class GetEnvContent
@@ -20,11 +21,21 @@ readonly class GetEnvContent
     public function handle(int $serverId, int $siteId): string
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/environment', $serverId, $siteId)
+            '/servers/%s/sites/%s/environment', $serverId, $siteId
         );
 
         $response = $this->client->get($path)->throw();
 
-        return $response->json('data.attributes.content', '');
+        return $this->environmentContent($response);
+    }
+
+    /**
+     * Get the environment content.
+     */
+    private function environmentContent(Response $response): string
+    {
+        $content = $response->json('data.attributes.content', '');
+
+        return is_string($content) ? $content : '';
     }
 }

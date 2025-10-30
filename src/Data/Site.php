@@ -9,6 +9,9 @@ readonly class Site
 {
     /**
      * Site constructor.
+     *
+     * @param  array<int, string>  $aliases
+     * @param  array<int, string>  $sharedPaths
      */
     public function __construct(
         public int $id,

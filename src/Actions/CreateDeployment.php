@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
@@ -26,17 +27,29 @@ readonly class CreateDeployment
     public function handle(int $serverId, int $siteId): Deployment
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/deployments', $serverId, $siteId)
+            '/servers/%s/sites/%s/deployments', $serverId, $siteId
         );
 
         $response = $this->client->post($path)->throw();
 
-        $data = $response->json('data', []);
+        $data = $this->responseData($response);
 
         if (empty($data)) {
             throw new RequestFailed('Unable to create deployment.');
         }
 
         return $this->makeDeployment($serverId, $siteId, $data);
+    }
+
+    /**
+     * Get the response data.
+     *
+     * @return array<string, mixed>
+     */
+    private function responseData(Response $response): array
+    {
+        $data = $response->json('data', []);
+
+        return is_array($data) ? $data : [];
     }
 }

@@ -2,8 +2,8 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
-use SebastianSulinski\LaravelForgeSdk\Enums\DatabaseStatus;
 use Carbon\Carbon;
+use SebastianSulinski\LaravelForgeSdk\Enums\DatabaseStatus;
 
 readonly class Database
 {

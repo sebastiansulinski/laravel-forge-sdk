@@ -17,7 +17,7 @@ readonly class DeleteDatabaseUser
     public function handle(int $serverId, int $databaseUserId): void
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/database/users/%s', $serverId, $databaseUserId)
+            '/servers/%s/database/users/%s', $serverId, $databaseUserId
         );
 
         $this->client->delete($path)->throw();

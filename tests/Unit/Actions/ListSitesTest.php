@@ -119,19 +119,25 @@ it('lists sites', function () {
         )
     );
 
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Site $first */
+    $first = $sites->first();
+
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Site $last */
+    $last = $sites->last();
+
     expect($sites)->toHaveCount(2)
-        ->and($sites->first()->id)->toBe(456)
-        ->and($sites->first()->name)->toBe('example.com')
-        ->and($sites->first()->status->value)->toBe('installed')
-        ->and($sites->first()->url)->toBe('https://example.com')
-        ->and($sites->first()->webDirectory)->toBe('/public')
-        ->and($sites->first()->phpVersion)->toBe('php84')
-        ->and($sites->first()->repository->provider)->toBe('github')
-        ->and($sites->first()->repository->branch)->toBe('main')
-        ->and($sites->last()->id)->toBe(789)
-        ->and($sites->last()->name)->toBe('test.com')
-        ->and($sites->last()->zeroDowntimeDeployments)->toBe(true)
-        ->and($sites->last()->quickDeploy)->toBe(true);
+        ->and($first->id)->toBe(456)
+        ->and($first->name)->toBe('example.com')
+        ->and($first->status->value)->toBe('installed')
+        ->and($first->url)->toBe('https://example.com')
+        ->and($first->webDirectory)->toBe('/public')
+        ->and($first->phpVersion)->toBe('php84')
+        ->and($first->repository->provider)->toBe('github')
+        ->and($first->repository->branch)->toBe('main')
+        ->and($last->id)->toBe(789)
+        ->and($last->name)->toBe('test.com')
+        ->and($last->zeroDowntimeDeployments)->toBe(true)
+        ->and($last->quickDeploy)->toBe(true);
 
     Http::assertSent(function (Request $request) {
         return str_contains($request->url(), 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites')

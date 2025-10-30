@@ -22,7 +22,7 @@ readonly class UpdateSite
     public function handle(int $serverId, int $siteId, UpdateSitePayload $payload): void
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s', $serverId, $siteId)
+            '/servers/%s/sites/%s', $serverId, $siteId
         );
 
         $this->client->put($path, $payload->toArray())->throw();

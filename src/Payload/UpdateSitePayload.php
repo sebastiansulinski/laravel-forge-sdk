@@ -2,10 +2,13 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Payload;
 
+use Illuminate\Contracts\Support\Arrayable;
 use SebastianSulinski\LaravelForgeSdk\Enums\PhpVersion;
 use SebastianSulinski\LaravelForgeSdk\Enums\SiteType;
-use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 readonly class UpdateSitePayload implements Arrayable
 {
     /**

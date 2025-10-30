@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# Check for staged files
+staged_files=$(git diff --cached --name-only --diff-filter=d)
+
+# File extensions to check
+extensions=("php" "js" "vue" "ts" "css")
+
+# Join extensions with regex OR operator
+extensions_regex=$(IFS="|"; echo "${extensions[*]}")
+
+# Check for matching files
+matching_files=$(echo "$staged_files" | grep -E "\\.($extensions_regex)$")
+
+# Commit fail message
+fail="Commit aborted. Please fix the issues before committing."
+
+# Run Laravel Pint
+echo "Running Laravel Pint..."
+vendor/bin/pint
+
+# Check if either of the commands failed
+if [ $? -ne 0 ]; then echo ""; echo $fail; exit 1; fi
+
+# Run PHPStan
+echo "Running PHPStan Static Analysis..."
+composer phpstan
+
+# Check if either of the commands failed
+if [ $? -ne 0 ]; then echo ""; echo $fail; exit 1; fi
+
+# Add any unstaged files processed by pint (if any)
+if [ ! -z "$staged_files" ]; then
+    printf "$staged_files" | xargs git add
+fi
+
+# Run Pest tests
+echo "Running Pest Tests..."
+script -q /dev/null vendor/bin/pest --compact --colors=always
+
+# Check if either of the commands failed
+if [ $? -ne 0 ]; then echo ""; echo $fail; exit 1; fi
+
+# Run Deptrac analysis
+echo "Running Deptrac Analysis..."
+composer deptrac
+
+# Check if either of the commands failed
+if [ $? -ne 0 ]; then echo ""; echo $fail; exit 1; fi
+
+exit 0

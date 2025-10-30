@@ -2,10 +2,10 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
+use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Enums\DomainStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\DomainType;
 use SebastianSulinski\LaravelForgeSdk\Enums\WwwRedirectType;
-use Carbon\Carbon;
 
 readonly class Domain
 {

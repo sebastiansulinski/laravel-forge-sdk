@@ -2,8 +2,8 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
-use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use Carbon\Carbon;
+use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 
 trait HasNginxTemplate
 {

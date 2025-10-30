@@ -85,17 +85,23 @@ it('lists servers', function () {
         )
     );
 
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Server $first */
+    $first = $servers->first();
+
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Server $last */
+    $last = $servers->last();
+
     expect($servers)->toHaveCount(2)
-        ->and($servers->first()->id)->toBe(1)
-        ->and($servers->first()->name)->toBe('production-server')
-        ->and($servers->first()->provider)->toBe('digitalocean')
-        ->and($servers->first()->region)->toBe('lon1')
-        ->and($servers->first()->ipAddress)->toBe('192.168.1.1')
-        ->and($servers->first()->isReady)->toBe(true)
-        ->and($servers->first()->type)->toBe('app')
-        ->and($servers->last()->id)->toBe(2)
-        ->and($servers->last()->name)->toBe('staging-server')
-        ->and($servers->last()->region)->toBe('nyc1');
+        ->and($first->id)->toBe(1)
+        ->and($first->name)->toBe('production-server')
+        ->and($first->provider)->toBe('digitalocean')
+        ->and($first->region)->toBe('lon1')
+        ->and($first->ipAddress)->toBe('192.168.1.1')
+        ->and($first->isReady)->toBe(true)
+        ->and($first->type)->toBe('app')
+        ->and($last->id)->toBe(2)
+        ->and($last->name)->toBe('staging-server')
+        ->and($last->region)->toBe('nyc1');
 
     Http::assertSent(function (Request $request) {
         return str_contains($request->url(), 'https://forge.laravel.com/api/orgs/test-org/servers')

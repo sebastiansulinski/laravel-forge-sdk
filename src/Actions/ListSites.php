@@ -22,7 +22,7 @@ readonly class ListSites
     /**
      * Handle request.
      *
-     * @return Collection<\SebastianSulinski\LaravelForgeSdk\Data\Site>
+     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Site>
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -33,11 +33,12 @@ readonly class ListSites
     ): Collection {
 
         $allSites = $this->fetchAllPages->handle(
-            path: $this->client->path(sprintf('/servers/%s/sites', $serverId)),
+            path: $this->client->path('/servers/%s/sites', $serverId),
             query: $payload->toQuery(),
             initialCursor: $payload->pageCursor
         );
 
+        /** @var array<int, array<string, mixed>> $allSites */
         return new Collection($allSites)->map(
             fn (array $site) => $this->makeSite($site)
         );

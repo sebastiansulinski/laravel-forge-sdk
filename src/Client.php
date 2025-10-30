@@ -28,6 +28,9 @@ readonly class Client
     /**
      * Perform GET request.
      *
+     * @param  string|array<string, mixed>|null  $query
+     * @param  array<string, string>|null  $headers
+     *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
     public function get(
@@ -40,6 +43,8 @@ readonly class Client
 
     /**
      * Get an instance of the http client.
+     *
+     * @param  array<string, string>|null  $headers
      */
     public function http(?array $headers = null): PendingRequest
     {
@@ -59,6 +64,9 @@ readonly class Client
     /**
      * Perform POST request.
      *
+     * @param  array<string, mixed>|Arrayable<string, mixed>|JsonSerializable  $data
+     * @param  array<string, string>|null  $headers
+     *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
     public function post(
@@ -71,6 +79,9 @@ readonly class Client
 
     /**
      * Perform PATCH request.
+     *
+     * @param  array<string, mixed>|Arrayable<string, mixed>|JsonSerializable  $data
+     * @param  array<string, string>|null  $headers
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
@@ -85,6 +96,9 @@ readonly class Client
     /**
      * Perform PUT request.
      *
+     * @param  array<string, mixed>|Arrayable<string, mixed>|JsonSerializable  $data
+     * @param  array<string, string>|null  $headers
+     *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
     public function put(
@@ -97,6 +111,9 @@ readonly class Client
 
     /**
      * Perform DELETE request.
+     *
+     * @param  array<string, mixed>|Arrayable<string, mixed>|JsonSerializable  $data
+     * @param  array<string, string>|null  $headers
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      */
@@ -111,11 +128,13 @@ readonly class Client
     /**
      * Parse path by prepending organisation.
      */
-    public function path(string $path): string
+    public function path(string $path, string|int ...$arguments): string
     {
-        return vsprintf('/orgs/%s/%s', [
+        $basePath = '/orgs/%s/'.ltrim($path, '/');
+
+        return vsprintf($basePath, [
             $this->organisation,
-            ltrim($path, '/'),
+            ...$arguments,
         ]);
     }
 }

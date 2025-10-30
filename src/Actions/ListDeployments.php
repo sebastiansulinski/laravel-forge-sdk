@@ -2,10 +2,10 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDeployment;
-use Illuminate\Support\Collection;
 
 readonly class ListDeployments
 {
@@ -22,7 +22,7 @@ readonly class ListDeployments
     /**
      * Handle request.
      *
-     * @return Collection<\SebastianSulinski\LaravelForgeSdk\Data\Deployment>
+     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Deployment>
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -33,9 +33,10 @@ readonly class ListDeployments
         ListDeploymentsPayload $payload = new ListDeploymentsPayload,
     ): Collection {
 
+        /** @var array<int, array<string, mixed>> $allDeployments */
         $allDeployments = $this->fetchAllPages->handle(
             path: $this->client->path(
-                sprintf('/servers/%s/sites/%s/deployments', $serverId, $siteId)
+                '/servers/%s/sites/%s/deployments', $serverId, $siteId
             ),
             query: $payload->toQuery(),
             initialCursor: $payload->pageCursor

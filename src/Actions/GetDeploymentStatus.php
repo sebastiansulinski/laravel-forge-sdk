@@ -2,12 +2,22 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Carbon\Carbon;
+use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\DeploymentStatus as DeploymentStatusEnum;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
-use Carbon\Carbon;
 
+/**
+ * @phpstan-type DataArray array{
+ *     id: string,
+ *     attributes: array{
+ *         status: string,
+ *         started_at: string
+ *     }
+ * }
+ */
 readonly class GetDeploymentStatus
 {
     /**
@@ -25,12 +35,12 @@ readonly class GetDeploymentStatus
     public function handle(int $serverId, int $siteId): DeploymentStatus
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/deployments/status', $serverId, $siteId)
+            '/servers/%s/sites/%s/deployments/status', $serverId, $siteId
         );
 
         $response = $this->client->get($path)->throw();
 
-        $data = $response->json('data', []);
+        $data = $this->responseData($response);
 
         if (empty($data)) {
             throw new RequestFailed('Unable to get deployment status.');
@@ -40,7 +50,21 @@ readonly class GetDeploymentStatus
     }
 
     /**
+     * Get the response data.
+     *
+     * @return DataArray|array{}
+     */
+    private function responseData(Response $response): array
+    {
+        $data = $response->json('data', []);
+
+        return is_array($data) ? $data : [];
+    }
+
+    /**
      * Make a deployment status.
+     *
+     * @param  DataArray  $data
      */
     private function makeDeploymentStatus(int $serverId, int $siteId, array $data): DeploymentStatus
     {

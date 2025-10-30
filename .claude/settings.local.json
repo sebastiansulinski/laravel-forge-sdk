@@ -5,7 +5,12 @@
       "Bash(composer test:*)",
       "Bash(php -r:*)",
       "WebFetch(domain:camberwellgreensurgery.nhs.uk)",
-      "WebFetch(domain:www.camberwellgreensurgery.nhs.uk)"
+      "WebFetch(domain:www.camberwellgreensurgery.nhs.uk)",
+      "Bash(composer require:*)",
+      "Bash(composer phpstan:*)",
+      "Bash(vendor/bin/phpstan analyse:*)",
+      "Bash(composer remove:*)",
+      "Bash(composer deptrac:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,61 +1,73 @@
 {
-    "name": "sebastiansulinski/laravel-forge-sdk",
-    "description": "A type-safe PHP SDK for Laravel Forge API v2 with fluent actions for managing servers, sites, deployments, and certificates.",
-    "type": "library",
-    "license": "MIT",
-    "keywords": [
-        "laravel",
-        "forge",
-        "sdk",
-        "api"
+  "name": "sebastiansulinski/laravel-forge-sdk",
+  "description": "A type-safe PHP SDK for Laravel Forge API v2 with fluent actions for managing servers, sites, deployments, and certificates.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "forge",
+    "sdk",
+    "api"
+  ],
+  "authors": [
+    {
+      "name": "Sebastian Sulinski",
+      "email": "sebastian@sulinski.co.uk"
+    }
+  ],
+  "require": {
+    "php": "^8.4|^8.5",
+    "illuminate/support": "^12.0",
+    "illuminate/http": "^12.0",
+    "illuminate/container": "^12.0",
+    "illuminate/config": "^12.0"
+  },
+  "require-dev": {
+    "deptrac/deptrac": "^4.2",
+    "larastan/larastan": "^3.7",
+    "laravel/pint": "^1.25",
+    "orchestra/testbench": "^10.0",
+    "pestphp/pest": "^3.0",
+    "pestphp/pest-plugin-laravel": "^3.0",
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^11.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "SebastianSulinski\\LaravelForgeSdk\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SebastianSulinski\\LaravelForgeSdk\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/pest",
+    "test-coverage": "vendor/bin/pest --coverage",
+    "phpstan": "vendor/bin/phpstan analyse",
+    "deptrac": "vendor/bin/deptrac analyse --config-file=deptrac.yaml",
+    "copy-git-hooks": [
+      "@php -r \"is_dir('.git') && copy('./scripts/git/hooks/pre-commit', '.git/hooks/pre-commit');\"",
+      "if [ -d .git ]; then chmod +x .git/hooks/pre-commit; else echo 'Git hooks directory or file does not exist.'; fi"
     ],
-    "authors": [
-        {
-            "name": "Sebastian Sulinski",
-            "email": "sebastian@sulinski.co.uk"
-        }
-    ],
-    "require": {
-        "php": "^8.4|^8.5",
-        "illuminate/support": "^12.0",
-        "illuminate/http": "^12.0",
-        "illuminate/container": "^12.0",
-        "illuminate/config": "^12.0"
-    },
-    "require-dev": {
-        "laravel/pint": "^1.25",
-        "orchestra/testbench": "^10.0",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0",
-        "phpunit/phpunit": "^11.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "SebastianSulinski\\LaravelForgeSdk\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "SebastianSulinski\\LaravelForgeSdk\\Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/pest",
-        "test-coverage": "vendor/bin/pest --coverage"
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "SebastianSulinski\\LaravelForgeSdk\\ForgeServiceProvider"
-            ]
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "post-autoload-dump": [
+      "@composer run copy-git-hooks"
+    ]
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "SebastianSulinski\\LaravelForgeSdk\\ForgeServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

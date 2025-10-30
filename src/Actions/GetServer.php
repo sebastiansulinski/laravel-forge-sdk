@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
@@ -25,16 +26,28 @@ readonly class GetServer
      */
     public function handle(int $serverId): Server
     {
-        $path = $this->client->path(sprintf('/servers/%s', $serverId));
+        $path = $this->client->path('/servers/%s', $serverId);
 
         $response = $this->client->get($path)->throw();
 
-        $data = $response->json('data', []);
+        $data = $this->responseData($response);
 
         if (empty($data)) {
             throw new RequestFailed('Unable to get server.');
         }
 
         return $this->makeServer($data);
+    }
+
+    /**
+     * Get the response data.
+     *
+     * @return array<string, mixed>
+     */
+    private function responseData(Response $response): array
+    {
+        $data = $response->json('data', []);
+
+        return is_array($data) ? $data : [];
     }
 }

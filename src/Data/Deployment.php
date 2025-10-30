@@ -2,8 +2,8 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
-use SebastianSulinski\LaravelForgeSdk\Enums\DeploymentStatus;
 use Carbon\Carbon;
+use SebastianSulinski\LaravelForgeSdk\Enums\DeploymentStatus;
 
 readonly class Deployment
 {

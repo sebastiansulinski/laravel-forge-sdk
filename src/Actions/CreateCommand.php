@@ -22,7 +22,7 @@ readonly class CreateCommand
     public function handle(int $serverId, int $siteId, CreateCommandPayload $payload): void
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/commands', $serverId, $siteId)
+            '/servers/%s/sites/%s/commands', $serverId, $siteId
         );
 
         $this->client->post($path, $payload->toArray())->throw();

@@ -2,10 +2,10 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDatabaseUser;
-use Illuminate\Support\Collection;
 
 readonly class ListDatabaseUsers
 {
@@ -22,7 +22,7 @@ readonly class ListDatabaseUsers
     /**
      * Handle request.
      *
-     * @return Collection<\SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser>
+     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser>
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -34,12 +34,13 @@ readonly class ListDatabaseUsers
 
         $allUsers = $this->fetchAllPages->handle(
             path: $this->client->path(
-                sprintf('/servers/%s/database/users', $serverId)
+                '/servers/%s/database/users', $serverId
             ),
             query: $payload->toQuery(),
             initialCursor: $payload->pageCursor
         );
 
+        /** @var array<int, array<string, mixed>> $allUsers */
         return new Collection($allUsers)->map(
             fn (array $user) => $this->makeDatabaseUser($serverId, $user)
         );

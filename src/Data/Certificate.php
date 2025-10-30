@@ -2,12 +2,12 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
+use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Enums\CertificateKeyType;
 use SebastianSulinski\LaravelForgeSdk\Enums\CertificateRequestStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\CertificateStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\CertificateType;
 use SebastianSulinski\LaravelForgeSdk\Enums\CertificateVerificationMethod;
-use Carbon\Carbon;
 
 readonly class Certificate
 {

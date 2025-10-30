@@ -2,10 +2,10 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasServer;
-use Illuminate\Support\Collection;
 
 readonly class ListServers
 {
@@ -22,7 +22,7 @@ readonly class ListServers
     /**
      * Handle request.
      *
-     * @return Collection<\SebastianSulinski\LaravelForgeSdk\Data\Server>
+     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Server>
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -35,6 +35,7 @@ readonly class ListServers
             initialCursor: $payload->pageCursor
         );
 
+        /** @var array<int, array<string, mixed>> $allServers */
         return new Collection($allServers)->map(
             fn (array $server) => $this->makeServer($server)
         );

@@ -20,7 +20,7 @@ readonly class DeleteSite
     public function handle(int $serverId, int $siteId): void
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s', $serverId, $siteId)
+            '/servers/%s/sites/%s', $serverId, $siteId
         );
 
         $this->client->delete($path)->throw();

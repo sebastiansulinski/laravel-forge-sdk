@@ -1,0 +1,15 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 9
+    paths:
+        - src
+    tmpDir: build/phpstan
+    ignoreErrors:
+        -
+            message: '#Method .+::responseData\(\) should return .+ but returns (array<mixed>|mixed)\.$#'
+            path: src/Actions/*.php
+        -
+            message: '#Method .+::make.+\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+            path: src/Traits/*.php

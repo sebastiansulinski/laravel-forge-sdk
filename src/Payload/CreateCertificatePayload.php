@@ -2,9 +2,12 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Payload;
 
-use SebastianSulinski\LaravelForgeSdk\Enums\CertificateType;
 use Illuminate\Contracts\Support\Arrayable;
+use SebastianSulinski\LaravelForgeSdk\Enums\CertificateType;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 abstract readonly class CreateCertificatePayload implements Arrayable
 {
     /**

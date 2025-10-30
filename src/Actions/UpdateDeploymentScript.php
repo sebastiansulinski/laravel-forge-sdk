@@ -22,7 +22,7 @@ readonly class UpdateDeploymentScript
     public function handle(int $serverId, int $siteId, UpdateDeploymentScriptPayload $payload): void
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/deployments/script', $serverId, $siteId)
+            '/servers/%s/sites/%s/deployments/script', $serverId, $siteId
         );
 
         $this->client->put($path, $payload->toArray())->throw();

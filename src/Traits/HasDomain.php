@@ -2,11 +2,11 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
+use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Domain;
 use SebastianSulinski\LaravelForgeSdk\Enums\DomainStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\DomainType;
 use SebastianSulinski\LaravelForgeSdk\Enums\WwwRedirectType;
-use Carbon\Carbon;
 
 trait HasDomain
 {

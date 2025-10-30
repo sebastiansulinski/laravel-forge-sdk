@@ -51,7 +51,7 @@ readonly class Forge
     /**
      * Get the collection of all servers.
      *
-     * @return Collection<\SebastianSulinski\LaravelForgeSdk\Data\Server>
+     * @return Collection<int, Server>
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -80,7 +80,7 @@ readonly class Forge
     /**
      * Get the collection of all server sites.
      *
-     * @return Collection<Site>
+     * @return Collection<int, Site>
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException

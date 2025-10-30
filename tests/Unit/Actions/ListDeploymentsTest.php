@@ -83,17 +83,23 @@ it('lists deployments', function () {
         )
     );
 
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Deployment $first */
+    $first = $deployments->first();
+
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Deployment $last */
+    $last = $deployments->last();
+
     expect($deployments)->toHaveCount(2)
-        ->and($deployments->first()->id)->toBe(1)
-        ->and($deployments->first()->serverId)->toBe(123)
-        ->and($deployments->first()->siteId)->toBe(456)
-        ->and($deployments->first()->status->value)->toBe('finished')
-        ->and($deployments->first()->commit->hash)->toBe('abc123')
-        ->and($deployments->first()->commit->message)->toBe('Fix bug')
-        ->and($deployments->first()->commit->author)->toBe('John Doe')
-        ->and($deployments->last()->id)->toBe(2)
-        ->and($deployments->last()->status->value)->toBe('deploying')
-        ->and($deployments->last()->commit->hash)->toBe('def456');
+        ->and($first->id)->toBe(1)
+        ->and($first->serverId)->toBe(123)
+        ->and($first->siteId)->toBe(456)
+        ->and($first->status->value)->toBe('finished')
+        ->and($first->commit->hash)->toBe('abc123')
+        ->and($first->commit->message)->toBe('Fix bug')
+        ->and($first->commit->author)->toBe('John Doe')
+        ->and($last->id)->toBe(2)
+        ->and($last->status->value)->toBe('deploying')
+        ->and($last->commit->hash)->toBe('def456');
 
     Http::assertSent(function (Request $request) {
         return str_contains($request->url(), 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments')

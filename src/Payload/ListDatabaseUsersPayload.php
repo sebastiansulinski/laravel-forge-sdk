@@ -21,6 +21,8 @@ readonly class ListDatabaseUsersPayload
 
     /**
      * Transform to a query array.
+     *
+     * @return array<string, string|int|null|array<string|int|null>>
      */
     public function toQuery(): array
     {

@@ -1,0 +1,80 @@
+deptrac:
+  paths:
+    - ./src
+  exclude_files:
+    - '#.*test.*#'
+  layers:
+    - name: Actions
+      collectors:
+        - type: classNameRegex
+          value: '#.*\\Actions\\.*#'
+    - name: Data
+      collectors:
+        - type: classNameRegex
+          value: '#.*\\Data\\.*#'
+    - name: Enums
+      collectors:
+        - type: classNameRegex
+          value: '#.*\\Enums\\.*#'
+    - name: Exceptions
+      collectors:
+        - type: classNameRegex
+          value: '#.*\\Exceptions\\.*#'
+    - name: Facades
+      collectors:
+        - type: classNameRegex
+          value: '#^SebastianSulinski\\LaravelForgeSdk\\Facades\\.*#'
+    - name: Payload
+      collectors:
+        - type: classNameRegex
+          value: '#.*\\Payload\\.*#'
+    - name: Traits
+      collectors:
+        - type: classNameRegex
+          value: '#.*\\Traits\\.*#'
+    - name: Client
+      collectors:
+        - type: classNameRegex
+          value: '#.*\\Client$#'
+    - name: ForgeService
+      collectors:
+        - type: classNameRegex
+          value: '#^SebastianSulinski\\LaravelForgeSdk\\Forge$#'
+    - name: ServiceProvider
+      collectors:
+        - type: classNameRegex
+          value: '#^SebastianSulinski\\LaravelForgeSdk\\ForgeServiceProvider$#'
+  ruleset:
+    Actions:
+      - Client
+      - Data
+      - Enums
+      - Exceptions
+      - Payload
+      - Traits
+    Data:
+      - Enums
+    Enums: []
+    Exceptions: []
+    Facades:
+      - Data
+      - ForgeService
+      - Payload
+    Payload:
+      - Enums
+      - Traits
+    Traits:
+      - Client
+      - Data
+      - Enums
+      - Payload
+    Client: []  # Client can depend on Laravel components
+    ForgeService:
+      - Actions
+      - Client
+      - Data
+      - Exceptions
+      - Payload
+    ServiceProvider:
+      - Client
+      - ForgeService

@@ -9,7 +9,7 @@ trait BuildsListQuery
     /**
      * Build query array with pagination and sorting.
      *
-     * @return array<string, mixed>
+     * @return array<string, string|int|null|array<string|int|null>>
      */
     protected function buildQuery(PaginationParameters $parameters, callable $callback): array
     {

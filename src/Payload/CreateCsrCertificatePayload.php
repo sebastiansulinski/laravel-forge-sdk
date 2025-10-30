@@ -8,6 +8,8 @@ readonly class CreateCsrCertificatePayload extends CreateCertificatePayload
 {
     /**
      * CreateCsrCertificatePayload constructor.
+     *
+     * @param  array<int, string>|null  $sans
      */
     public function __construct(
         public string $domain,

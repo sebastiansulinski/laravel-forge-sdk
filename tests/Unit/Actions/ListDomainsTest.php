@@ -52,19 +52,25 @@ it('lists domains', function () {
         siteId: 456
     );
 
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Domain $first */
+    $first = $domains->first();
+
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Domain $last */
+    $last = $domains->last();
+
     expect($domains)->toHaveCount(2)
-        ->and($domains->first()->id)->toBe(1)
-        ->and($domains->first()->serverId)->toBe(123)
-        ->and($domains->first()->siteId)->toBe(456)
-        ->and($domains->first()->name)->toBe('example.com')
-        ->and($domains->first()->type->value)->toBe('primary')
-        ->and($domains->first()->status->value)->toBe('enabled')
-        ->and($domains->first()->wwwRedirectType->value)->toBe('none')
-        ->and($domains->first()->allowWildcardSubdomains)->toBe(false)
-        ->and($domains->last()->id)->toBe(2)
-        ->and($domains->last()->name)->toBe('www.example.com')
-        ->and($domains->last()->type->value)->toBe('alias')
-        ->and($domains->last()->allowWildcardSubdomains)->toBe(true);
+        ->and($first->id)->toBe(1)
+        ->and($first->serverId)->toBe(123)
+        ->and($first->siteId)->toBe(456)
+        ->and($first->name)->toBe('example.com')
+        ->and($first->type->value)->toBe('primary')
+        ->and($first->status->value)->toBe('enabled')
+        ->and($first->wwwRedirectType->value)->toBe('none')
+        ->and($first->allowWildcardSubdomains)->toBeFalse()
+        ->and($last->id)->toBe(2)
+        ->and($last->name)->toBe('www.example.com')
+        ->and($last->type->value)->toBe('alias')
+        ->and($last->allowWildcardSubdomains)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains'

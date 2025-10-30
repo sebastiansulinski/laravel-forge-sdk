@@ -1,5 +1,6 @@
 /vendor/
 /node_modules/
+/build/
 composer.lock
 .phpunit.result.cache
 .DS_Store
@@ -14,3 +15,5 @@ Thumbs.db
 .phpunit.cache
 .pest
 .php-cs-fixer.cache
+.deptrac.cache
+.phpstan.cache

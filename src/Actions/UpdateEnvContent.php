@@ -22,7 +22,7 @@ readonly class UpdateEnvContent
     public function handle(int $serverId, int $siteId, UpdateEnvContentPayload $payload): void
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/environment', $serverId, $siteId)
+            '/servers/%s/sites/%s/environment', $serverId, $siteId
         );
 
         $this->client->put($path, $payload->toArray())->throw();

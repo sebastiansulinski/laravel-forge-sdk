@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 
 readonly class GetDeploymentScript
@@ -20,11 +21,21 @@ readonly class GetDeploymentScript
     public function handle(int $serverId, int $siteId): string
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/deployments/script', $serverId, $siteId)
+            '/servers/%s/sites/%s/deployments/script', $serverId, $siteId
         );
 
         $response = $this->client->get($path)->throw();
 
-        return $response->json('data.attributes.content', '');
+        return $this->scriptContent($response);
+    }
+
+    /**
+     * Get the script content.
+     */
+    private function scriptContent(Response $response): string
+    {
+        $content = $response->json('data.attributes.content', '');
+
+        return is_string($content) ? $content : '';
     }
 }

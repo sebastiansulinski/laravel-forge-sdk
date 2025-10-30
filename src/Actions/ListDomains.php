@@ -2,10 +2,26 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDomain;
-use Illuminate\Support\Collection;
 
+/**
+ * @phpstan-type DomainData array{
+ *     id: int,
+ *     attributes: array{
+ *         name: string,
+ *         type: string,
+ *         status: string,
+ *         www_redirect_type: string,
+ *         allow_wildcard_subdomains: bool,
+ *         created_at: string,
+ *         updated_at: string
+ *     }
+ * }
+ * @phpstan-type DataArray array<int, DomainData>
+ */
 readonly class ListDomains
 {
     use HasDomain;
@@ -18,7 +34,7 @@ readonly class ListDomains
     /**
      * Handle request.
      *
-     * @return Collection<\SebastianSulinski\LaravelForgeSdk\Data\Domain>
+     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Domain>
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -26,13 +42,23 @@ readonly class ListDomains
     public function handle(int $serverId, int $siteId): Collection
     {
         $path = $this->client->path(
-            sprintf('/servers/%s/sites/%s/domains', $serverId, $siteId)
+            '/servers/%s/sites/%s/domains', $serverId, $siteId
         );
 
         $response = $this->client->get($path)->throw();
 
-        return new Collection($response->json('data', []))->map(
+        return new Collection($this->responseData($response))->map(
             fn (array $domain) => $this->makeDomain($serverId, $siteId, $domain)
         );
+    }
+
+    /**
+     * Get the response data.
+     *
+     * @return DataArray
+     */
+    private function responseData(Response $response): array
+    {
+        return $response->json('data', []);
     }
 }

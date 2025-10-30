@@ -2,10 +2,10 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
+use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Commit;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Enums\DeploymentStatus;
-use Carbon\Carbon;
 
 trait HasDeployment
 {

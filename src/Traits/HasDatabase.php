@@ -2,9 +2,9 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
+use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Enums\DatabaseStatus;
-use Carbon\Carbon;
 
 trait HasDatabase
 {

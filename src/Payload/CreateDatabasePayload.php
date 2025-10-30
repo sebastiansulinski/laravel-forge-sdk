@@ -4,6 +4,9 @@ namespace SebastianSulinski\LaravelForgeSdk\Payload;
 
 use Illuminate\Contracts\Support\Arrayable;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 readonly class CreateDatabasePayload implements Arrayable
 {
     /**

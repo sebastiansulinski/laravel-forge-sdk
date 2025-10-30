@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
@@ -26,7 +27,7 @@ readonly class GetNginxTemplateByName
     public function handle(int $serverId, string $templateName): ?NginxTemplate
     {
         $response = $this->client->get(
-            $this->client->path(sprintf('/servers/%s/nginx/templates', $serverId)),
+            $this->client->path('/servers/%s/nginx/templates', $serverId),
             ['filter[name]' => $templateName]
         )->throw();
 
@@ -36,12 +37,24 @@ readonly class GetNginxTemplateByName
             );
         }
 
-        $data = $response->json('data.0');
+        $data = $this->responseData($response);
 
-        if (! $data) {
+        if (empty($data)) {
             return null;
         }
 
         return $this->makeNginxTemplate($serverId, $data);
+    }
+
+    /**
+     * Get the response data.
+     *
+     * @return array<string, mixed>
+     */
+    private function responseData(Response $response): array
+    {
+        $data = $response->json('data.0');
+
+        return is_array($data) ? $data : [];
     }
 }

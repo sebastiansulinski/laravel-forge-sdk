@@ -64,13 +64,19 @@ it('lists database users', function () {
         )
     );
 
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser $first */
+    $first = $users->first();
+
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser $last */
+    $last = $users->last();
+
     expect($users)->toHaveCount(2)
-        ->and($users->first()->id)->toBe(1)
-        ->and($users->first()->serverId)->toBe(123)
-        ->and($users->first()->name)->toBe('forge_user')
-        ->and($users->first()->status->value)->toBe('installed')
-        ->and($users->last()->id)->toBe(2)
-        ->and($users->last()->name)->toBe('app_user');
+        ->and($first->id)->toBe(1)
+        ->and($first->serverId)->toBe(123)
+        ->and($first->name)->toBe('forge_user')
+        ->and($first->status->value)->toBe('installed')
+        ->and($last->id)->toBe(2)
+        ->and($last->name)->toBe('app_user');
 
     Http::assertSent(function (Request $request) {
         return str_contains($request->url(), 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/users')
