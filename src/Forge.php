@@ -103,10 +103,10 @@ readonly class Forge
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @throws \SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed
      */
-    public function getSite(int $serverId, int $siteId): Site
+    public function getSite(int $siteId): Site
     {
         return $this->app->make(GetSite::class)
-            ->handle(serverId: $serverId, siteId: $siteId);
+            ->handle(siteId: $siteId);
     }
 
     /**

@@ -3,9 +3,8 @@
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
-use SebastianSulinski\LaravelForgeSdk\Actions\CreateSite;
+use SebastianSulinski\LaravelForgeSdk\Actions\GetSite;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -13,14 +12,14 @@ beforeEach(function () {
     config()->set('forge.organisation', 'test-org');
 });
 
-it('creates a site with explicit nginx template id', function () {
+it('gets site', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/sites/456' => Http::response([
             'data' => [
                 'id' => 456,
                 'attributes' => [
                     'name' => 'example.com',
-                    'status' => 'installing',
+                    'status' => 'installed',
                     'url' => 'https://example.com',
                     'user' => 'forge',
                     'https' => true,
@@ -53,32 +52,19 @@ it('creates a site with explicit nginx template id', function () {
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
                 ],
             ],
-        ], 201),
+        ]),
     ]);
 
     $client = app(Client::class);
-    $action = new CreateSite($client);
-
-    $payload = new CreateSitePayload(
-        type: 'php',
-        domain_mode: 'single',
-        name: 'example.com',
-        web_directory: '/public',
-        php_version: 'php83',
-        source_control_provider: 'github',
-        repository: 'user/repo',
-        branch: 'main',
-        nginx_template_id: 999
-    );
+    $action = new GetSite($client);
 
     $site = $action->handle(
-        serverId: 123,
-        payload: $payload
+        siteId: 456
     );
 
     expect($site->id)->toBe(456)
         ->and($site->name)->toBe('example.com')
-        ->and($site->status->value)->toBe('installing')
+        ->and($site->status->value)->toBe('installed')
         ->and($site->url)->toBe('https://example.com')
         ->and($site->webDirectory)->toBe('/public')
         ->and($site->phpVersion)->toBe('php83')
@@ -86,46 +72,40 @@ it('creates a site with explicit nginx template id', function () {
         ->and($site->repository->branch)->toBe('main');
 
     Http::assertSent(function (Request $request) {
-        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites'
-            && $request->method() === 'POST'
-            && $request['name'] === 'example.com'
-            && $request['type'] === 'php'
-            && $request['web_directory'] === '/public'
-            && $request['php_version'] === 'php83'
-            && $request['source_control_provider'] === 'github'
-            && $request['repository'] === 'user/repo'
-            && $request['branch'] === 'main'
-            && $request['nginx_template_id'] === 999
+        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/sites/456'
+            && $request->method() === 'GET'
             && $request->hasHeader('Authorization', 'Bearer test-token')
             && $request->hasHeader('Accept', 'application/json')
             && $request->hasHeader('Content-Type', 'application/json');
     });
 });
 
+it('throws exception when site not found', function () {
+    Http::fake([
+        'forge.laravel.com/api/orgs/test-org/sites/456' => Http::response([
+            'message' => 'Site not found',
+        ], 404),
+    ]);
+
+    $client = app(Client::class);
+    $action = new GetSite($client);
+
+    $action->handle(
+        siteId: 456
+    );
+})->throws(RequestException::class);
+
 it('throws exception when request fails', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/sites/456' => Http::response([
             'message' => 'Server error',
         ], 500),
     ]);
 
     $client = app(Client::class);
-    $action = new CreateSite($client);
-
-    $payload = new CreateSitePayload(
-        type: 'php',
-        domain_mode: 'single',
-        name: 'example.com',
-        web_directory: '/public',
-        php_version: 'php83',
-        source_control_provider: 'github',
-        repository: 'user/repo',
-        branch: 'main',
-        nginx_template_id: 999
-    );
+    $action = new GetSite($client);
 
     $action->handle(
-        serverId: 123,
-        payload: $payload
+        siteId: 456
     );
 })->throws(RequestException::class);

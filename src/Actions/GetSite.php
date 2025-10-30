@@ -23,7 +23,7 @@ readonly class GetSite
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function handle(int $serverId, int $siteId): Site
+    public function handle(int $siteId): Site
     {
         $path = $this->client->path(sprintf('/sites/%s', $siteId));
 
@@ -35,6 +35,6 @@ readonly class GetSite
             );
         }
 
-        return $this->makeSite($serverId, $response->json('data'));
+        return $this->makeSite($response->json('data'));
     }
 }

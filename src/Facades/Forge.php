@@ -24,7 +24,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
  * @method static Collection listServers(ListServersPayload $payload)
  * @method static Server getServer(int $serverId)
  * @method static Collection listSites(int $serverId, ListSitesPayload $payload)
- * @method static Site getSite(int $serverId, int $siteId)
+ * @method static Site getSite(int $siteId)
  * @method static Site createSite(int $serverId, CreateSitePayload $payload)
  * @method static void updateSite(int $serverId, int $siteId, UpdateSitePayload $payload)
  * @method static void deleteSite(int $serverId, int $siteId)

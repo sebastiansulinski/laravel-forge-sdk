@@ -2,20 +2,20 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
+use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\MaintenanceMode;
 use SebastianSulinski\LaravelForgeSdk\Data\Repository;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Enums\MaintenanceModeStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\RepositoryStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\SiteStatus;
-use Carbon\Carbon;
 
 trait HasSite
 {
     /**
      * Make site.
      */
-    protected function makeSite(int $serverId, array $data): Site
+    protected function makeSite(array $data): Site
     {
         $attributes = $data['attributes'];
         $repositoryData = $attributes['repository'];
@@ -23,7 +23,6 @@ trait HasSite
 
         return new Site(
             id: $data['id'],
-            serverId: $serverId,
             name: $attributes['name'],
             status: SiteStatus::from($attributes['status']),
             url: $attributes['url'],

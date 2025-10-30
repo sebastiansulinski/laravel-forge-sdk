@@ -2,10 +2,10 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
+use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasSite;
-use Illuminate\Support\Collection;
 
 readonly class ListSites
 {
@@ -39,7 +39,7 @@ readonly class ListSites
         );
 
         return new Collection($allSites)->map(
-            fn (array $site) => $this->makeSite($serverId, $site)
+            fn (array $site) => $this->makeSite($site)
         );
     }
 }

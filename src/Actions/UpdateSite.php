@@ -4,12 +4,9 @@ namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
-use SebastianSulinski\LaravelForgeSdk\Traits\HasSite;
 
 readonly class UpdateSite
 {
-    use HasSite;
-
     /**
      * UpdateSite constructor.
      */

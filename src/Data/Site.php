@@ -2,8 +2,8 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
-use SebastianSulinski\LaravelForgeSdk\Enums\SiteStatus;
 use Carbon\Carbon;
+use SebastianSulinski\LaravelForgeSdk\Enums\SiteStatus;
 
 readonly class Site
 {
@@ -12,7 +12,6 @@ readonly class Site
      */
     public function __construct(
         public int $id,
-        public int $serverId,
         public string $name,
         public SiteStatus $status,
         public string $url,

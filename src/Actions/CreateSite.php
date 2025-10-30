@@ -37,6 +37,6 @@ readonly class CreateSite
             );
         }
 
-        return $this->makeSite($serverId, $response->json('data'));
+        return $this->makeSite($response->json('data'));
     }
 }

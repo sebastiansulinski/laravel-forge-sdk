@@ -58,14 +58,16 @@ class DeploySiteJob
         // Get a specific server
         $server = $this->forge->getServer(serverId: 123);
 
-        // List sites on a server with includes
+        // List sites with includes
         $sites = $this->forge->listSites(
-            serverId: 123,
             payload: new ListSitesPayload(
                 filterName: 'example.com',
                 include: [SiteInclude::LatestDeployment, SiteInclude::Server]
             )
         );
+
+        // Get a specific site
+        $site = $this->forge->getSite(siteId: 456);
 
         // Create a new site
         $site = $this->forge->createSite(
@@ -144,14 +146,16 @@ $servers = Forge::listServers(
 // Get a specific server
 $server = Forge::getServer(serverId: 123);
 
-// List sites on a server with includes
+// List sites with includes
 $sites = Forge::listSites(
-    serverId: 123,
     payload: new ListSitesPayload(
         filterName: 'example.com',
         include: [SiteInclude::LatestDeployment, SiteInclude::Server]
     )
 );
+
+// Get a specific site
+$site = Forge::getSite(siteId: 456);
 
 // Create a new site
 $site = Forge::createSite(
@@ -230,7 +234,7 @@ The SDK provides actions for all major Forge operations:
 The SDK uses typed data objects for all responses:
 
 - `Server` - Server information
-- `Site` - Site information
+- `Site` - Site information (note: does not include serverId as per Forge API v2)
 - `Database` - Database information
 - `DatabaseUser` - Database user information
 - `Certificate` - SSL certificate information
