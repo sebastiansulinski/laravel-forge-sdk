@@ -18,6 +18,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\UpdateDeploymentScriptPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\UpdateEnvContentPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
 
 /**
@@ -30,7 +31,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
  * @method static void deleteSite(int $serverId, int $siteId)
  * @method static bool createCommand(int $serverId, int $siteId, string $command)
  * @method static string getEnvContent(int $serverId, int $siteId)
- * @method static void updateEnvContent(int $serverId, int $siteId, string $content)
+ * @method static void updateEnvContent(int $serverId, int $siteId, UpdateEnvContentPayload $payload)
  * @method static Deployment createDeployment(int $serverId, int $siteId)
  * @method static DeploymentStatus getDeploymentStatus(int $serverId, int $siteId)
  * @method static Database createDatabase(int $serverId, CreateDatabasePayload $payload)

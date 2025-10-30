@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Breaking:** Updated `Forge::updateEnvContent()` method signature to accept `UpdateEnvContentPayload` instead of `string $content` for more flexible environment updates with optional parameters (cache, queues, encryption_key)
+
 ## [0.1.0] - 2025-10-30
 
 ### Added
