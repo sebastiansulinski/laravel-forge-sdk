@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.3] - 2025-10-31
+
+### Fixed
+- Fixed null deployment status handling to default to `Pending` status when API returns null
+
 ## [0.6.2] - 2025-10-31
 
 ### Changed
@@ -107,7 +112,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.2...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.3...HEAD
+[0.6.3]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.5.1...v0.6.0
