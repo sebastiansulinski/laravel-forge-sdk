@@ -7,10 +7,31 @@ use SebastianSulinski\LaravelForgeSdk\Data\Commit;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Enums\DeploymentStatus;
 
+/**
+ * @phpstan-type DeploymentData array{
+ *     id: int,
+ *     attributes: array{
+ *         commit: array{
+ *             hash?: string|null,
+ *             author?: string|null,
+ *             message?: string|null,
+ *             branch?: string|null
+ *         },
+ *         type: string,
+ *         status: string,
+ *         created_at?: string|null,
+ *         updated_at?: string|null,
+ *         started_at?: string|null,
+ *         ended_at?: string|null
+ *     }
+ * }
+ */
 trait HasDeployment
 {
     /**
      * Make a deployment.
+     *
+     * @param  DeploymentData  $data
      */
     protected function makeDeployment(int $serverId, int $siteId, array $data): Deployment
     {

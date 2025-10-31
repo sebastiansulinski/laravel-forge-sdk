@@ -10,10 +10,53 @@ use SebastianSulinski\LaravelForgeSdk\Enums\MaintenanceModeStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\RepositoryStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\SiteStatus;
 
+/**
+ * @phpstan-type SiteData array{
+ *     id: int,
+ *     attributes: array{
+ *         name: string,
+ *         status: string,
+ *         url: string,
+ *         user: string,
+ *         https: bool,
+ *         web_directory: string,
+ *         root_directory: string,
+ *         aliases?: array<int, string>,
+ *         php_version: string,
+ *         deployment_status: string,
+ *         isolated: bool,
+ *         shared_paths?: array<int, string>,
+ *         zero_downtime_deployments: bool,
+ *         app_type: string,
+ *         uses_envoyer: bool,
+ *         deployment_url: string,
+ *         repository: array{
+ *             provider: string,
+ *             url?: string|null,
+ *             branch?: string|null,
+ *             status?: string|null
+ *         },
+ *         maintenance_mode: array{
+ *             enabled?: bool|null,
+ *             status?: string|null
+ *         },
+ *         quick_deploy: bool,
+ *         deployment_script: string,
+ *         wildcards: bool,
+ *         healthcheck_url: string,
+ *         created_at?: string|null,
+ *         updated_at?: string|null
+ *     },
+ *     relationships?: array<string, mixed>,
+ *     links?: array<string, mixed>
+ * }
+ */
 trait HasSite
 {
     /**
      * Make site.
+     *
+     * @param  SiteData  $data
      */
     protected function makeSite(array $data): Site
     {
@@ -53,6 +96,8 @@ trait HasSite
                     ? MaintenanceModeStatus::from($maintenanceModeData['status'])
                     : null
             ),
+            relationships: $data['relationships'] ?? [],
+            links: $data['links'] ?? [],
             quickDeploy: $attributes['quick_deploy'],
             deploymentScript: $attributes['deployment_script'],
             wildcards: $attributes['wildcards'],

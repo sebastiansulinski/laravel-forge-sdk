@@ -2,15 +2,19 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasCertificate;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
+/**
+ * @phpstan-import-type CertificateData from HasCertificate
+ */
 readonly class GetDomainCertificate
 {
     use HasCertificate;
+    use ParsesResponse;
 
     /**
      * GetDomainCertificate constructor.
@@ -35,24 +39,13 @@ readonly class GetDomainCertificate
 
         $response = $this->client->get($path)->throw();
 
-        $data = $this->responseData($response);
+        $data = $this->parseData($response);
 
         if (empty($data)) {
             throw new RequestFailed('Unable to get domain certificate.');
         }
 
+        /** @var CertificateData $data */
         return $this->makeCertificate($serverId, $siteId, $domainRecordId, $data);
-    }
-
-    /**
-     * Get the response data.
-     *
-     * @return array<string, mixed>
-     */
-    private function responseData(Response $response): array
-    {
-        $data = $response->json('data', []);
-
-        return is_array($data) ? $data : [];
     }
 }

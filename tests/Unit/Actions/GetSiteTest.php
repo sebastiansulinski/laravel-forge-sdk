@@ -51,6 +51,28 @@ it('gets site', function () {
                     'created_at' => '2024-01-15T10:30:00.000000Z',
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
                 ],
+                'relationships' => [
+                    'server' => [
+                        'data' => [
+                            'id' => 123,
+                            'type' => 'server',
+                        ],
+                        'links' => [
+                            'related' => 'https://forge.laravel.com/api/orgs/test-org/servers/123',
+                        ],
+                    ],
+                    'tags' => [
+                        'data' => [
+                            ['id' => 1, 'type' => 'tag'],
+                            ['id' => 2, 'type' => 'tag'],
+                        ],
+                    ],
+                ],
+                'links' => [
+                    'self' => [
+                        'href' => 'https://forge.laravel.com/api/orgs/test-org/sites/456',
+                    ],
+                ],
             ],
         ]),
     ]);
@@ -70,6 +92,30 @@ it('gets site', function () {
         ->and($site->phpVersion)->toBe('php83')
         ->and($site->repository->provider)->toBe('github')
         ->and($site->repository->branch)->toBe('main');
+
+    // Test relationships and links direct access
+    expect($site->relationships)->toBeArray()
+        ->and($site->links)->toBeArray();
+
+    // Test relationship accessor methods
+    expect($site->relationships('server.data.id'))->toBe(123)
+        ->and($site->relationships('server.data.type'))->toBe('server')
+        ->and($site->relationships('server.links.related'))->toBe('https://forge.laravel.com/api/orgs/test-org/servers/123')
+        ->and($site->relationships('tags.data.0.id'))->toBe(1)
+        ->and($site->relationships('tags.data.1.type'))->toBe('tag');
+
+    // Test link accessor methods
+    expect($site->links('self.href'))->toBe('https://forge.laravel.com/api/orgs/test-org/sites/456');
+
+    // Test with default values
+    expect($site->relationships('nonexistent.key', 'default'))->toBe('default')
+        ->and($site->links('nonexistent.key', 'default'))->toBe('default');
+
+    // Test existence checkers
+    expect($site->hasRelationship('server'))->toBeTrue()
+        ->and($site->hasRelationship('nonexistent'))->toBeFalse()
+        ->and($site->hasLink('self'))->toBeTrue()
+        ->and($site->hasLink('nonexistent'))->toBeFalse();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/sites/456'

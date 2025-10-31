@@ -85,13 +85,15 @@ it('lists servers', function () {
         )
     );
 
+    $collection = $servers->collection();
+
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\Server $first */
-    $first = $servers->first();
+    $first = $collection->first();
 
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\Server $last */
-    $last = $servers->last();
+    $last = $collection->last();
 
-    expect($servers)->toHaveCount(2)
+    expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(1)
         ->and($first->name)->toBe('production-server')
         ->and($first->provider)->toBe('digitalocean')
@@ -137,7 +139,7 @@ it('returns empty collection when no servers found', function () {
 
     $servers = $action->handle();
 
-    expect($servers)->toBeEmpty();
+    expect($servers->hasData())->toBeFalse();
 });
 
 it('throws exception when request fails', function () {

@@ -10,10 +10,27 @@ use SebastianSulinski\LaravelForgeSdk\Enums\CertificateStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\CertificateType;
 use SebastianSulinski\LaravelForgeSdk\Enums\CertificateVerificationMethod;
 
+/**
+ * @phpstan-type CertificateData array{
+ *     id: int,
+ *     attributes: array{
+ *         type: string,
+ *         request_status: string,
+ *         status: string,
+ *         verification_method?: string|null,
+ *         key_type?: string|null,
+ *         preferred_chain?: string|null,
+ *         created_at?: string|null,
+ *         updated_at?: string|null
+ *     }
+ * }
+ */
 trait HasCertificate
 {
     /**
      * Make a certificate.
+     *
+     * @param  CertificateData  $data
      */
     protected function makeCertificate(int $serverId, int $siteId, int $domainRecordId, array $data): Certificate
     {

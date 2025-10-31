@@ -8,10 +8,15 @@ use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateCertificatePayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasCertificate;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
+/**
+ * @phpstan-import-type CertificateData from HasCertificate
+ */
 readonly class CreateDomainCertificate
 {
     use HasCertificate;
+    use ParsesResponse;
 
     /**
      * CreateDomainCertificate constructor.
@@ -46,11 +51,14 @@ readonly class CreateDomainCertificate
             throw new RequestFailed($this->exceptionMessage($response));
         }
 
+        /** @var CertificateData $data */
+        $data = $this->parseData($response);
+
         return $this->makeCertificate(
             serverId: $serverId,
             siteId: $siteId,
             domainRecordId: $domainRecordId,
-            data: $this->responseData($response)
+            data: $data
         );
     }
 
@@ -62,17 +70,5 @@ readonly class CreateDomainCertificate
         $message = $response->json('message', 'Response returned: '.$response->status());
 
         return is_string($message) ? $message : 'Response returned: '.$response->status();
-    }
-
-    /**
-     * Get the response data.
-     *
-     * @return array<string, mixed>
-     */
-    private function responseData(Response $response): array
-    {
-        $data = $response->json('data');
-
-        return is_array($data) ? $data : [];
     }
 }

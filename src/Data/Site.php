@@ -3,15 +3,20 @@
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
 use Carbon\Carbon;
+use SebastianSulinski\LaravelForgeSdk\Data\Concerns\HasApiMetadata;
 use SebastianSulinski\LaravelForgeSdk\Enums\SiteStatus;
 
 readonly class Site
 {
+    use HasApiMetadata;
+
     /**
      * Site constructor.
      *
      * @param  array<int, string>  $aliases
      * @param  array<int, string>  $sharedPaths
+     * @param  array<string, mixed>  $relationships
+     * @param  array<string, mixed>  $links
      */
     public function __construct(
         public int $id,
@@ -33,6 +38,8 @@ readonly class Site
         public string $deploymentUrl,
         public Repository $repository,
         public MaintenanceMode $maintenanceMode,
+        public array $relationships = [],
+        public array $links = [],
         public ?bool $quickDeploy = null,
         public ?string $deploymentScript = null,
         public ?bool $wildcards = null,

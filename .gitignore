@@ -17,3 +17,4 @@ Thumbs.db
 .php-cs-fixer.cache
 .deptrac.cache
 .phpstan.cache
+.claude
