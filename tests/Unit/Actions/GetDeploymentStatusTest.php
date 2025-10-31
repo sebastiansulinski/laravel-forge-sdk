@@ -74,6 +74,30 @@ it('gets deployment status with deploying state', function () {
     expect($deploymentStatus->status->value)->toBe('deploying');
 });
 
+it('sets status to pending when response status is null', function () {
+    Http::fake([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments/status' => Http::response([
+            'data' => [
+                'id' => 789,
+                'attributes' => [
+                    'status' => null,
+                    'started_at' => '2024-01-15T10:30:00.000000Z',
+                ],
+            ],
+        ]),
+    ]);
+
+    $client = app(Client::class);
+    $action = new GetDeploymentStatus($client);
+
+    $deploymentStatus = $action->handle(
+        serverId: 123,
+        siteId: 456
+    );
+
+    expect($deploymentStatus->status->value)->toBe('pending');
+});
+
 it('throws RequestFailed exception when response data is empty', function () {
     Http::fake([
         'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments/status' => Http::response([

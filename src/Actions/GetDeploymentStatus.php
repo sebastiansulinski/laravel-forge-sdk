@@ -65,8 +65,18 @@ readonly class GetDeploymentStatus
             id: $data['id'],
             serverId: $serverId,
             siteId: $siteId,
-            status: DeploymentStatusEnum::from($attributes['status']),
+            status: $this->status($attributes['status']),
             startedAt: Carbon::parse($attributes['started_at'])
         );
+    }
+
+    /**
+     * Get status.
+     */
+    private function status(?string $status = null): DeploymentStatusEnum
+    {
+        return $status === null
+            ? DeploymentStatusEnum::Pending
+            : DeploymentStatusEnum::from($status);
     }
 }
