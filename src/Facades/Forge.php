@@ -18,6 +18,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\CreateCertificatePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseSchemasPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
@@ -41,6 +42,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
  * @method static DeploymentStatus getDeploymentStatus(int $serverId, int $siteId)
  * @method static Database createDatabase(int $serverId, CreateDatabasePayload $payload)
  * @method static void deleteDatabaseSchema(int $serverId, int $databaseId)
+ * @method static Collection<int, Database> listDatabaseSchemas(int $serverId, ListDatabaseSchemasPayload $payload)
  * @method static Collection<int, DatabaseUser> listDatabaseUsers(int $serverId, ListDatabaseUsersPayload $payload)
  * @method static void deleteDatabaseUser(int $serverId, int $databaseUserId)
  * @method static Certificate createDomainCertificate(int $serverId, int $siteId, int $domainRecordId, CreateCertificatePayload $payload)

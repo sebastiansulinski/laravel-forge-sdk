@@ -1,0 +1,136 @@
+<?php
+
+use Illuminate\Http\Client\Request;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Http;
+use SebastianSulinski\LaravelForgeSdk\Actions\FetchAllPages;
+use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseSchemas;
+use SebastianSulinski\LaravelForgeSdk\Client;
+use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseSchemasPayload;
+
+beforeEach(function () {
+    config()->set('forge.token', 'test-token');
+    config()->set('forge.timeout', 90);
+    config()->set('forge.organisation', 'test-org');
+});
+
+it('lists database schemas', function () {
+    Http::fake([
+        'forge.laravel.com/api/orgs/test-org/servers/123/database/schemas*' => Http::response([
+            'data' => [
+                [
+                    'id' => 1,
+                    'attributes' => [
+                        'name' => 'forge_db',
+                        'status' => 'installed',
+                        'created_at' => '2024-01-15T10:30:00.000000Z',
+                        'updated_at' => '2024-01-15T10:30:00.000000Z',
+                    ],
+                ],
+                [
+                    'id' => 2,
+                    'attributes' => [
+                        'name' => 'app_db',
+                        'status' => 'installed',
+                        'created_at' => '2024-01-16T10:30:00.000000Z',
+                        'updated_at' => '2024-01-16T10:30:00.000000Z',
+                    ],
+                ],
+            ],
+            'links' => [
+                'first' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/schemas?page[size]=20',
+                'last' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/schemas?page[size]=20',
+            ],
+            'meta' => [
+                'current_page' => 1,
+                'from' => 1,
+                'last_page' => 1,
+                'per_page' => 20,
+                'to' => 2,
+                'total' => 2,
+            ],
+        ]),
+    ]);
+
+    $client = app(Client::class);
+    $fetchAllPages = new FetchAllPages($client);
+    $action = new ListDatabaseSchemas($client, $fetchAllPages);
+
+    $schemas = $action->handle(
+        serverId: 123,
+        payload: new ListDatabaseSchemasPayload(
+            filterName: 'forge',
+            filterStatus: 'installed'
+        )
+    );
+
+    $collection = $schemas->collection();
+
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Database $first */
+    $first = $collection->first();
+
+    /** @var \SebastianSulinski\LaravelForgeSdk\Data\Database $last */
+    $last = $collection->last();
+
+    expect($collection)->toHaveCount(2)
+        ->and($first->id)->toBe(1)
+        ->and($first->serverId)->toBe(123)
+        ->and($first->name)->toBe('forge_db')
+        ->and($first->status->value)->toBe('installed')
+        ->and($last->id)->toBe(2)
+        ->and($last->name)->toBe('app_db');
+
+    Http::assertSent(function (Request $request) {
+        return str_contains($request->url(), 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/schemas')
+            && $request->method() === 'GET'
+            && $request->hasHeader('Authorization', 'Bearer test-token')
+            && $request->hasHeader('Accept', 'application/json')
+            && $request->hasHeader('Content-Type', 'application/json');
+    });
+});
+
+it('returns empty collection when no schemas found', function () {
+    Http::fake([
+        'forge.laravel.com/api/orgs/test-org/servers/123/database/schemas*' => Http::response([
+            'data' => [],
+            'links' => [
+                'first' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/schemas?page[size]=20',
+                'last' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/schemas?page[size]=20',
+            ],
+            'meta' => [
+                'current_page' => 1,
+                'from' => null,
+                'last_page' => 1,
+                'per_page' => 20,
+                'to' => null,
+                'total' => 0,
+            ],
+        ]),
+    ]);
+
+    $client = app(Client::class);
+    $fetchAllPages = new FetchAllPages($client);
+    $action = new ListDatabaseSchemas($client, $fetchAllPages);
+
+    $schemas = $action->handle(
+        serverId: 123
+    );
+
+    expect($schemas->hasData())->toBeFalse();
+});
+
+it('throws exception when request fails', function () {
+    Http::fake([
+        'forge.laravel.com/api/orgs/test-org/servers/123/database/schemas*' => Http::response([
+            'message' => 'Server error',
+        ], 500),
+    ]);
+
+    $client = app(Client::class);
+    $fetchAllPages = new FetchAllPages($client);
+    $action = new ListDatabaseSchemas($client, $fetchAllPages);
+
+    $action->handle(
+        serverId: 123
+    );
+})->throws(RequestException::class);

@@ -20,6 +20,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\GetEnvContent;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetNginxTemplateByName;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetServer;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetSite;
+use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseSchemas;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseUsers;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDeployments;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDomains;
@@ -41,6 +42,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\CreateCommandPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseSchemasPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
@@ -262,6 +264,22 @@ readonly class Forge
     {
         $this->app->make(DeleteDatabaseSchema::class)
             ->handle(serverId: $serverId, databaseId: $databaseId);
+    }
+
+    /**
+     * List database schemas.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function listDatabaseSchemas(
+        int $serverId,
+        ListDatabaseSchemasPayload $payload = new ListDatabaseSchemasPayload
+    ): ListResponse {
+        return $this->app->make(ListDatabaseSchemas::class)->handle(
+            serverId: $serverId, payload: $payload
+        );
     }
 
     /**
