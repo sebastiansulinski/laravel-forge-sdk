@@ -35,10 +35,11 @@ The recommended way to interact with the Forge API is by injecting the `Forge` c
 
 ```php
 use SebastianSulinski\LaravelForgeSdk\Forge;
+use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
+use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
-use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
 
 class DeploySiteJob
 {
@@ -46,14 +47,30 @@ class DeploySiteJob
 
     public function handle(): void
     {
-        // List all servers with filters
-        $servers = $this->forge->listServers(
+        // List servers with pagination (default mode)
+        $response = $this->forge->listServers(
             new ListServersPayload(
                 filterProvider: 'digitalocean',
                 filterRegion: 'lon1',
                 pageSize: 20
             )
         );
+
+        // Access data as Collection
+        $servers = $response->collection();
+
+        // List all servers without pagination (fetches all pages automatically)
+        $allServersResponse = $this->forge->listServers(
+            new ListServersPayload(
+                mode: PaginationMode::All,
+                filterProvider: 'digitalocean'
+            )
+        );
+
+        // Iterate over all servers
+        foreach ($allServersResponse->collection() as $server) {
+            // Process each server...
+        }
 
         // Get a specific server
         $server = $this->forge->getServer(serverId: 123);
@@ -62,7 +79,8 @@ class DeploySiteJob
         $selfLink = $server->links['self'] ?? null;
 
         // List sites with includes
-        $sites = $this->forge->listSites(
+        $sitesResponse = $this->forge->listSites(
+            serverId: 123,
             payload: new ListSitesPayload(
                 filterName: 'example.com',
                 include: [SiteInclude::LatestDeployment, SiteInclude::Server]
@@ -70,7 +88,7 @@ class DeploySiteJob
         );
 
         // Get a specific site
-        $site = $this->forge->getSite(siteId: 456);
+        $site = $this->forge->getSite(serverId: 123, siteId: 456);
 
         // Create a new site
         $site = $this->forge->createSite(
@@ -132,13 +150,14 @@ For quick operations or in routes/controllers, you can use the static `Forge` fa
 
 ```php
 use SebastianSulinski\LaravelForgeSdk\Facades\Forge;
+use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
+use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
-use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
 
-// List all servers with filters
-$servers = Forge::listServers(
+// List servers with pagination (default) - returns ListResponse
+$response = Forge::listServers(
     new ListServersPayload(
         filterProvider: 'digitalocean',
         filterRegion: 'lon1',
@@ -146,11 +165,23 @@ $servers = Forge::listServers(
     )
 );
 
+// Access data as Collection
+$servers = $response->collection();
+
+// List all servers (fetches all pages automatically)
+$allServersResponse = Forge::listServers(
+    new ListServersPayload(
+        mode: PaginationMode::All,
+        filterProvider: 'digitalocean'
+    )
+);
+
 // Get a specific server
 $server = Forge::getServer(serverId: 123);
 
 // List sites with includes
-$sites = Forge::listSites(
+$sitesResponse = Forge::listSites(
+    serverId: 123,
     payload: new ListSitesPayload(
         filterName: 'example.com',
         include: [SiteInclude::LatestDeployment, SiteInclude::Server]
@@ -158,7 +189,7 @@ $sites = Forge::listSites(
 );
 
 // Get a specific site
-$site = Forge::getSite(siteId: 456);
+$site = Forge::getSite(serverId: 123, siteId: 456);
 
 // Create a new site
 $site = Forge::createSite(
@@ -177,6 +208,69 @@ $deployment = Forge::createDeployment(
 );
 ```
 
+## Working with Pagination
+
+All list endpoints return a `ListResponse` object that provides flexible pagination options:
+
+### Paginated Mode (Default)
+
+Returns a single page of results:
+
+```php
+use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
+use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
+
+// Default behavior - returns first page with 20 items
+$response = Forge::listServers(
+    new ListServersPayload(
+        pageSize: 20
+    )
+);
+
+// Access data as Collection
+$servers = $response->collection();
+
+// Access pagination metadata
+$nextCursor = $response->meta('next_cursor'); // For cursor-based pagination
+$total = $response->meta('total');
+$perPage = $response->meta('per_page');
+
+// Access pagination links
+$nextUrl = $response->link('next');
+$prevUrl = $response->link('prev');
+
+// Check if there are more pages
+if ($response->hasMeta() && $response->meta('next_cursor')) {
+    // Fetch next page
+    $nextPage = Forge::listServers(
+        new ListServersPayload(
+            pageCursor: $response->meta('next_cursor'),
+            pageSize: 20
+        )
+    );
+}
+```
+
+### Fetch All Mode
+
+Automatically fetches all pages and returns all results:
+
+```php
+// Fetch all servers across all pages
+$response = Forge::listServers(
+    new ListServersPayload(
+        mode: PaginationMode::All,
+        filterProvider: 'digitalocean'
+    )
+);
+
+// All servers from all pages
+$allServers = $response->collection();
+
+// The response still contains metadata from the last page
+$total = $response->meta('total');
+```
+
 ## Working with Relationships and Links
 
 Individual resource objects (like `Server`, `Site`, etc.) include `relationships` and `links` properties that contain metadata from the Forge API:
@@ -193,7 +287,9 @@ $links = $server->links;
 // Example: $links['self'] = 'https://forge.laravel.com/api/orgs/xxx/servers/123'
 ```
 
-List endpoints return a `Response` object that includes pagination metadata and links:
+## Working with ListResponse
+
+List endpoints return a `ListResponse` object that includes pagination metadata and links:
 
 ```php
 $response = Forge::listServers($payload);
@@ -201,8 +297,13 @@ $response = Forge::listServers($payload);
 // Access the data as an array
 $serversArray = $response->data; // array of Server objects
 
-// Or convert to Collection when needed
+// Convert to Collection (recommended)
 $servers = $response->collection(); // Collection<int, Server>
+
+// Iterate over results
+foreach ($response->collection() as $server) {
+    echo $server->name;
+}
 
 // Access pagination links (array)
 $nextUrl = $response->links['next'] ?? null;
@@ -216,14 +317,14 @@ $perPage = $response->meta['per_page'] ?? null;
 
 // Check if response has data/metadata
 if ($response->hasData()) {
-    // ...
+    // Process data...
 }
 
 if ($response->hasMeta()) {
-    // ...
+    // Check pagination info...
 }
 
-// Access included resources
+// Access included resources (when using include parameter)
 $includedArray = $response->included; // array
 $includedCollection = $response->included(); // Collection
 ```
@@ -283,14 +384,14 @@ The SDK provides actions for all major Forge operations:
 
 - `GetNginxTemplateByName` - Get Nginx template by name
 
-## Response Object
+## ListResponse Object
 
-List actions (like `listServers`, `listSites`) return a `Response` object that wraps the data with additional metadata:
+List actions (like `listServers`, `listSites`) return a `ListResponse` object that wraps the data with additional metadata:
 
-**Properties (all arrays for consistency):**
+**Properties (all public arrays):**
 - `data` - `array<int, Resource>` - Array of resources (Servers, Sites, etc.)
 - `links` - `array<string, mixed>` - Pagination links (first, last, prev, next)
-- `meta` - `array<string, mixed>` - Pagination metadata (current_page, total, per_page, etc.)
+- `meta` - `array<string, mixed>` - Pagination metadata (current_page, total, per_page, next_cursor, etc.)
 - `included` - `array<int, array<string, mixed>>` - Included resources from the API response (if requested)
 
 **Helper methods:**
@@ -300,13 +401,20 @@ List actions (like `listServers`, `listSites`) return a `Response` object that w
 - `hasIncluded(): bool` - Check if response has included resources
 - `link(string $key, mixed $default = null): mixed` - Get a specific link value
 - `meta(string $key, mixed $default = null): mixed` - Get a specific meta value
-- `collection(): Collection` - Convert data array to a Collection
+- `collection(): Collection` - Convert data array to a Collection (recommended for iteration)
 - `included(): Collection` - Convert included array to a Collection
+
+**Pagination Modes:**
+
+All list payloads support a `mode` parameter to control pagination behavior:
+- `PaginationMode::Paginated` (default) - Returns a single page of results
+- `PaginationMode::All` - Automatically fetches all pages and returns all results
 
 ## Data Objects
 
 The SDK uses typed data objects for all responses:
 
+### Resource Objects
 - `Server` - Server information
 - `Site` - Site information (note: does not include serverId as per Forge API v2)
 - `Database` - Database information
@@ -320,12 +428,19 @@ The SDK uses typed data objects for all responses:
 - `NginxTemplate` - Nginx template
 - `Commit` - Git commit information
 
-All data objects include `relationships` and `links` properties that contain metadata from the Forge API about related resources and resource URLs.
+All resource objects include `relationships` and `links` properties that contain metadata from the Forge API about related resources and resource URLs.
+
+### Response Objects
+- `ListResponse` - Wrapper for list endpoints containing data array, pagination links, metadata, and included resources
 
 ## Enums
 
 Type-safe enums for all Forge constants:
 
+### API Behavior
+- `PaginationMode` - Pagination modes (`All`, `Paginated`)
+
+### Resource Status & Types
 - `CertificateType` - Certificate types
 - `CertificateStatus` - Certificate status values
 - `SiteStatus` - Site status values
