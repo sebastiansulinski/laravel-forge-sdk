@@ -6,7 +6,7 @@ An unofficial, type-safe Laravel package for interacting with the Laravel Forge 
 
 ## Requirements
 
-- PHP 8.4 or 8.5
+- PHP 8.3+
 - Laravel 12
 
 ## Installation

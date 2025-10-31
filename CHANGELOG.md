@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2025-10-31
+
+### Changed
+- Added PHP 8.3 support to broaden compatibility (now supports PHP 8.3+)
+
 ## [0.5.0] - 2025-10-31
 
 ### Added
@@ -55,7 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release of unofficial Laravel Forge SDK for API v2
-- Type-safe PHP SDK with readonly classes and PHP 8.4/8.5 support
+- Type-safe PHP SDK with readonly classes and PHP 8.3+ support
 - Server management actions (list, get)
 - Site management actions (create, get, list, update, delete)
 - Deployment actions (create, get status, get/update script)
@@ -79,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.2.0...v0.3.0
