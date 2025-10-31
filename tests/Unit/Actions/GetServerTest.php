@@ -81,6 +81,16 @@ it('gets server', function () {
             'self' => 'https://forge.laravel.com/api/orgs/test-org/servers/123',
         ]);
 
+    // Test relationship and link accessor methods
+    expect($server->relationships('sites.links.related'))->toBe('https://forge.laravel.com/api/orgs/test-org/servers/123/sites')
+        ->and($server->links('self'))->toBe('https://forge.laravel.com/api/orgs/test-org/servers/123')
+        ->and($server->hasRelationship('sites'))->toBeTrue()
+        ->and($server->hasRelationship('nonexistent'))->toBeFalse()
+        ->and($server->hasLink('self'))->toBeTrue()
+        ->and($server->hasLink('nonexistent'))->toBeFalse()
+        ->and($server->relationships('nonexistent.key', 'default'))->toBe('default')
+        ->and($server->links('nonexistent.key', 'default'))->toBe('default');
+
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123'
             && $request->method() === 'GET'

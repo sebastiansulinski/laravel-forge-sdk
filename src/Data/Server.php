@@ -3,9 +3,12 @@
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
 use Carbon\Carbon;
+use SebastianSulinski\LaravelForgeSdk\Data\Concerns\HasApiMetadata;
 
 readonly class Server
 {
+    use HasApiMetadata;
+
     /**
      * Server constructor.
      *

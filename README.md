@@ -273,7 +273,9 @@ $total = $response->meta('total');
 
 ## Working with Relationships and Links
 
-Individual resource objects (like `Server`, `Site`, etc.) include `relationships` and `links` properties that contain metadata from the Forge API:
+Individual resource objects (like `Server`, `Site`, etc.) include `relationships` and `links` properties that contain metadata from the Forge API. These resources use the `HasApiMetadata` trait which provides convenient accessor methods with dot notation support.
+
+### Direct Property Access
 
 ```php
 $server = Forge::getServer(serverId: 123);
@@ -286,6 +288,47 @@ $relationships = $server->relationships;
 $links = $server->links;
 // Example: $links['self'] = 'https://forge.laravel.com/api/orgs/xxx/servers/123'
 ```
+
+### Using Accessor Methods with Dot Notation
+
+For easier access to nested values, use the provided accessor methods:
+
+```php
+$server = Forge::getServer(serverId: 123);
+$site = Forge::getSite(serverId: 123, siteId: 456);
+
+// Access nested relationships using dot notation
+$sitesRelatedLink = $server->relationships('sites.links.related');
+$serverDataId = $site->relationships('server.data.id');
+$tagType = $site->relationships('tags.data.0.type');
+
+// Access nested links using dot notation
+$selfHref = $server->links('self.href');
+$relatedUrl = $site->links('server.related');
+
+// Provide default values
+$tagType = $site->relationships('tags.data.0.type', 'default-type');
+$customLink = $server->links('custom.link', 'https://fallback.url');
+
+// Check if relationships or links exist
+if ($server->hasRelationship('sites')) {
+    $sitesData = $server->relationships('sites');
+}
+
+if ($site->hasLink('self')) {
+    $selfLink = $site->links('self');
+}
+
+// Combine with null coalescing for cleaner code
+$relatedSites = $server->relationships('sites.data') ?? [];
+$selfUrl = $site->links('self.href') ?? 'N/A';
+```
+
+**Available accessor methods:**
+- `relationships(string $key, mixed $default = null): mixed` - Get relationship value with dot notation
+- `links(string $key, mixed $default = null): mixed` - Get link value with dot notation
+- `hasRelationship(string $key): bool` - Check if a relationship exists
+- `hasLink(string $key): bool` - Check if a link exists
 
 ## Working with ListResponse
 
@@ -428,7 +471,16 @@ The SDK uses typed data objects for all responses:
 - `NginxTemplate` - Nginx template
 - `Commit` - Git commit information
 
-All resource objects include `relationships` and `links` properties that contain metadata from the Forge API about related resources and resource URLs.
+**Resources with API Metadata:**
+
+The `Server` and `Site` data objects include `relationships` and `links` properties that contain metadata from the Forge API about related resources and resource URLs. These objects use the `HasApiMetadata` trait which provides convenient accessor methods:
+
+- `relationships(string $key, mixed $default = null)` - Access nested relationship data with dot notation
+- `links(string $key, mixed $default = null)` - Access nested link data with dot notation
+- `hasRelationship(string $key)` - Check if a relationship exists
+- `hasLink(string $key)` - Check if a link exists
+
+See the "Working with Relationships and Links" section for usage examples.
 
 ### Response Objects
 - `ListResponse` - Wrapper for list endpoints containing data array, pagination links, metadata, and included resources
@@ -449,6 +501,35 @@ Type-safe enums for all Forge constants:
 - `DeploymentStatus` - Deployment status values
 - `PhpVersion` - Available PHP versions
 - And more...
+
+## Traits
+
+The SDK provides reusable traits for common functionality:
+
+### HasApiMetadata
+
+Used by `Server` and `Site` data objects to provide convenient access to API metadata:
+
+```php
+use SebastianSulinski\LaravelForgeSdk\Data\Concerns\HasApiMetadata;
+
+readonly class YourDataObject
+{
+    use HasApiMetadata;
+
+    public function __construct(
+        public array $relationships = [],
+        public array $links = [],
+        // ... other properties
+    ) {}
+}
+```
+
+**Methods:**
+- `relationships(string $key, mixed $default = null): mixed` - Access relationships with dot notation
+- `links(string $key, mixed $default = null): mixed` - Access links with dot notation
+- `hasRelationship(string $key): bool` - Check if relationship exists
+- `hasLink(string $key): bool` - Check if link exists
 
 ## Testing
 

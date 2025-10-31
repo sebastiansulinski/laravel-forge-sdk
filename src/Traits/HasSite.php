@@ -46,7 +46,9 @@ use SebastianSulinski\LaravelForgeSdk\Enums\SiteStatus;
  *         healthcheck_url: string,
  *         created_at?: string|null,
  *         updated_at?: string|null
- *     }
+ *     },
+ *     relationships?: array<string, mixed>,
+ *     links?: array<string, mixed>
  * }
  */
 trait HasSite
@@ -94,6 +96,8 @@ trait HasSite
                     ? MaintenanceModeStatus::from($maintenanceModeData['status'])
                     : null
             ),
+            relationships: $data['relationships'] ?? [],
+            links: $data['links'] ?? [],
             quickDeploy: $attributes['quick_deploy'],
             deploymentScript: $attributes['deployment_script'],
             wildcards: $attributes['wildcards'],

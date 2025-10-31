@@ -54,6 +54,19 @@ it('lists sites', function () {
                         'created_at' => '2024-01-15T10:30:00.000000Z',
                         'updated_at' => '2024-01-15T10:30:00.000000Z',
                     ],
+                    'relationships' => [
+                        'server' => [
+                            'data' => [
+                                'id' => 123,
+                                'type' => 'server',
+                            ],
+                        ],
+                    ],
+                    'links' => [
+                        'self' => [
+                            'href' => 'https://forge.laravel.com/api/orgs/test-org/sites/456',
+                        ],
+                    ],
                 ],
                 [
                     'id' => 789,
@@ -140,6 +153,13 @@ it('lists sites', function () {
         ->and($last->name)->toBe('test.com')
         ->and($last->zeroDowntimeDeployments)->toBe(true)
         ->and($last->quickDeploy)->toBe(true);
+
+    // Test relationships and links on first site
+    expect($first->relationships('server.data.id'))->toBe(123)
+        ->and($first->relationships('server.data.type'))->toBe('server')
+        ->and($first->links('self.href'))->toBe('https://forge.laravel.com/api/orgs/test-org/sites/456')
+        ->and($first->hasRelationship('server'))->toBeTrue()
+        ->and($first->hasLink('self'))->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return str_contains($request->url(), 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites')
