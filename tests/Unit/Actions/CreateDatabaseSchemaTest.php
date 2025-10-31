@@ -3,7 +3,7 @@
 use Illuminate\Http\Client\Request;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
-use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabase;
+use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabaseSchema;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
 
@@ -20,7 +20,7 @@ it('creates a database', function () {
                 'id' => 456,
                 'attributes' => [
                     'name' => 'my_database',
-                    'status' => 'creating',
+                    'status' => 'installing',
                     'created_at' => '2024-01-15T10:30:00.000000Z',
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
                 ],
@@ -29,7 +29,7 @@ it('creates a database', function () {
     ]);
 
     $client = app(Client::class);
-    $action = new CreateDatabase($client);
+    $action = new CreateDatabaseSchema($client);
 
     $payload = new CreateDatabasePayload(
         name: 'my_database',
@@ -45,7 +45,7 @@ it('creates a database', function () {
     expect($database->id)->toBe(456)
         ->and($database->serverId)->toBe(123)
         ->and($database->name)->toBe('my_database')
-        ->and($database->status->value)->toBe('creating');
+        ->and($database->status->value)->toBe('installing');
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/schemas'
@@ -66,7 +66,7 @@ it('creates a database without optional user and password', function () {
                 'id' => 456,
                 'attributes' => [
                     'name' => 'my_database',
-                    'status' => 'creating',
+                    'status' => 'installing',
                     'created_at' => '2024-01-15T10:30:00.000000Z',
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
                 ],
@@ -75,7 +75,7 @@ it('creates a database without optional user and password', function () {
     ]);
 
     $client = app(Client::class);
-    $action = new CreateDatabase($client);
+    $action = new CreateDatabaseSchema($client);
 
     $payload = new CreateDatabasePayload(
         name: 'my_database'
@@ -104,7 +104,7 @@ it('throws exception when request fails', function () {
     ]);
 
     $client = app(Client::class);
-    $action = new CreateDatabase($client);
+    $action = new CreateDatabaseSchema($client);
 
     $payload = new CreateDatabasePayload(
         name: 'my_database'

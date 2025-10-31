@@ -13,13 +13,13 @@ use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 /**
  * @phpstan-import-type DatabaseData from HasDatabase
  */
-readonly class CreateDatabase
+readonly class CreateDatabaseSchema
 {
     use HasDatabase;
     use ParsesResponse;
 
     /**
-     * CreateDatabase constructor.
+     * CreateDatabaseSchema constructor.
      */
     public function __construct(private Client $client) {}
 

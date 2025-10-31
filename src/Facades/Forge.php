@@ -40,7 +40,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
  * @method static void updateEnvContent(int $serverId, int $siteId, UpdateEnvContentPayload $payload)
  * @method static Deployment createDeployment(int $serverId, int $siteId)
  * @method static DeploymentStatus getDeploymentStatus(int $serverId, int $siteId)
- * @method static Database createDatabase(int $serverId, CreateDatabasePayload $payload)
+ * @method static Database createDatabaseSchema(int $serverId, CreateDatabasePayload $payload)
  * @method static void deleteDatabaseSchema(int $serverId, int $databaseId)
  * @method static Collection<int, Database> listDatabaseSchemas(int $serverId, ListDatabaseSchemasPayload $payload)
  * @method static Collection<int, DatabaseUser> listDatabaseUsers(int $serverId, ListDatabaseUsersPayload $payload)

@@ -5,7 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateCommand;
-use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabase;
+use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabaseSchema;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDeployment;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomain;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomainCertificate;
@@ -245,9 +245,9 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Exception
      */
-    public function createDatabase(int $serverId, CreateDatabasePayload $payload): Database
+    public function createDatabaseSchema(int $serverId, CreateDatabasePayload $payload): Database
     {
-        return $this->app->make(CreateDatabase::class)->handle(
+        return $this->app->make(CreateDatabaseSchema::class)->handle(
             serverId: $serverId,
             payload: $payload
         );

@@ -5,6 +5,6 @@ namespace SebastianSulinski\LaravelForgeSdk\Enums;
 enum DatabaseStatus: string
 {
     case Installed = 'installed';
-    case Creating = 'creating';
+    case Installing = 'installing';
     case Removing = 'removing';
 }
