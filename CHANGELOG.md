@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.2] - 2025-10-31
+
+### Changed
+- **Breaking:** Renamed `createDatabase()` method to `createDatabaseSchema()` for consistency with related methods
+- **Breaking:** Renamed `CreateDatabase` action class to `CreateDatabaseSchema`
+- Replaced `Creating` status with `Installing` in `DatabaseStatus` enum to match actual API behavior
+
+### Fixed
+- Added missing `Installing` status to `DatabaseStatus` enum (discovered during UAT testing)
+
 ## [0.6.1] - 2025-10-31
 
 ### Changed
@@ -97,7 +107,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.5.0...v0.5.1

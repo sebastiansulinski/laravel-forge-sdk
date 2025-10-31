@@ -391,7 +391,7 @@ The SDK provides actions for all major Forge operations:
 
 ### Databases
 
-- `CreateDatabase` - Create a database
+- `CreateDatabaseSchema` - Create a database schema
 - `ListDatabaseSchemas` - List database schemas
 - `DeleteDatabaseSchema` - Delete a database schema
 - `ListDatabaseUsers` - List database users
