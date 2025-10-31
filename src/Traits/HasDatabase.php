@@ -6,10 +6,23 @@ use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Enums\DatabaseStatus;
 
+/**
+ * @phpstan-type DatabaseData array{
+ *     id: int,
+ *     attributes: array{
+ *         name: string,
+ *         status: string,
+ *         created_at?: string|null,
+ *         updated_at?: string|null
+ *     }
+ * }
+ */
 trait HasDatabase
 {
     /**
      * Make a database.
+     *
+     * @param  DatabaseData  $data
      */
     protected function makeDatabase(int $serverId, array $data): Database
     {

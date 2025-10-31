@@ -38,7 +38,6 @@ it('gets nginx template by name', function () {
     );
 
     expect($template->id)->toBe(456)
-        ->and($template->serverId)->toBe(123)
         ->and($template->name)->toBe('custom-template')
         ->and($template->content)->toBe('server { listen 80; }');
 

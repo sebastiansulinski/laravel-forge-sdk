@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Payload;
 
+use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
 use SebastianSulinski\LaravelForgeSdk\Traits\BuildsListQuery;
 
 readonly class ListDatabaseUsersPayload
@@ -12,6 +13,7 @@ readonly class ListDatabaseUsersPayload
      * ListDatabaseUsersPayload constructor.
      */
     public function __construct(
+        public PaginationMode $mode = PaginationMode::Paginated,
         public ?string $sort = null,
         public ?int $pageSize = null,
         public ?string $pageCursor = null,

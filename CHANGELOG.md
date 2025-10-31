@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2025-10-31
+
+### Added
+- Added `ListResponse` data object for handling paginated list endpoints with metadata
+- Added `PaginationMode` enum with `All` and `Paginated` modes for flexible pagination control
+- Added `HasApiMetadata` trait (in `Data\Concerns`) for convenient dot notation access to API relationships and links
+- Added `relationships()` and `links()` accessor methods to `Server` and `Site` data objects
+- Added `hasRelationship()` and `hasLink()` helper methods for checking existence
+- Added comprehensive pagination documentation and examples to README
+
+### Changed
+- **Breaking:** All list methods now return `ListResponse` instead of `Collection`
+  - Use `->collection()` method on `ListResponse` to get a Collection instance
+  - Example: `Forge::listServers($payload)->collection()`
+- **Breaking:** List payloads now use `mode` property with `PaginationMode` enum instead of boolean `fetchAll`
+  - `PaginationMode::Paginated` (default) - returns single page
+  - `PaginationMode::All` - fetches all pages automatically
+- Refactored all list actions to use native PHP `array_map()` for better performance
+- Refactored response handling to use `ParsesResponse` trait for consistency
+- Moved `HasApiMetadata` trait to `Data\Concerns` namespace for better architectural alignment
+- Enhanced `Server` and `Site` data objects with `relationships` and `links` properties
+
+### Improved
+- Enhanced type safety with explicit PHPStan type definitions across all actions
+- Improved documentation with detailed pagination mode examples
+- Added comprehensive tests for relationship and link accessor methods
+
 ## [0.4.0] - 2025-10-30
 
 ### Added
@@ -52,7 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.1.0...v0.2.0

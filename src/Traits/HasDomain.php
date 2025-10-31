@@ -8,10 +8,26 @@ use SebastianSulinski\LaravelForgeSdk\Enums\DomainStatus;
 use SebastianSulinski\LaravelForgeSdk\Enums\DomainType;
 use SebastianSulinski\LaravelForgeSdk\Enums\WwwRedirectType;
 
+/**
+ * @phpstan-type DomainData array{
+ *     id: int,
+ *     attributes: array{
+ *         name: string,
+ *         type: string,
+ *         status: string,
+ *         www_redirect_type: string,
+ *         allow_wildcard_subdomains: bool,
+ *         created_at?: string|null,
+ *         updated_at?: string|null
+ *     }
+ * }
+ */
 trait HasDomain
 {
     /**
      * Make domain.
+     *
+     * @param  DomainData  $data
      */
     protected function makeDomain(int $serverId, int $siteId, array $data): Domain
     {

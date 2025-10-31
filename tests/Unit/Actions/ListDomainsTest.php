@@ -52,13 +52,15 @@ it('lists domains', function () {
         siteId: 456
     );
 
+    $collection = $domains->collection();
+
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\Domain $first */
-    $first = $domains->first();
+    $first = $collection->first();
 
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\Domain $last */
-    $last = $domains->last();
+    $last = $collection->last();
 
-    expect($domains)->toHaveCount(2)
+    expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(1)
         ->and($first->serverId)->toBe(123)
         ->and($first->siteId)->toBe(456)
@@ -96,7 +98,7 @@ it('returns empty collection when no domains found', function () {
         siteId: 456
     );
 
-    expect($domains)->toBeEmpty();
+    expect($domains->hasData())->toBeFalse();
 });
 
 it('throws exception when request fails', function () {

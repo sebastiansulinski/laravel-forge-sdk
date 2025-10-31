@@ -2,29 +2,18 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Http\Client\Response;
-use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
+use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDomain;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
 /**
- * @phpstan-type DomainData array{
- *     id: int,
- *     attributes: array{
- *         name: string,
- *         type: string,
- *         status: string,
- *         www_redirect_type: string,
- *         allow_wildcard_subdomains: bool,
- *         created_at: string,
- *         updated_at: string
- *     }
- * }
- * @phpstan-type DataArray array<int, DomainData>
+ * @phpstan-import-type DomainData from HasDomain
  */
 readonly class ListDomains
 {
     use HasDomain;
+    use ParsesResponse;
 
     /**
      * ListDomains constructor.
@@ -34,31 +23,30 @@ readonly class ListDomains
     /**
      * Handle request.
      *
-     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Domain>
-     *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function handle(int $serverId, int $siteId): Collection
+    public function handle(int $serverId, int $siteId): ListResponse
     {
-        $path = $this->client->path(
-            '/servers/%s/sites/%s/domains', $serverId, $siteId
+        $path = $this->client->path('/servers/%s/sites/%s/domains', $serverId, $siteId);
+
+        $httpResponse = $this->client->get(
+            path: $path
+        )->throw();
+
+        /** @var array<int, DomainData> $domains */
+        $domains = $this->parseDataList($httpResponse);
+
+        $mappedDomains = array_map(
+            fn (array $domain) => $this->makeDomain($serverId, $siteId, $domain),
+            $domains
         );
 
-        $response = $this->client->get($path)->throw();
-
-        return new Collection($this->responseData($response))->map(
-            fn (array $domain) => $this->makeDomain($serverId, $siteId, $domain)
+        return new ListResponse(
+            data: $mappedDomains,
+            links: $this->parseLinks($httpResponse),
+            meta: $this->parseMeta($httpResponse),
+            included: $this->parseIncluded($httpResponse)
         );
-    }
-
-    /**
-     * Get the response data.
-     *
-     * @return DataArray
-     */
-    private function responseData(Response $response): array
-    {
-        return $response->json('data', []);
     }
 }

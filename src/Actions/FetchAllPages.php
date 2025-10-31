@@ -2,14 +2,18 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Http\Client\Response;
+use Illuminate\Http\Client\Response as HttpResponse;
 use SebastianSulinski\LaravelForgeSdk\Client;
+use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
 /**
  * @phpstan-type QueryArray array<string, string|int|null|array<string|int|null>>
  */
 readonly class FetchAllPages
 {
+    use ParsesResponse;
+
     /**
      * FetchAllPages constructor.
      */
@@ -19,7 +23,6 @@ readonly class FetchAllPages
      * Fetch all paginated results.
      *
      * @param  QueryArray  $query
-     * @return QueryArray
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -28,7 +31,7 @@ readonly class FetchAllPages
         string $path,
         array $query = [],
         ?string $initialCursor = null
-    ): array {
+    ): ListResponse {
         $allResults = [];
         $cursor = $initialCursor;
 
@@ -39,28 +42,30 @@ readonly class FetchAllPages
                 $currentQuery['page[cursor]'] = $cursor;
             }
 
-            $response = $this->client->get($path, $currentQuery)->throw();
+            $lastResponse = $this->client->get($path, $currentQuery)->throw();
 
-            /** @var QueryArray $data */
-            $data = $response->json('data', []);
-
-            $allResults = array_merge($allResults, $data);
+            $allResults = array_merge($allResults, $this->parseDataList($lastResponse));
 
             /** @var string|null $cursor */
-            $cursor = $response->json('meta.next_cursor');
+            $cursor = $this->parseMeta($lastResponse)['next_cursor'] ?? null;
 
             if ($cursor !== null) {
-                $this->handleRateLimiting($response);
+                $this->handleRateLimiting($lastResponse);
             }
         } while ($cursor !== null);
 
-        return $allResults;
+        return new ListResponse(
+            data: $allResults,
+            links: $this->parseLinks($lastResponse),
+            meta: $this->parseMeta($lastResponse),
+            included: $this->parseIncluded($lastResponse)
+        );
     }
 
     /**
      * Handle rate limiting between pagination requests.
      */
-    private function handleRateLimiting(Response $response): void
+    private function handleRateLimiting(HttpResponse $response): void
     {
         $remaining = (int) $response->header('X-RateLimit-Remaining');
         $resetTime = (int) $response->header('X-RateLimit-Reset');

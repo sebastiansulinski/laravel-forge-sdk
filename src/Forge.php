@@ -32,6 +32,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
+use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
@@ -58,15 +59,13 @@ readonly class Forge
     /**
      * Get the collection of all servers.
      *
-     * @return Collection<int, Server>
-     *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function listServers(
         ListServersPayload $payload = new ListServersPayload
-    ): Collection {
+    ): ListResponse {
         return $this->app->make(ListServers::class)
             ->handle($payload);
     }
@@ -87,8 +86,6 @@ readonly class Forge
     /**
      * Get the collection of all server sites.
      *
-     * @return Collection<int, Site>
-     *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
@@ -96,7 +93,7 @@ readonly class Forge
     public function listSites(
         int $serverId,
         ListSitesPayload $payload = new ListSitesPayload
-    ): Collection {
+    ): ListResponse {
         return $this->app->make(ListSites::class)->handle(
             serverId: $serverId, payload: $payload
         );
@@ -270,8 +267,6 @@ readonly class Forge
     /**
      * List database users.
      *
-     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser>
-     *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
@@ -279,7 +274,7 @@ readonly class Forge
     public function listDatabaseUsers(
         int $serverId,
         ListDatabaseUsersPayload $payload = new ListDatabaseUsersPayload
-    ): Collection {
+    ): ListResponse {
         return $this->app->make(ListDatabaseUsers::class)->handle(
             serverId: $serverId, payload: $payload
         );
@@ -375,8 +370,6 @@ readonly class Forge
     /**
      * List deployments.
      *
-     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Deployment>
-     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
@@ -385,7 +378,7 @@ readonly class Forge
         int $serverId,
         int $siteId,
         ListDeploymentsPayload $payload = new ListDeploymentsPayload,
-    ): Collection {
+    ): ListResponse {
         return $this->app->make(ListDeployments::class)->handle(
             serverId: $serverId,
             siteId: $siteId,
@@ -416,13 +409,11 @@ readonly class Forge
     /**
      * List domains.
      *
-     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Domain>
-     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function listDomains(int $serverId, int $siteId): Collection
+    public function listDomains(int $serverId, int $siteId): ListResponse
     {
         return $this->app->make(ListDomains::class)->handle(
             serverId: $serverId,
