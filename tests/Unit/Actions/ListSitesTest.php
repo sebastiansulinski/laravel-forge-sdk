@@ -119,13 +119,15 @@ it('lists sites', function () {
         )
     );
 
+    $collection = $sites->collection();
+
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\Site $first */
-    $first = $sites->first();
+    $first = $collection->first();
 
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\Site $last */
-    $last = $sites->last();
+    $last = $collection->last();
 
-    expect($sites)->toHaveCount(2)
+    expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(456)
         ->and($first->name)->toBe('example.com')
         ->and($first->status->value)->toBe('installed')
@@ -173,7 +175,7 @@ it('returns empty collection when no sites found', function () {
 
     $sites = $action->handle(serverId: 123);
 
-    expect($sites)->toBeEmpty();
+    expect($sites->hasData())->toBeFalse();
 });
 
 it('throws exception when request fails', function () {

@@ -2,10 +2,12 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
+use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
+use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDeployment;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
 /**
  * @phpstan-import-type DeploymentData from HasDeployment
@@ -13,6 +15,7 @@ use SebastianSulinski\LaravelForgeSdk\Traits\HasDeployment;
 readonly class ListDeployments
 {
     use HasDeployment;
+    use ParsesResponse;
 
     /**
      * ListDeployments constructor.
@@ -25,8 +28,6 @@ readonly class ListDeployments
     /**
      * Handle request.
      *
-     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Deployment>
-     *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
@@ -34,19 +35,76 @@ readonly class ListDeployments
         int $serverId,
         int $siteId,
         ListDeploymentsPayload $payload = new ListDeploymentsPayload,
-    ): Collection {
+    ): ListResponse {
 
-        /** @var array<int, DeploymentData> $allDeployments */
-        $allDeployments = $this->fetchAllPages->handle(
-            path: $this->client->path(
-                '/servers/%s/sites/%s/deployments', $serverId, $siteId
-            ),
+        $path = $this->client->path('/servers/%s/sites/%s/deployments', $serverId, $siteId);
+
+        return match ($payload->mode) {
+            PaginationMode::All => $this->fetchAll($path, $serverId, $siteId, $payload),
+            PaginationMode::Paginated => $this->fetchSinglePage($path, $serverId, $siteId, $payload),
+        };
+    }
+
+    /**
+     * Fetch all pages.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    private function fetchAll(string $path, int $serverId, int $siteId, ListDeploymentsPayload $payload): ListResponse
+    {
+        $response = $this->fetchAllPages->handle(
+            path: $path,
             query: $payload->toQuery(),
             initialCursor: $payload->pageCursor
         );
 
-        return new Collection($allDeployments)->map(
-            fn (array $deployment) => $this->makeDeployment($serverId, $siteId, $deployment)
+        /** @var array<int, DeploymentData> $data */
+        $data = $response->data;
+
+        $deployments = array_map(
+            fn (array $deployment) => $this->makeDeployment($serverId, $siteId, $deployment),
+            $data
+        );
+
+        return new ListResponse(
+            data: $deployments,
+            links: $response->links,
+            meta: $response->meta,
+            included: $response->included
+        );
+    }
+
+    /**
+     * Fetch a single page.
+     *
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Illuminate\Http\Client\ConnectionException
+     */
+    private function fetchSinglePage(
+        string $path,
+        int $serverId,
+        int $siteId,
+        ListDeploymentsPayload $payload
+    ): ListResponse {
+        $httpResponse = $this->client->get(
+            path: $path,
+            query: $payload->toQuery()
+        )->throw();
+
+        /** @var array<int, DeploymentData> $deployments */
+        $deployments = $this->parseDataList($httpResponse);
+
+        $mappedDeployments = array_map(
+            fn (array $deployment) => $this->makeDeployment($serverId, $siteId, $deployment),
+            $deployments
+        );
+
+        return new ListResponse(
+            data: $mappedDeployments,
+            links: $this->parseLinks($httpResponse),
+            meta: $this->parseMeta($httpResponse),
+            included: $this->parseIncluded($httpResponse)
         );
     }
 }

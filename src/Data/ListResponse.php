@@ -1,13 +1,13 @@
 <?php
 
-namespace SebastianSulinski\LaravelForgeSdk;
+namespace SebastianSulinski\LaravelForgeSdk\Data;
 
 use Illuminate\Support\Collection;
 
-readonly class Response
+readonly class ListResponse
 {
     /**
-     * Response constructor.
+     * ListResponse constructor.
      *
      * @param  array<int, mixed>  $data
      * @param  array<string, mixed>  $links

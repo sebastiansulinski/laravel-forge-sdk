@@ -2,8 +2,8 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
+use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDomain;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -23,24 +23,30 @@ readonly class ListDomains
     /**
      * Handle request.
      *
-     * @return Collection<int, \SebastianSulinski\LaravelForgeSdk\Data\Domain>
-     *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function handle(int $serverId, int $siteId): Collection
+    public function handle(int $serverId, int $siteId): ListResponse
     {
-        $path = $this->client->path(
-            '/servers/%s/sites/%s/domains', $serverId, $siteId
-        );
+        $path = $this->client->path('/servers/%s/sites/%s/domains', $serverId, $siteId);
 
-        $response = $this->client->get($path)->throw();
+        $httpResponse = $this->client->get(
+            path: $path
+        )->throw();
 
         /** @var array<int, DomainData> $domains */
-        $domains = $this->parseDataList($response);
+        $domains = $this->parseDataList($httpResponse);
 
-        return new Collection($domains)->map(
-            fn (array $domain) => $this->makeDomain($serverId, $siteId, $domain)
+        $mappedDomains = array_map(
+            fn (array $domain) => $this->makeDomain($serverId, $siteId, $domain),
+            $domains
+        );
+
+        return new ListResponse(
+            data: $mappedDomains,
+            links: $this->parseLinks($httpResponse),
+            meta: $this->parseMeta($httpResponse),
+            included: $this->parseIncluded($httpResponse)
         );
     }
 }

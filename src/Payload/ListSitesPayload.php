@@ -2,6 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Payload;
 
+use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
 use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
 use SebastianSulinski\LaravelForgeSdk\Traits\BuildsListQuery;
 
@@ -15,6 +16,7 @@ readonly class ListSitesPayload
      * @param  array<SiteInclude>  $include
      */
     public function __construct(
+        public PaginationMode $mode = PaginationMode::Paginated,
         public ?string $filterName = null,
         public ?string $sort = null,
         public ?int $pageSize = null,

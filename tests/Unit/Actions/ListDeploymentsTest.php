@@ -83,13 +83,15 @@ it('lists deployments', function () {
         )
     );
 
+    $collection = $deployments->collection();
+
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\Deployment $first */
-    $first = $deployments->first();
+    $first = $collection->first();
 
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\Deployment $last */
-    $last = $deployments->last();
+    $last = $collection->last();
 
-    expect($deployments)->toHaveCount(2)
+    expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(1)
         ->and($first->serverId)->toBe(123)
         ->and($first->siteId)->toBe(456)
@@ -138,7 +140,7 @@ it('returns empty collection when no deployments found', function () {
         siteId: 456
     );
 
-    expect($deployments)->toBeEmpty();
+    expect($deployments->hasData())->toBeFalse();
 });
 
 it('throws exception when request fails', function () {

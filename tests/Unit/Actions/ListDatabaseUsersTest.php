@@ -64,13 +64,15 @@ it('lists database users', function () {
         )
     );
 
+    $collection = $users->collection();
+
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser $first */
-    $first = $users->first();
+    $first = $collection->first();
 
     /** @var \SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser $last */
-    $last = $users->last();
+    $last = $collection->last();
 
-    expect($users)->toHaveCount(2)
+    expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(1)
         ->and($first->serverId)->toBe(123)
         ->and($first->name)->toBe('forge_user')
@@ -114,7 +116,7 @@ it('returns empty collection when no users found', function () {
         serverId: 123
     );
 
-    expect($users)->toBeEmpty();
+    expect($users->hasData())->toBeFalse();
 });
 
 it('throws exception when request fails', function () {
