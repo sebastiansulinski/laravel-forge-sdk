@@ -93,7 +93,6 @@ it('lists deployments', function () {
 
     expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(1)
-        ->and($first->serverId)->toBe(123)
         ->and($first->siteId)->toBe(456)
         ->and($first->status->value)->toBe('finished')
         ->and($first->commit->hash)->toBe('abc123')
@@ -104,7 +103,8 @@ it('lists deployments', function () {
         ->and($last->commit->hash)->toBe('def456');
 
     Http::assertSent(function (Request $request) {
-        return str_contains($request->url(), 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments')
+        return str_contains($request->url(),
+            'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments')
             && $request->method() === 'GET'
             && $request->hasHeader('Authorization', 'Bearer test-token')
             && $request->hasHeader('Accept', 'application/json')

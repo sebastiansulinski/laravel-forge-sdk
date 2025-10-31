@@ -12,7 +12,6 @@ readonly class Deployment
      */
     public function __construct(
         public int $id,
-        public int $serverId,
         public int $siteId,
         public Commit $commit,
         public string $type,

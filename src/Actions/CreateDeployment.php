@@ -43,6 +43,6 @@ readonly class CreateDeployment
         }
 
         /** @var DeploymentData $data */
-        return $this->makeDeployment($serverId, $siteId, $data);
+        return $this->makeDeployment($siteId, $data);
     }
 }

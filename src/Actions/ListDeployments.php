@@ -63,7 +63,7 @@ readonly class ListDeployments
         $data = $response->data;
 
         $deployments = array_map(
-            fn (array $deployment) => $this->makeDeployment($serverId, $siteId, $deployment),
+            fn (array $deployment) => $this->makeDeployment($siteId, $deployment),
             $data
         );
 
@@ -96,7 +96,7 @@ readonly class ListDeployments
         $deployments = $this->parseDataList($httpResponse);
 
         $mappedDeployments = array_map(
-            fn (array $deployment) => $this->makeDeployment($serverId, $siteId, $deployment),
+            fn (array $deployment) => $this->makeDeployment($siteId, $deployment),
             $deployments
         );
 
