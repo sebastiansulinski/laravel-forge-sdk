@@ -40,8 +40,12 @@ readonly class ListDeployments
         $path = $this->client->path('/servers/%s/sites/%s/deployments', $serverId, $siteId);
 
         return match ($payload->mode) {
-            PaginationMode::All => $this->fetchAll($path, $serverId, $siteId, $payload),
-            PaginationMode::Paginated => $this->fetchSinglePage($path, $serverId, $siteId, $payload),
+            PaginationMode::All => $this->fetchAll(
+                path: $path, siteId: $siteId, payload: $payload
+            ),
+            PaginationMode::Paginated => $this->fetchSinglePage(
+                path: $path, siteId: $siteId, payload: $payload
+            ),
         };
     }
 
@@ -51,7 +55,7 @@ readonly class ListDeployments
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    private function fetchAll(string $path, int $serverId, int $siteId, ListDeploymentsPayload $payload): ListResponse
+    private function fetchAll(string $path, int $siteId, ListDeploymentsPayload $payload): ListResponse
     {
         $response = $this->fetchAllPages->handle(
             path: $path,
@@ -83,7 +87,6 @@ readonly class ListDeployments
      */
     private function fetchSinglePage(
         string $path,
-        int $serverId,
         int $siteId,
         ListDeploymentsPayload $payload
     ): ListResponse {
