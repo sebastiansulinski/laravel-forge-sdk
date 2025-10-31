@@ -2,15 +2,19 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasServer;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
+/**
+ * @phpstan-import-type ServerData from HasServer
+ */
 readonly class GetServer
 {
     use HasServer;
+    use ParsesResponse;
 
     /**
      * GetServer constructor.
@@ -28,26 +32,15 @@ readonly class GetServer
     {
         $path = $this->client->path('/servers/%s', $serverId);
 
-        $response = $this->client->get($path)->throw();
+        $httpResponse = $this->client->get($path)->throw();
 
-        $data = $this->responseData($response);
+        $data = $this->parseData($httpResponse);
 
         if (empty($data)) {
             throw new RequestFailed('Unable to get server.');
         }
 
+        /** @var ServerData $data */
         return $this->makeServer($data);
-    }
-
-    /**
-     * Get the response data.
-     *
-     * @return array<string, mixed>
-     */
-    private function responseData(Response $response): array
-    {
-        $data = $response->json('data', []);
-
-        return is_array($data) ? $data : [];
     }
 }

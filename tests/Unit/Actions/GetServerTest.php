@@ -18,6 +18,7 @@ it('gets server', function () {
         'forge.laravel.com/api/orgs/test-org/servers/123' => Http::response([
             'data' => [
                 'id' => 123,
+                'type' => 'server',
                 'attributes' => [
                     'name' => 'production-server',
                     'provider' => 'digitalocean',
@@ -35,6 +36,16 @@ it('gets server', function () {
                     'created_at' => '2024-01-15T10:30:00.000000Z',
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
                 ],
+                'relationships' => [
+                    'sites' => [
+                        'links' => [
+                            'related' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites',
+                        ],
+                    ],
+                ],
+                'links' => [
+                    'self' => 'https://forge.laravel.com/api/orgs/test-org/servers/123',
+                ],
             ],
         ]),
     ]);
@@ -44,7 +55,8 @@ it('gets server', function () {
 
     $server = $action->handle(serverId: 123);
 
-    expect($server->id)->toBe(123)
+    expect($server)->toBeInstanceOf(\SebastianSulinski\LaravelForgeSdk\Data\Server::class)
+        ->and($server->id)->toBe(123)
         ->and($server->name)->toBe('production-server')
         ->and($server->provider)->toBe('digitalocean')
         ->and($server->region)->toBe('lon1')
@@ -57,7 +69,17 @@ it('gets server', function () {
         ->and($server->type)->toBe('app')
         ->and($server->size)->toBe('s-2vcpu-2gb')
         ->and($server->ubuntuVersion)->toBe('22.04')
-        ->and($server->phpCliVersion)->toBe('php84');
+        ->and($server->phpCliVersion)->toBe('php84')
+        ->and($server->relationships)->toBe([
+            'sites' => [
+                'links' => [
+                    'related' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites',
+                ],
+            ],
+        ])
+        ->and($server->links)->toBe([
+            'self' => 'https://forge.laravel.com/api/orgs/test-org/servers/123',
+        ]);
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123'

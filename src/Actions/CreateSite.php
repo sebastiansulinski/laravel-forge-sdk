@@ -8,10 +8,15 @@ use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasSite;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
+/**
+ * @phpstan-import-type SiteData from HasSite
+ */
 readonly class CreateSite
 {
     use HasSite;
+    use ParsesResponse;
 
     /**
      * CreateSite constructor.
@@ -36,7 +41,10 @@ readonly class CreateSite
             throw new RequestFailed($this->exceptionMessage($response));
         }
 
-        return $this->makeSite($this->responseData($response));
+        /** @var SiteData $data */
+        $data = $this->parseData($response);
+
+        return $this->makeSite($data);
     }
 
     /**
@@ -47,17 +55,5 @@ readonly class CreateSite
         $message = $response->json('message', 'Response returned: '.$response->status());
 
         return is_string($message) ? $message : 'Response returned: '.$response->status();
-    }
-
-    /**
-     * Get the response data.
-     *
-     * @return array<string, mixed>
-     */
-    private function responseData(Response $response): array
-    {
-        $data = $response->json('data');
-
-        return is_array($data) ? $data : [];
     }
 }

@@ -2,15 +2,18 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasNginxTemplate;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
+/**
+ * @phpstan-import-type NginxTemplateData from HasNginxTemplate
+ */
 readonly class GetNginxTemplateByName
 {
-    use HasNginxTemplate;
+    use HasNginxTemplate, ParsesResponse;
 
     /**
      * GetNginxTemplateByName constructor.
@@ -37,24 +40,15 @@ readonly class GetNginxTemplateByName
             );
         }
 
-        $data = $this->responseData($response);
+        $allData = $this->parseDataList($response);
 
-        if (empty($data)) {
+        if (empty($allData)) {
             return null;
         }
 
-        return $this->makeNginxTemplate($serverId, $data);
-    }
+        /** @var NginxTemplateData $data */
+        $data = $allData[0];
 
-    /**
-     * Get the response data.
-     *
-     * @return array<string, mixed>
-     */
-    private function responseData(Response $response): array
-    {
-        $data = $response->json('data.0');
-
-        return is_array($data) ? $data : [];
+        return $this->makeNginxTemplate($data);
     }
 }

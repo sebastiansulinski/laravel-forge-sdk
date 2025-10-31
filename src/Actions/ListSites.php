@@ -7,6 +7,9 @@ use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasSite;
 
+/**
+ * @phpstan-import-type SiteData from HasSite
+ */
 readonly class ListSites
 {
     use HasSite;
@@ -32,13 +35,13 @@ readonly class ListSites
         ListSitesPayload $payload = new ListSitesPayload
     ): Collection {
 
+        /** @var array<int, SiteData> $allSites */
         $allSites = $this->fetchAllPages->handle(
             path: $this->client->path('/servers/%s/sites', $serverId),
             query: $payload->toQuery(),
             initialCursor: $payload->pageCursor
         );
 
-        /** @var array<int, array<string, mixed>> $allSites */
         return new Collection($allSites)->map(
             fn (array $site) => $this->makeSite($site)
         );

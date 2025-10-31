@@ -8,6 +8,9 @@ readonly class Server
 {
     /**
      * Server constructor.
+     *
+     * @param  array<string, mixed>  $relationships
+     * @param  array<string, mixed>  $links
      */
     public function __construct(
         public int $id,
@@ -23,6 +26,8 @@ readonly class Server
         public string $type,
         public Carbon $createdAt,
         public Carbon $updatedAt,
+        public array $relationships = [],
+        public array $links = [],
         public ?string $size = null,
         public ?string $ubuntuVersion = null,
         public ?string $phpCliVersion = null,

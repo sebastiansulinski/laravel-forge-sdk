@@ -2,29 +2,18 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDomain;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
 /**
- * @phpstan-type DomainData array{
- *     id: int,
- *     attributes: array{
- *         name: string,
- *         type: string,
- *         status: string,
- *         www_redirect_type: string,
- *         allow_wildcard_subdomains: bool,
- *         created_at: string,
- *         updated_at: string
- *     }
- * }
- * @phpstan-type DataArray array<int, DomainData>
+ * @phpstan-import-type DomainData from HasDomain
  */
 readonly class ListDomains
 {
     use HasDomain;
+    use ParsesResponse;
 
     /**
      * ListDomains constructor.
@@ -47,18 +36,11 @@ readonly class ListDomains
 
         $response = $this->client->get($path)->throw();
 
-        return new Collection($this->responseData($response))->map(
+        /** @var array<int, DomainData> $domains */
+        $domains = $this->parseDataList($response);
+
+        return new Collection($domains)->map(
             fn (array $domain) => $this->makeDomain($serverId, $siteId, $domain)
         );
-    }
-
-    /**
-     * Get the response data.
-     *
-     * @return DataArray
-     */
-    private function responseData(Response $response): array
-    {
-        return $response->json('data', []);
     }
 }

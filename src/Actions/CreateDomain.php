@@ -2,16 +2,20 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
-use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Domain;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDomain;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
+/**
+ * @phpstan-import-type DomainData from HasDomain
+ */
 readonly class CreateDomain
 {
     use HasDomain;
+    use ParsesResponse;
 
     /**
      * CreateDomain constructor.
@@ -34,24 +38,13 @@ readonly class CreateDomain
 
         $response = $this->client->post($path, $payload->toArray())->throw();
 
-        $data = $this->responseData($response);
+        $data = $this->parseData($response);
 
         if (empty($data)) {
             throw new RequestFailed('Unable to create domain.');
         }
 
+        /** @var DomainData $data */
         return $this->makeDomain($serverId, $siteId, $data);
-    }
-
-    /**
-     * Get the response data.
-     *
-     * @return array<string, mixed>
-     */
-    private function responseData(Response $response): array
-    {
-        $data = $response->json('data', []);
-
-        return is_array($data) ? $data : [];
     }
 }

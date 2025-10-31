@@ -7,6 +7,9 @@ use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDeployment;
 
+/**
+ * @phpstan-import-type DeploymentData from HasDeployment
+ */
 readonly class ListDeployments
 {
     use HasDeployment;
@@ -33,7 +36,7 @@ readonly class ListDeployments
         ListDeploymentsPayload $payload = new ListDeploymentsPayload,
     ): Collection {
 
-        /** @var array<int, array<string, mixed>> $allDeployments */
+        /** @var array<int, DeploymentData> $allDeployments */
         $allDeployments = $this->fetchAllPages->handle(
             path: $this->client->path(
                 '/servers/%s/sites/%s/deployments', $serverId, $siteId

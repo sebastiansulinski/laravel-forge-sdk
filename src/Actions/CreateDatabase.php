@@ -8,10 +8,15 @@ use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDatabase;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
+/**
+ * @phpstan-import-type DatabaseData from HasDatabase
+ */
 readonly class CreateDatabase
 {
     use HasDatabase;
+    use ParsesResponse;
 
     /**
      * CreateDatabase constructor.
@@ -36,7 +41,10 @@ readonly class CreateDatabase
             throw new RequestFailed($this->exceptionMessage($response));
         }
 
-        return $this->makeDatabase($serverId, $this->responseData($response));
+        /** @var DatabaseData $data */
+        $data = $this->parseData($response);
+
+        return $this->makeDatabase($serverId, $data);
     }
 
     /**
@@ -47,17 +55,5 @@ readonly class CreateDatabase
         $message = $response->json('message', 'Response returned: '.$response->status());
 
         return is_string($message) ? $message : 'Response returned: '.$response->status();
-    }
-
-    /**
-     * Get the response data.
-     *
-     * @return array<string, mixed>
-     */
-    private function responseData(Response $response): array
-    {
-        $data = $response->json('data', []);
-
-        return is_array($data) ? $data : [];
     }
 }

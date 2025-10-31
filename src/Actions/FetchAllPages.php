@@ -4,12 +4,15 @@ namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
 use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
+use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
 /**
  * @phpstan-type QueryArray array<string, string|int|null|array<string|int|null>>
  */
 readonly class FetchAllPages
 {
+    use ParsesResponse;
+
     /**
      * FetchAllPages constructor.
      */
@@ -42,12 +45,13 @@ readonly class FetchAllPages
             $response = $this->client->get($path, $currentQuery)->throw();
 
             /** @var QueryArray $data */
-            $data = $response->json('data', []);
+            $data = $this->parseDataList($response);
 
             $allResults = array_merge($allResults, $data);
 
+            $meta = $this->parseMeta($response);
             /** @var string|null $cursor */
-            $cursor = $response->json('meta.next_cursor');
+            $cursor = $meta['next_cursor'] ?? null;
 
             if ($cursor !== null) {
                 $this->handleRateLimiting($response);

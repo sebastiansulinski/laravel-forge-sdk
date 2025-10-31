@@ -7,6 +7,9 @@ use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDatabaseUser;
 
+/**
+ * @phpstan-import-type DatabaseUserData from HasDatabaseUser
+ */
 readonly class ListDatabaseUsers
 {
     use HasDatabaseUser;
@@ -32,6 +35,7 @@ readonly class ListDatabaseUsers
         ListDatabaseUsersPayload $payload = new ListDatabaseUsersPayload
     ): Collection {
 
+        /** @var array<int, DatabaseUserData> $allUsers */
         $allUsers = $this->fetchAllPages->handle(
             path: $this->client->path(
                 '/servers/%s/database/users', $serverId
@@ -40,7 +44,6 @@ readonly class ListDatabaseUsers
             initialCursor: $payload->pageCursor
         );
 
-        /** @var array<int, array<string, mixed>> $allUsers */
         return new Collection($allUsers)->map(
             fn (array $user) => $this->makeDatabaseUser($serverId, $user)
         );
