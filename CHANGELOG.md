@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2025-11-01
+
+### Added
+- Added `ListCommands` action to fetch site commands with support for filtering and pagination
+- Added `WwwRedirectType` enum for managing WWW redirect behavior (`None`, `FromWww`, `ToWww`)
+- Added support for wildcard subdomains in site creation with `allow_wildcard_subdomains` parameter
+- Added domain mode validations to `CreateSite` action
+
+### Changed
+- **Breaking:** Refactored all enums, payloads, and traits to use nested namespaces for better organization
+  - Enums moved to `Enums\{Resource}` namespace (e.g., `Enums\Site\Type`, `Enums\Certificate\Status`)
+  - Payloads moved to `Payload\{Resource}` namespace (e.g., `Payload\Site\CreatePayload`)
+  - Traits moved to appropriate namespaces (e.g., `Data\Concerns\HasApiMetadata`)
+- Removed unused classes for cleaner codebase
+
+### Fixed
+- Fixed README documentation to correctly show `getSite()` method signature (removed incorrect `serverId` parameter)
+- Fixed README examples for `CreateSite` to include required `www_redirect_type` and `allow_wildcard_subdomains` parameters when using `DomainMode::Custom`
+
 ## [0.6.3] - 2025-10-31
 
 ### Fixed
@@ -112,7 +131,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.3...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.3...v0.7.0
 [0.6.3]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.0...v0.6.1
