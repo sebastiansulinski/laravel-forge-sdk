@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2025-11-01
+
+### Fixed
+- Fixed `Command` data object `duration` property type from `?int` to `?string` to match API response format (returns human-readable format like "5m")
+
+### Changed
+- Removed `siteId` property from `Command` data object as it's not included in the API response
+
 ## [0.7.0] - 2025-11-01
 
 ### Added
@@ -131,7 +139,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.3...v0.7.0
 [0.6.3]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.6.1...v0.6.2
