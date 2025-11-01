@@ -12,11 +12,10 @@ readonly class Command
      */
     public function __construct(
         public int $id,
-        public int $siteId,
         public string $command,
         public Status $status,
         public ?int $userId = null,
-        public ?int $duration = null,
+        public ?string $duration = null,
         public ?Carbon $createdAt = null,
         public ?Carbon $updatedAt = null,
     ) {}

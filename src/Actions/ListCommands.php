@@ -41,10 +41,10 @@ readonly class ListCommands
 
         return match ($payload->mode) {
             PaginationMode::All => $this->fetchAll(
-                path: $path, siteId: $siteId, payload: $payload
+                path: $path, payload: $payload
             ),
             PaginationMode::Paginated => $this->fetchSinglePage(
-                path: $path, siteId: $siteId, payload: $payload
+                path: $path, payload: $payload
             ),
         };
     }
@@ -55,7 +55,7 @@ readonly class ListCommands
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    private function fetchAll(string $path, int $siteId, ListPayload $payload): ListResponse
+    private function fetchAll(string $path, ListPayload $payload): ListResponse
     {
         $response = $this->fetchAllPages->handle(
             path: $path,
@@ -67,7 +67,7 @@ readonly class ListCommands
         $data = $response->data;
 
         $commands = array_map(
-            fn (array $command) => $this->makeCommand($siteId, $command),
+            fn (array $command) => $this->makeCommand($command),
             $data
         );
 
@@ -87,7 +87,6 @@ readonly class ListCommands
      */
     private function fetchSinglePage(
         string $path,
-        int $siteId,
         ListPayload $payload
     ): ListResponse {
         $httpResponse = $this->client->get(
@@ -99,7 +98,7 @@ readonly class ListCommands
         $commands = $this->parseDataList($httpResponse);
 
         $mappedCommands = array_map(
-            fn (array $command) => $this->makeCommand($siteId, $command),
+            fn (array $command) => $this->makeCommand($command),
             $commands
         );
 

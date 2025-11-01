@@ -24,7 +24,7 @@ it('lists commands', function () {
                         'command' => 'php artisan migrate',
                         'status' => 'finished',
                         'user_id' => 100,
-                        'duration' => 45,
+                        'duration' => '45s',
                         'created_at' => '2024-01-15T10:30:00.000000Z',
                         'updated_at' => '2024-01-15T10:30:45.000000Z',
                     ],
@@ -79,11 +79,10 @@ it('lists commands', function () {
 
     expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(1)
-        ->and($first->siteId)->toBe(456)
         ->and($first->command)->toBe('php artisan migrate')
         ->and($first->status->value)->toBe('finished')
         ->and($first->userId)->toBe(100)
-        ->and($first->duration)->toBe(45)
+        ->and($first->duration)->toBe('45s')
         ->and($last->id)->toBe(2)
         ->and($last->command)->toBe('php artisan cache:clear')
         ->and($last->status->value)->toBe('running')

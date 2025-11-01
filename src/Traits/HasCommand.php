@@ -13,7 +13,7 @@ use SebastianSulinski\LaravelForgeSdk\Enums\Command\Status;
  *         command: string,
  *         status: string,
  *         user_id?: int|null,
- *         duration?: int|null,
+ *         duration?: string|null,
  *         created_at?: string|null,
  *         updated_at?: string|null
  *     }
@@ -26,13 +26,12 @@ trait HasCommand
      *
      * @param  CommandData  $data
      */
-    protected function makeCommand(int $siteId, array $data): Command
+    protected function makeCommand(array $data): Command
     {
         $attributes = $data['attributes'];
 
         return new Command(
             id: $data['id'],
-            siteId: $siteId,
             command: $attributes['command'],
             status: Status::from($attributes['status']),
             userId: $attributes['user_id'] ?? null,
