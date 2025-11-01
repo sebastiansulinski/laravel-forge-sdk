@@ -455,6 +455,7 @@ The SDK provides actions for all major Forge operations:
 
 ### Commands
 
+- `ListCommands` - List commands executed on a site
 - `CreateCommand` - Execute a command on the server
 
 ### Nginx Templates
@@ -500,6 +501,7 @@ The SDK uses typed data objects for all responses:
 - `Domain` - Domain information
 - `Deployment` - Deployment information
 - `DeploymentStatus` - Deployment status
+- `Command` - Command information
 - `Repository` - Repository information
 - `MaintenanceMode` - Maintenance mode status
 - `NginxTemplate` - Nginx template
@@ -540,6 +542,9 @@ Type-safe enums for all Forge constants:
 - `Certificate\KeyType` - Certificate key types (`Ecdsa`, `Rsa`)
 - `Certificate\VerificationMethod` - Verification methods (`Http01`, `Dns01`)
 - `Certificate\RequestStatus` - Certificate request status values
+
+### Command
+- `Command\Status` - Command status values (`Waiting`, `Running`, `Finished`, `Timeout`, `Failed`)
 
 ### Database
 - `Database\Status` - Database status values
@@ -589,6 +594,10 @@ Payload classes represent request data for API operations. They are organized by
 
 ### Domain Payloads
 - `Domain\CreatePayload` - Data for adding a domain to a site
+
+### Command Payloads
+- `Command\ListPayload` - Query parameters for listing commands
+  - Supports filtering by user ID, status, command text, and pagination
 
 ### Server Payloads
 - `Server\ListPayload` - Query parameters for listing servers

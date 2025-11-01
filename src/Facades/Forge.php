@@ -5,6 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Facades;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Facade;
 use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
+use SebastianSulinski\LaravelForgeSdk\Data\Command;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
@@ -15,6 +16,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Forge as ForgeService;
 use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreatePayload as CreateCertificatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Command\ListPayload as ListCommandsPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListSchemasPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListUsersPayload;
@@ -35,6 +37,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static Site createSite(int $serverId, CreateSitePayload $payload)
  * @method static void updateSite(int $serverId, int $siteId, UpdateSitePayload $payload)
  * @method static void deleteSite(int $serverId, int $siteId)
+ * @method static Collection<int, Command> listCommands(int $serverId, int $siteId, ListCommandsPayload $payload)
  * @method static bool createCommand(int $serverId, int $siteId, string $command)
  * @method static string getEnvContent(int $serverId, int $siteId)
  * @method static void updateEnvContent(int $serverId, int $siteId, UpdateEnvPayload $payload)

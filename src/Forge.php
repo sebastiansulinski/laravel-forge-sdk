@@ -19,6 +19,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\GetEnvContent;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetNginxTemplateByName;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetServer;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetSite;
+use SebastianSulinski\LaravelForgeSdk\Actions\ListCommands;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseSchemas;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseUsers;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDeployments;
@@ -37,6 +38,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreatePayload as CreateCertificatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Command\ListPayload as ListCommandsPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListSchemasPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListUsersPayload;
@@ -157,6 +159,25 @@ readonly class Forge
     {
         $this->app->make(DeleteSite::class)
             ->handle(serverId: $serverId, siteId: $siteId);
+    }
+
+    /**
+     * List commands for a site.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function listCommands(
+        int $serverId,
+        int $siteId,
+        ListCommandsPayload $payload = new ListCommandsPayload,
+    ): ListResponse {
+        return $this->app->make(ListCommands::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            payload: $payload
+        );
     }
 
     /**
