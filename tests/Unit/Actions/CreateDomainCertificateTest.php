@@ -5,9 +5,9 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomainCertificate;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Enums\CertificateKeyType;
-use SebastianSulinski\LaravelForgeSdk\Enums\CertificateVerificationMethod;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateLetsEncryptCertificatePayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\KeyType;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\VerificationMethod;
+use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreateLetsEncryptPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -37,9 +37,9 @@ it('creates a lets encrypt certificate', function () {
     $client = app(Client::class);
     $action = new CreateDomainCertificate($client);
 
-    $payload = new CreateLetsEncryptCertificatePayload(
-        verification_method: CertificateVerificationMethod::Http01,
-        key_type: CertificateKeyType::Rsa,
+    $payload = new CreateLetsEncryptPayload(
+        verification_method: VerificationMethod::Http01,
+        key_type: KeyType::Rsa,
         preferred_chain: 'ISRG Root X1'
     );
 
@@ -96,9 +96,9 @@ it('creates a lets encrypt certificate with dns verification', function () {
     $client = app(Client::class);
     $action = new CreateDomainCertificate($client);
 
-    $payload = new CreateLetsEncryptCertificatePayload(
-        verification_method: CertificateVerificationMethod::Dns01,
-        key_type: CertificateKeyType::Ecdsa
+    $payload = new CreateLetsEncryptPayload(
+        verification_method: VerificationMethod::Dns01,
+        key_type: KeyType::Ecdsa
     );
 
     $certificate = $action->handle(
@@ -127,9 +127,9 @@ it('throws exception when request fails', function () {
     $client = app(Client::class);
     $action = new CreateDomainCertificate($client);
 
-    $payload = new CreateLetsEncryptCertificatePayload(
-        verification_method: CertificateVerificationMethod::Http01,
-        key_type: CertificateKeyType::Rsa
+    $payload = new CreateLetsEncryptPayload(
+        verification_method: VerificationMethod::Http01,
+        key_type: KeyType::Rsa
     );
 
     $action->handle(

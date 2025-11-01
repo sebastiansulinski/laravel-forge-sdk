@@ -2,7 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
-use SebastianSulinski\LaravelForgeSdk\Enums\MaintenanceModeStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\MaintenanceModeStatus;
 
 readonly class MaintenanceMode
 {

@@ -3,7 +3,7 @@
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload;
 
 readonly class UpdateSite
 {
@@ -19,7 +19,7 @@ readonly class UpdateSite
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Exception
      */
-    public function handle(int $serverId, int $siteId, UpdateSitePayload $payload): void
+    public function handle(int $serverId, int $siteId, UpdatePayload $payload): void
     {
         $path = $this->client->path(
             '/servers/%s/sites/%s', $serverId, $siteId

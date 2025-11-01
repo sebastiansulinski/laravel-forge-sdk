@@ -5,7 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Traits;
 use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Commit;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
-use SebastianSulinski\LaravelForgeSdk\Enums\DeploymentStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Deployment\Status;
 
 /**
  * @phpstan-type DeploymentData array{
@@ -48,7 +48,7 @@ trait HasDeployment
                 branch: $commitData['branch'] ?? null
             ),
             type: $attributes['type'],
-            status: DeploymentStatus::from($attributes['status']),
+            status: Status::from($attributes['status']),
             createdAt: isset($attributes['created_at'])
                 ? Carbon::parse($attributes['created_at'])
                 : null,

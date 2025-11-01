@@ -5,7 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Actions;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseSchemasPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListSchemasPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDatabase;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -33,7 +33,7 @@ readonly class ListDatabaseSchemas
      */
     public function handle(
         int $serverId,
-        ListDatabaseSchemasPayload $payload = new ListDatabaseSchemasPayload
+        ListSchemasPayload $payload = new ListSchemasPayload
     ): ListResponse {
 
         $path = $this->client->path('/servers/%s/database/schemas', $serverId);
@@ -50,7 +50,7 @@ readonly class ListDatabaseSchemas
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    private function fetchAll(string $path, int $serverId, ListDatabaseSchemasPayload $payload): ListResponse
+    private function fetchAll(string $path, int $serverId, ListSchemasPayload $payload): ListResponse
     {
         $response = $this->fetchAllPages->handle(
             path: $path,
@@ -80,7 +80,7 @@ readonly class ListDatabaseSchemas
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Http\Client\ConnectionException
      */
-    private function fetchSinglePage(string $path, int $serverId, ListDatabaseSchemasPayload $payload): ListResponse
+    private function fetchSinglePage(string $path, int $serverId, ListSchemasPayload $payload): ListResponse
     {
         $httpResponse = $this->client->get(
             path: $path,

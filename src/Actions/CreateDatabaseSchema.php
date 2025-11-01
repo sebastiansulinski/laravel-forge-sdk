@@ -6,7 +6,7 @@ use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDatabase;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -31,7 +31,7 @@ readonly class CreateDatabaseSchema
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Exception
      */
-    public function handle(int $serverId, CreateDatabasePayload $payload): Database
+    public function handle(int $serverId, CreateSchemaPayload $payload): Database
     {
         $path = $this->client->path('/servers/%s/database/schemas', $serverId);
 

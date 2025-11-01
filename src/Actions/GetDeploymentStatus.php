@@ -5,7 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Actions;
 use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
-use SebastianSulinski\LaravelForgeSdk\Enums\DeploymentStatus as DeploymentStatusEnum;
+use SebastianSulinski\LaravelForgeSdk\Enums\Deployment\Status as DeploymentStatusEnum;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -13,7 +13,7 @@ use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
  * @phpstan-type DataArray array{
  *     id: string,
  *     attributes: array{
- *         status: string,
+ *         status: string|null,
  *         started_at: string
  *     }
  * }
@@ -65,18 +65,18 @@ readonly class GetDeploymentStatus
             id: $data['id'],
             serverId: $serverId,
             siteId: $siteId,
-            status: $this->status($attributes['status']),
-            startedAt: Carbon::parse($attributes['started_at'])
+            startedAt: Carbon::parse($attributes['started_at']),
+            status: $this->status($attributes['status'])
         );
     }
 
     /**
      * Get status.
      */
-    private function status(?string $status = null): DeploymentStatusEnum
+    private function status(?string $status = null): ?DeploymentStatusEnum
     {
         return $status === null
-            ? DeploymentStatusEnum::Pending
+            ? null
             : DeploymentStatusEnum::from($status);
     }
 }

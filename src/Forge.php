@@ -3,7 +3,6 @@
 namespace SebastianSulinski\LaravelForgeSdk;
 
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Support\Collection;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateCommand;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabaseSchema;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDeployment;
@@ -37,19 +36,19 @@ use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateCertificatePayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateCommandPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseSchemasPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateDeploymentScriptPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateEnvContentPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreatePayload as CreateCertificatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListSchemasPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListUsersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\ListPayload as ListDeploymentsPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\UpdateScriptPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Domain\CreatePayload as CreateDomainPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Env\UpdatePayload as UpdateEnvPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\CreateCommandPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload as CreateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload as ListSitesPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePayload;
 
 readonly class Forge
 {
@@ -200,7 +199,7 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function updateEnvContent(int $serverId, int $siteId, UpdateEnvContentPayload $payload): void
+    public function updateEnvContent(int $serverId, int $siteId, UpdateEnvPayload $payload): void
     {
         $this->app->make(UpdateEnvContent::class)->handle(
             serverId: $serverId,
@@ -245,7 +244,7 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Exception
      */
-    public function createDatabaseSchema(int $serverId, CreateDatabasePayload $payload): Database
+    public function createDatabaseSchema(int $serverId, CreateSchemaPayload $payload): Database
     {
         return $this->app->make(CreateDatabaseSchema::class)->handle(
             serverId: $serverId,
@@ -275,7 +274,7 @@ readonly class Forge
      */
     public function listDatabaseSchemas(
         int $serverId,
-        ListDatabaseSchemasPayload $payload = new ListDatabaseSchemasPayload
+        ListSchemasPayload $payload = new ListSchemasPayload
     ): ListResponse {
         return $this->app->make(ListDatabaseSchemas::class)->handle(
             serverId: $serverId, payload: $payload
@@ -291,7 +290,7 @@ readonly class Forge
      */
     public function listDatabaseUsers(
         int $serverId,
-        ListDatabaseUsersPayload $payload = new ListDatabaseUsersPayload
+        ListUsersPayload $payload = new ListUsersPayload
     ): ListResponse {
         return $this->app->make(ListDatabaseUsers::class)->handle(
             serverId: $serverId, payload: $payload
@@ -376,7 +375,7 @@ readonly class Forge
     public function updateDeploymentScript(
         int $serverId,
         int $siteId,
-        UpdateDeploymentScriptPayload $payload
+        UpdateScriptPayload $payload
     ): void {
         $this->app->make(UpdateDeploymentScript::class)->handle(
             serverId: $serverId,

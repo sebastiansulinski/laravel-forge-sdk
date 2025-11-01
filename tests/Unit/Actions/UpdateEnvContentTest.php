@@ -5,7 +5,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\UpdateEnvContent;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateEnvContentPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Env\UpdatePayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -21,7 +21,7 @@ it('updates environment content', function () {
     $client = app(Client::class);
     $action = new UpdateEnvContent($client);
 
-    $payload = new UpdateEnvContentPayload(
+    $payload = new UpdatePayload(
         environment: implode(PHP_EOL, [
             'APP_NAME=Laravel',
             'APP_ENV=production',
@@ -68,7 +68,7 @@ it('updates environment content with minimal data', function () {
     $client = app(Client::class);
     $action = new UpdateEnvContent($client);
 
-    $payload = new UpdateEnvContentPayload(
+    $payload = new UpdatePayload(
         environment: 'APP_NAME=Laravel'
     );
 
@@ -101,7 +101,7 @@ it('throws exception when request fails', function () {
     $client = app(Client::class);
     $action = new UpdateEnvContent($client);
 
-    $payload = new UpdateEnvContentPayload(
+    $payload = new UpdatePayload(
         environment: 'APP_NAME=Laravel'
     );
 

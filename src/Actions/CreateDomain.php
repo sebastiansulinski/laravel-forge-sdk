@@ -5,7 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Actions;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Domain;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Domain\CreatePayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDomain;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -30,7 +30,7 @@ readonly class CreateDomain
      * @throws \SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed
      * @throws \Exception
      */
-    public function handle(int $serverId, int $siteId, CreateDomainPayload $payload): Domain
+    public function handle(int $serverId, int $siteId, CreatePayload $payload): Domain
     {
         $path = $this->client->path(
             '/servers/%s/sites/%s/domains', $serverId, $siteId

@@ -4,7 +4,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
 use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
-use SebastianSulinski\LaravelForgeSdk\Enums\DatabaseStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Database\Status;
 
 /**
  * @phpstan-type DatabaseData array{
@@ -32,7 +32,7 @@ trait HasDatabase
             id: $data['id'],
             serverId: $serverId,
             name: $attributes['name'],
-            status: DatabaseStatus::from($attributes['status']),
+            status: Status::from($attributes['status']),
             createdAt: isset($attributes['created_at'])
                 ? Carbon::parse($attributes['created_at'])
                 : null,

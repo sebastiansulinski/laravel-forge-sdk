@@ -6,7 +6,7 @@ use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasSite;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -31,7 +31,7 @@ readonly class CreateSite
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Exception
      */
-    public function handle(int $serverId, CreateSitePayload $payload): Site
+    public function handle(int $serverId, CreatePayload $payload): Site
     {
         $path = $this->client->path('/servers/%s/sites', $serverId);
 

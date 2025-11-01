@@ -74,7 +74,7 @@ it('gets deployment status with deploying state', function () {
     expect($deploymentStatus->status->value)->toBe('deploying');
 });
 
-it('sets status to pending when response status is null', function () {
+it('sets status to null when response status is null', function () {
     Http::fake([
         'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments/status' => Http::response([
             'data' => [
@@ -95,7 +95,7 @@ it('sets status to pending when response status is null', function () {
         siteId: 456
     );
 
-    expect($deploymentStatus->status->value)->toBe('pending');
+    expect($deploymentStatus->status)->toBeNull();
 });
 
 it('throws RequestFailed exception when response data is empty', function () {

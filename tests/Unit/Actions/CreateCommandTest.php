@@ -5,7 +5,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateCommand;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateCommandPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\CreateCommandPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');

@@ -4,7 +4,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Data;
 
 use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Concerns\HasApiMetadata;
-use SebastianSulinski\LaravelForgeSdk\Enums\SiteStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\Status;
 
 readonly class Site
 {
@@ -21,7 +21,7 @@ readonly class Site
     public function __construct(
         public int $id,
         public string $name,
-        public SiteStatus $status,
+        public Status $status,
         public string $url,
         public string $user,
         public bool $https,

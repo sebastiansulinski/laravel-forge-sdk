@@ -3,7 +3,7 @@
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
 use Carbon\Carbon;
-use SebastianSulinski\LaravelForgeSdk\Enums\DatabaseStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Database\Status;
 
 readonly class Database
 {
@@ -14,7 +14,7 @@ readonly class Database
         public int $id,
         public int $serverId,
         public string $name,
-        public DatabaseStatus $status,
+        public Status $status,
         public ?Carbon $createdAt = null,
         public ?Carbon $updatedAt = null,
     ) {}

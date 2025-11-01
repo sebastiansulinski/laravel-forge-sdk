@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\FetchAllPages;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseUsers;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListUsersPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -58,7 +58,7 @@ it('lists database users', function () {
 
     $users = $action->handle(
         serverId: 123,
-        payload: new ListDatabaseUsersPayload(
+        payload: new ListUsersPayload(
             filterName: 'forge',
             filterStatus: 'installed'
         )

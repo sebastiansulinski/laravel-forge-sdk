@@ -5,9 +5,9 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomain;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Enums\WwwRedirectType;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Domain\CreatePayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -36,7 +36,7 @@ it('creates a domain with default values', function () {
     $client = app(Client::class);
     $action = new CreateDomain($client);
 
-    $payload = new CreateDomainPayload(
+    $payload = new CreatePayload(
         name: 'example.com'
     );
 
@@ -88,7 +88,7 @@ it('creates a domain with custom values', function () {
     $client = app(Client::class);
     $action = new CreateDomain($client);
 
-    $payload = new CreateDomainPayload(
+    $payload = new CreatePayload(
         name: '*.example.com',
         allow_wildcard_subdomains: true,
         www_redirect_type: WwwRedirectType::ToWww
@@ -122,7 +122,7 @@ it('throws RequestFailed exception when response data is empty', function () {
     $client = app(Client::class);
     $action = new CreateDomain($client);
 
-    $payload = new CreateDomainPayload(
+    $payload = new CreatePayload(
         name: 'example.com'
     );
 
@@ -143,7 +143,7 @@ it('throws exception when request fails', function () {
     $client = app(Client::class);
     $action = new CreateDomain($client);
 
-    $payload = new CreateDomainPayload(
+    $payload = new CreatePayload(
         name: 'example.com'
     );
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\FetchAllPages;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListServers;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -79,7 +79,7 @@ it('lists servers', function () {
     $action = new ListServers($client, $fetchAllPages);
 
     $servers = $action->handle(
-        payload: new ListServersPayload(
+        payload: new ListPayload(
             filterProvider: 'digitalocean',
             filterRegion: 'lon1'
         )

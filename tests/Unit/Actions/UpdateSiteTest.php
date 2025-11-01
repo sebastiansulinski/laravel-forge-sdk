@@ -5,9 +5,9 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\UpdateSite;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Enums\PhpVersion;
-use SebastianSulinski\LaravelForgeSdk\Enums\SiteType;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -23,9 +23,9 @@ it('updates site', function () {
     $client = app(Client::class);
     $action = new UpdateSite($client);
 
-    $payload = new UpdateSitePayload(
+    $payload = new UpdatePayload(
         directory: '/public_html',
-        type: SiteType::Php,
+        type: Type::Php,
         php_version: PhpVersion::Php84,
         push_to_deploy: true,
         repository_branch: 'production'
@@ -59,7 +59,7 @@ it('updates site with partial data', function () {
     $client = app(Client::class);
     $action = new UpdateSite($client);
 
-    $payload = new UpdateSitePayload(
+    $payload = new UpdatePayload(
         php_version: PhpVersion::Php85,
         push_to_deploy: false
     );
@@ -94,7 +94,7 @@ it('throws exception when request fails', function () {
     $client = app(Client::class);
     $action = new UpdateSite($client);
 
-    $payload = new UpdateSitePayload(
+    $payload = new UpdatePayload(
         directory: '/public'
     );
 

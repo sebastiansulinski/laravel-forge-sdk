@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\FetchAllPages;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListSites;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -127,7 +127,7 @@ it('lists sites', function () {
 
     $sites = $action->handle(
         serverId: 123,
-        payload: new ListSitesPayload(
+        payload: new ListPayload(
             filterName: 'example'
         )
     );

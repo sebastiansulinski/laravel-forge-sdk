@@ -3,7 +3,7 @@
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateEnvContentPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Env\UpdatePayload;
 
 readonly class UpdateEnvContent
 {
@@ -19,7 +19,7 @@ readonly class UpdateEnvContent
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Exception
      */
-    public function handle(int $serverId, int $siteId, UpdateEnvContentPayload $payload): void
+    public function handle(int $serverId, int $siteId, UpdatePayload $payload): void
     {
         $path = $this->client->path(
             '/servers/%s/sites/%s/environment', $serverId, $siteId

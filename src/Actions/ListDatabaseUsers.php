@@ -5,7 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Actions;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListUsersPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDatabaseUser;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -33,7 +33,7 @@ readonly class ListDatabaseUsers
      */
     public function handle(
         int $serverId,
-        ListDatabaseUsersPayload $payload = new ListDatabaseUsersPayload
+        ListUsersPayload $payload = new ListUsersPayload
     ): ListResponse {
 
         $path = $this->client->path('/servers/%s/database/users', $serverId);
@@ -50,7 +50,7 @@ readonly class ListDatabaseUsers
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    private function fetchAll(string $path, int $serverId, ListDatabaseUsersPayload $payload): ListResponse
+    private function fetchAll(string $path, int $serverId, ListUsersPayload $payload): ListResponse
     {
         $response = $this->fetchAllPages->handle(
             path: $path,
@@ -80,7 +80,7 @@ readonly class ListDatabaseUsers
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Http\Client\ConnectionException
      */
-    private function fetchSinglePage(string $path, int $serverId, ListDatabaseUsersPayload $payload): ListResponse
+    private function fetchSinglePage(string $path, int $serverId, ListUsersPayload $payload): ListResponse
     {
         $httpResponse = $this->client->get(
             path: $path,

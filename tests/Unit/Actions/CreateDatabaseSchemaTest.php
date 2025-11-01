@@ -5,7 +5,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabaseSchema;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -31,7 +31,7 @@ it('creates a database', function () {
     $client = app(Client::class);
     $action = new CreateDatabaseSchema($client);
 
-    $payload = new CreateDatabasePayload(
+    $payload = new CreateSchemaPayload(
         name: 'my_database',
         user: 'db_user',
         password: 'secret123'
@@ -77,7 +77,7 @@ it('creates a database without optional user and password', function () {
     $client = app(Client::class);
     $action = new CreateDatabaseSchema($client);
 
-    $payload = new CreateDatabasePayload(
+    $payload = new CreateSchemaPayload(
         name: 'my_database'
     );
 
@@ -106,7 +106,7 @@ it('throws exception when request fails', function () {
     $client = app(Client::class);
     $action = new CreateDatabaseSchema($client);
 
-    $payload = new CreateDatabasePayload(
+    $payload = new CreateSchemaPayload(
         name: 'my_database'
     );
 

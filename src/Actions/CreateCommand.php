@@ -3,7 +3,7 @@
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateCommandPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\CreateCommandPayload;
 
 readonly class CreateCommand
 {

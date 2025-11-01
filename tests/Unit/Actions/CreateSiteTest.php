@@ -5,7 +5,11 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateSite;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Provider;
+use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -59,13 +63,13 @@ it('creates a site with explicit nginx template id', function () {
     $client = app(Client::class);
     $action = new CreateSite($client);
 
-    $payload = new CreateSitePayload(
-        type: 'php',
-        domain_mode: 'single',
+    $payload = new CreatePayload(
+        type: Type::Php,
         name: 'example.com',
+        domain_mode: DomainMode::Custom,
         web_directory: '/public',
-        php_version: 'php83',
-        source_control_provider: 'github',
+        php_version: PhpVersion::Php83,
+        source_control_provider: Provider::Github,
         repository: 'user/repo',
         branch: 'main',
         nginx_template_id: 999
@@ -112,13 +116,13 @@ it('throws exception when request fails', function () {
     $client = app(Client::class);
     $action = new CreateSite($client);
 
-    $payload = new CreateSitePayload(
-        type: 'php',
-        domain_mode: 'single',
+    $payload = new CreatePayload(
+        type: Type::Php,
         name: 'example.com',
+        domain_mode: DomainMode::Custom,
         web_directory: '/public',
-        php_version: 'php83',
-        source_control_provider: 'github',
+        php_version: PhpVersion::Php83,
+        source_control_provider: Provider::Github,
         repository: 'user/repo',
         branch: 'main',
         nginx_template_id: 999

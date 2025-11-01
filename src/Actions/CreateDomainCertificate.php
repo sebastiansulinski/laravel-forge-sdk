@@ -6,7 +6,7 @@ use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateCertificatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreatePayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasCertificate;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -35,7 +35,7 @@ readonly class CreateDomainCertificate
         int $serverId,
         int $siteId,
         int $domainRecordId,
-        CreateCertificatePayload $payload
+        CreatePayload $payload
     ): Certificate {
 
         $path = $this->client->path(

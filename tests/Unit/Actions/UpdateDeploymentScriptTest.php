@@ -5,7 +5,7 @@ use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\UpdateDeploymentScript;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateDeploymentScriptPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\UpdateScriptPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -21,7 +21,7 @@ it('updates deployment script', function () {
     $client = app(Client::class);
     $action = new UpdateDeploymentScript($client);
 
-    $payload = new UpdateDeploymentScriptPayload(
+    $payload = new UpdateScriptPayload(
         content: implode(PHP_EOL, [
             'cd /home/forge/example.com',
             'git pull origin production',
@@ -59,7 +59,7 @@ it('throws exception when request fails', function () {
     $client = app(Client::class);
     $action = new UpdateDeploymentScript($client);
 
-    $payload = new UpdateDeploymentScriptPayload(
+    $payload = new UpdateScriptPayload(
         content: 'cd /home/forge/example.com'
     );
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\FetchAllPages;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDeployments;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\ListPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -77,7 +77,7 @@ it('lists deployments', function () {
     $deployments = $action->handle(
         serverId: 123,
         siteId: 456,
-        payload: new ListDeploymentsPayload(
+        payload: new ListPayload(
             filterCommitAuthor: 'John',
             filterCommitMessage: 'Fix'
         )

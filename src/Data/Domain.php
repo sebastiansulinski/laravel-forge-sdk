@@ -3,9 +3,9 @@
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
 use Carbon\Carbon;
-use SebastianSulinski\LaravelForgeSdk\Enums\DomainStatus;
-use SebastianSulinski\LaravelForgeSdk\Enums\DomainType;
-use SebastianSulinski\LaravelForgeSdk\Enums\WwwRedirectType;
+use SebastianSulinski\LaravelForgeSdk\Enums\Domain\Status;
+use SebastianSulinski\LaravelForgeSdk\Enums\Domain\Type;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
 
 readonly class Domain
 {
@@ -17,8 +17,8 @@ readonly class Domain
         public int $serverId,
         public int $siteId,
         public string $name,
-        public DomainType $type,
-        public DomainStatus $status,
+        public Type $type,
+        public Status $status,
         public WwwRedirectType $wwwRedirectType,
         public bool $allowWildcardSubdomains,
         public ?Carbon $createdAt = null,

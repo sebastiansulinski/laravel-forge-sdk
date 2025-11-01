@@ -4,9 +4,9 @@ namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
 use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Domain;
-use SebastianSulinski\LaravelForgeSdk\Enums\DomainStatus;
-use SebastianSulinski\LaravelForgeSdk\Enums\DomainType;
-use SebastianSulinski\LaravelForgeSdk\Enums\WwwRedirectType;
+use SebastianSulinski\LaravelForgeSdk\Enums\Domain\Status;
+use SebastianSulinski\LaravelForgeSdk\Enums\Domain\Type;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
 
 /**
  * @phpstan-type DomainData array{
@@ -38,8 +38,8 @@ trait HasDomain
             serverId: $serverId,
             siteId: $siteId,
             name: $attributes['name'],
-            type: DomainType::from($attributes['type']),
-            status: DomainStatus::from($attributes['status']),
+            type: Type::from($attributes['type']),
+            status: Status::from($attributes['status']),
             wwwRedirectType: WwwRedirectType::from($attributes['www_redirect_type']),
             allowWildcardSubdomains: $attributes['allow_wildcard_subdomains'],
             createdAt: isset($attributes['created_at'])

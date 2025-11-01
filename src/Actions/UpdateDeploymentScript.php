@@ -3,7 +3,7 @@
 namespace SebastianSulinski\LaravelForgeSdk\Actions;
 
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateDeploymentScriptPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\UpdateScriptPayload;
 
 readonly class UpdateDeploymentScript
 {
@@ -19,7 +19,7 @@ readonly class UpdateDeploymentScript
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Exception
      */
-    public function handle(int $serverId, int $siteId, UpdateDeploymentScriptPayload $payload): void
+    public function handle(int $serverId, int $siteId, UpdateScriptPayload $payload): void
     {
         $path = $this->client->path(
             '/servers/%s/sites/%s/deployments/script', $serverId, $siteId

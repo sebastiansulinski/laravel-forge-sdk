@@ -6,9 +6,9 @@ use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\MaintenanceMode;
 use SebastianSulinski\LaravelForgeSdk\Data\Repository;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
-use SebastianSulinski\LaravelForgeSdk\Enums\MaintenanceModeStatus;
-use SebastianSulinski\LaravelForgeSdk\Enums\RepositoryStatus;
-use SebastianSulinski\LaravelForgeSdk\Enums\SiteStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Status as RepositoryStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\MaintenanceModeStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\Status as SiteStatus;
 
 /**
  * @phpstan-type SiteData array{

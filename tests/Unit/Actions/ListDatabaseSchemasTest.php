@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\FetchAllPages;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseSchemas;
 use SebastianSulinski\LaravelForgeSdk\Client;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseSchemasPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListSchemasPayload;
 
 beforeEach(function () {
     config()->set('forge.token', 'test-token');
@@ -58,7 +58,7 @@ it('lists database schemas', function () {
 
     $schemas = $action->handle(
         serverId: 123,
-        payload: new ListDatabaseSchemasPayload(
+        payload: new ListSchemasPayload(
             filterName: 'forge',
             filterStatus: 'installed'
         )

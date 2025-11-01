@@ -2,7 +2,7 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
-use SebastianSulinski\LaravelForgeSdk\Enums\RepositoryStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Status;
 
 readonly class Repository
 {
@@ -13,6 +13,6 @@ readonly class Repository
         public string $provider,
         public ?string $url = null,
         public ?string $branch = null,
-        public ?RepositoryStatus $status = null,
+        public ?Status $status = null,
     ) {}
 }

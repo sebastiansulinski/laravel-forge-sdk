@@ -36,10 +36,14 @@ The recommended way to interact with the Forge API is by injecting the `Forge` c
 ```php
 use SebastianSulinski\LaravelForgeSdk\Forge;
 use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
-use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Provider;
+use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\IncludeOption;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload as ListSitesPayload;
 
 class DeploySiteJob
 {
@@ -83,7 +87,7 @@ class DeploySiteJob
             serverId: 123,
             payload: new ListSitesPayload(
                 filterName: 'example.com',
-                include: [SiteInclude::LatestDeployment, SiteInclude::Server]
+                include: [IncludeOption::LatestDeployment, IncludeOption::Server]
             )
         );
 
@@ -93,10 +97,17 @@ class DeploySiteJob
         // Create a new site
         $site = $this->forge->createSite(
             serverId: 123,
-            payload: new CreateSitePayload(
-                domain: 'example.com',
-                projectType: 'php',
-                directory: '/public'
+            payload: new CreatePayload(
+                type: Type::Laravel,
+                name: 'example.com',
+                domain_mode: DomainMode::Custom,
+                web_directory: '/public',
+                php_version: PhpVersion::Php84,
+                source_control_provider: Provider::Github,
+                repository: 'username/repo',
+                branch: 'main',
+                install_composer_dependencies: true,
+                push_to_deploy: false
             )
         );
 
@@ -116,7 +127,11 @@ For more granular control, you can inject specific Action classes directly:
 ```php
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateSite;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDeployment;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Provider;
+use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 
 class DeploySiteJob
 {
@@ -129,10 +144,17 @@ class DeploySiteJob
     {
         $site = $this->createSite->handle(
             serverId: 123,
-            payload: new CreateSitePayload(
-                domain: 'example.com',
-                projectType: 'php',
-                directory: '/public'
+            payload: new CreatePayload(
+                type: Type::Laravel,
+                name: 'example.com',
+                domain_mode: DomainMode::Custom,
+                web_directory: '/public',
+                php_version: PhpVersion::Php84,
+                source_control_provider: Provider::Github,
+                repository: 'username/repo',
+                branch: 'main',
+                install_composer_dependencies: true,
+                push_to_deploy: false
             )
         );
 
@@ -151,10 +173,14 @@ For quick operations or in routes/controllers, you can use the static `Forge` fa
 ```php
 use SebastianSulinski\LaravelForgeSdk\Facades\Forge;
 use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
-use SebastianSulinski\LaravelForgeSdk\Enums\SiteInclude;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Provider;
+use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\IncludeOption;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload as ListSitesPayload;
 
 // List servers with pagination (default) - returns ListResponse
 $response = Forge::listServers(
@@ -184,7 +210,7 @@ $sitesResponse = Forge::listSites(
     serverId: 123,
     payload: new ListSitesPayload(
         filterName: 'example.com',
-        include: [SiteInclude::LatestDeployment, SiteInclude::Server]
+        include: [IncludeOption::LatestDeployment, IncludeOption::Server]
     )
 );
 
@@ -194,10 +220,17 @@ $site = Forge::getSite(serverId: 123, siteId: 456);
 // Create a new site
 $site = Forge::createSite(
     serverId: 123,
-    payload: new CreateSitePayload(
-        domain: 'example.com',
-        projectType: 'php',
-        directory: '/public'
+    payload: new CreatePayload(
+        type: Type::Laravel,
+        name: 'example.com',
+        domain_mode: DomainMode::Custom,
+        web_directory: '/public',
+        php_version: PhpVersion::Php84,
+        source_control_provider: Provider::Github,
+        repository: 'username/repo',
+        branch: 'main',
+        install_composer_dependencies: true,
+        push_to_deploy: false
     )
 );
 
@@ -218,7 +251,7 @@ Returns a single page of results:
 
 ```php
 use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
 
 // Default behavior - returns first page with 20 items
 $response = Forge::listServers(
@@ -493,15 +526,137 @@ Type-safe enums for all Forge constants:
 ### API Behavior
 - `PaginationMode` - Pagination modes (`All`, `Paginated`)
 
-### Resource Status & Types
-- `CertificateType` - Certificate types
-- `CertificateStatus` - Certificate status values
-- `SiteStatus` - Site status values
-- `SiteType` - Site types
-- `DatabaseStatus` - Database status values
-- `DeploymentStatus` - Deployment status values
-- `PhpVersion` - Available PHP versions
-- And more...
+### Site
+- `Site\Type` - Site types (`Laravel`, `Symfony`, `Statamic`, `Wordpress`, `PhpMyAdmin`, `Php`, `NextJs`, `NuxtJs`, `StaticHtml`, `Other`, `Custom`)
+- `Site\Status` - Site status values
+- `Site\IncludeOption` - Available include options for site queries
+- `Site\DomainMode` - Domain configuration mode (`OnForge`, `Custom`)
+- `Site\WwwRedirectType` - WWW redirect behavior (`None`, `FromWww`, `ToWww`)
+- `Site\MaintenanceModeStatus` - Maintenance mode status values
+
+### Certificate
+- `Certificate\Type` - Certificate types (`LetsEncrypt`, `Csr`, `Existing`)
+- `Certificate\Status` - Certificate status values
+- `Certificate\KeyType` - Certificate key types (`Ecdsa`, `Rsa`)
+- `Certificate\VerificationMethod` - Verification methods (`Http01`, `Dns01`)
+- `Certificate\RequestStatus` - Certificate request status values
+
+### Database
+- `Database\Status` - Database status values
+- `Database\UserStatus` - Database user status values
+
+### Deployment
+- `Deployment\Status` - Deployment status values
+
+### Domain
+- `Domain\Type` - Domain types (`Primary`, `Alias`)
+- `Domain\Status` - Domain status values
+
+### Repository
+- `Repository\Provider` - Version control providers (`Github`, `Gitlab`, `Bitbucket`, `GitlabCustom`, `Custom`)
+- `Repository\Status` - Repository status values
+
+### Server
+- `Server\PhpVersion` - Available PHP versions (`Php56` through `Php85`)
+
+## Payloads
+
+Payload classes represent request data for API operations. They are organized by resource type and provide type-safe interfaces for constructing API requests.
+
+### Site Payloads
+- `Site\CreatePayload` - Data for creating a new site
+  - Required: `type` (Type enum)
+  - Optional: 28+ properties including `domain_mode`, `name`, `web_directory`, `php_version`, `source_control_provider`, `repository`, `branch`, `install_composer_dependencies`, `push_to_deploy`, and more
+  - See [Forge API docs](https://forge.laravel.com/docs/api-reference/sites/create-site) for all available properties
+- `Site\UpdatePayload` - Data for updating site properties
+- `Site\ListPayload` - Query parameters for listing sites
+  - Supports pagination, filtering by name/status, and includes (via `IncludeOption` enum)
+
+### Certificate Payloads
+- `Certificate\CreatePayload` - Abstract base class for certificate creation
+- `Certificate\CreateLetsEncryptPayload` - Create Let's Encrypt certificate
+- `Certificate\CreateCsrPayload` - Create certificate from CSR
+- `Certificate\CreateExistingPayload` - Install existing certificate
+
+### Database Payloads
+- `Database\CreateSchemaPayload` - Data for creating a database schema
+- `Database\ListSchemasPayload` - Query parameters for listing database schemas
+- `Database\ListUsersPayload` - Query parameters for listing database users
+
+### Deployment Payloads
+- `Deployment\ListPayload` - Query parameters for listing deployments
+- `Deployment\UpdateScriptPayload` - Data for updating deployment script
+
+### Domain Payloads
+- `Domain\CreatePayload` - Data for adding a domain to a site
+
+### Server Payloads
+- `Server\ListPayload` - Query parameters for listing servers
+  - Supports filtering by provider, region, and pagination
+- `Server\CreateCommandPayload` - Data for executing server commands
+
+### Environment Payloads
+- `Env\UpdatePayload` - Data for updating environment file content
+
+### Pagination
+- `PaginationParameters` - Reusable pagination parameters used by all List payloads
+  - Properties: `sort`, `pageSize`, `pageCursor`
+
+### Usage Examples
+
+```php
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreateLetsEncryptPayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
+use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
+use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Provider;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\Type as CertificateType;
+
+// Create a site with all common options
+$createSitePayload = new CreatePayload(
+    type: Type::Laravel,
+    name: 'example.com',
+    domain_mode: DomainMode::Custom,
+    web_directory: '/public',
+    php_version: PhpVersion::Php84,
+    source_control_provider: Provider::Github,
+    repository: 'username/repo',
+    branch: 'main',
+    install_composer_dependencies: true,
+    push_to_deploy: false,
+    zero_downtime_deployments: true
+);
+
+// Update site properties (all properties are optional)
+$updateSitePayload = new UpdatePayload(
+    php_version: PhpVersion::Php85,
+    push_to_deploy: true
+);
+
+// List sites with filters and includes
+$listSitesPayload = new ListPayload(
+    filterName: 'example.com',
+    include: [IncludeOption::LatestDeployment, IncludeOption::Server],
+    pageSize: 50
+);
+
+// Create a database
+$createDatabasePayload = new CreateSchemaPayload(
+    name: 'my_database',
+    user: 'db_user',
+    password: 'secure_password'
+);
+
+// Create Let's Encrypt certificate
+$createCertificatePayload = new CreateLetsEncryptPayload(
+    type: CertificateType::LetsEncrypt,
+    domains: ['example.com', 'www.example.com']
+);
+```
 
 ## Traits
 

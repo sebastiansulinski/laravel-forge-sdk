@@ -3,7 +3,7 @@
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
 use Carbon\Carbon;
-use SebastianSulinski\LaravelForgeSdk\Enums\DeploymentStatus as DeploymentStatusEnum;
+use SebastianSulinski\LaravelForgeSdk\Enums\Deployment\Status as DeploymentStatusEnum;
 
 readonly class DeploymentStatus
 {
@@ -14,7 +14,7 @@ readonly class DeploymentStatus
         public string $id,
         public int $serverId,
         public int $siteId,
-        public DeploymentStatusEnum $status,
         public Carbon $startedAt,
+        public ?DeploymentStatusEnum $status = null,
     ) {}
 }

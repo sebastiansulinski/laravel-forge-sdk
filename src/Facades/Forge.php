@@ -14,18 +14,18 @@ use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Forge as ForgeService;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateCertificatePayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateDatabasePayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateDomainPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\CreateSitePayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseSchemasPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDatabaseUsersPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListServersPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListSitesPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateDeploymentScriptPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateEnvContentPayload;
-use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreatePayload as CreateCertificatePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListSchemasPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListUsersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\ListPayload as ListDeploymentsPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\UpdateScriptPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Domain\CreatePayload as CreateDomainPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Env\UpdatePayload as UpdateEnvPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload as CreateSitePayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload as ListSitesPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePayload;
 
 /**
  * @method static Collection<int, Server> listServers(ListServersPayload $payload)
@@ -37,22 +37,22 @@ use SebastianSulinski\LaravelForgeSdk\Payload\UpdateSitePayload;
  * @method static void deleteSite(int $serverId, int $siteId)
  * @method static bool createCommand(int $serverId, int $siteId, string $command)
  * @method static string getEnvContent(int $serverId, int $siteId)
- * @method static void updateEnvContent(int $serverId, int $siteId, UpdateEnvContentPayload $payload)
+ * @method static void updateEnvContent(int $serverId, int $siteId, UpdateEnvPayload $payload)
  * @method static Deployment createDeployment(int $serverId, int $siteId)
  * @method static DeploymentStatus getDeploymentStatus(int $serverId, int $siteId)
- * @method static Database createDatabaseSchema(int $serverId, CreateDatabasePayload $payload)
+ * @method static Database createDatabaseSchema(int $serverId, CreateSchemaPayload $payload)
  * @method static void deleteDatabaseSchema(int $serverId, int $databaseId)
- * @method static Collection<int, Database> listDatabaseSchemas(int $serverId, ListDatabaseSchemasPayload $payload)
- * @method static Collection<int, DatabaseUser> listDatabaseUsers(int $serverId, ListDatabaseUsersPayload $payload)
+ * @method static Collection<int, Database> listDatabaseSchemas(int $serverId, ListSchemasPayload $payload)
+ * @method static Collection<int, DatabaseUser> listDatabaseUsers(int $serverId, ListUsersPayload $payload)
  * @method static void deleteDatabaseUser(int $serverId, int $databaseUserId)
  * @method static Certificate createDomainCertificate(int $serverId, int $siteId, int $domainRecordId, CreateCertificatePayload $payload)
  * @method static Certificate getDomainCertificate(int $serverId, int $siteId, int $domainRecordId)
  * @method static string getDeploymentScript(int $serverId, int $siteId)
- * @method static void updateDeploymentScript(int $serverId, int $siteId, UpdateDeploymentScriptPayload $payload)
+ * @method static void updateDeploymentScript(int $serverId, int $siteId, UpdateScriptPayload $payload)
  * @method static Collection<int, Deployment> listDeployments(int $serverId, int $siteId, ListDeploymentsPayload $payload)
  * @method static void createDomain(int $serverId, int $siteId, CreateDomainPayload $payload)
  * @method static Collection<int, Domain> listDomains(int $serverId, int $siteId)
- * @method static ?NginxTemplate getNginxTemplateByName(int $serverId, string $templateName)
+ * @method static NginxTemplate|null getNginxTemplateByName(int $serverId, string $templateName)
  *
  * @see \SebastianSulinski\LaravelForgeSdk\Forge
  */

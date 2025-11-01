@@ -4,11 +4,11 @@ namespace SebastianSulinski\LaravelForgeSdk\Traits;
 
 use Carbon\Carbon;
 use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
-use SebastianSulinski\LaravelForgeSdk\Enums\CertificateKeyType;
-use SebastianSulinski\LaravelForgeSdk\Enums\CertificateRequestStatus;
-use SebastianSulinski\LaravelForgeSdk\Enums\CertificateStatus;
-use SebastianSulinski\LaravelForgeSdk\Enums\CertificateType;
-use SebastianSulinski\LaravelForgeSdk\Enums\CertificateVerificationMethod;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\KeyType;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\RequestStatus;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\Status;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\Type;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\VerificationMethod;
 
 /**
  * @phpstan-type CertificateData array{
@@ -41,14 +41,14 @@ trait HasCertificate
             serverId: $serverId,
             siteId: $siteId,
             domainRecordId: $domainRecordId,
-            type: CertificateType::from($attributes['type']),
-            requestStatus: CertificateRequestStatus::from($attributes['request_status']),
-            status: CertificateStatus::from($attributes['status']),
+            type: Type::from($attributes['type']),
+            requestStatus: RequestStatus::from($attributes['request_status']),
+            status: Status::from($attributes['status']),
             verificationMethod: isset($attributes['verification_method'])
-                ? CertificateVerificationMethod::from($attributes['verification_method'])
+                ? VerificationMethod::from($attributes['verification_method'])
                 : null,
             keyType: isset($attributes['key_type'])
-                ? CertificateKeyType::from($attributes['key_type'])
+                ? KeyType::from($attributes['key_type'])
                 : null,
             preferredChain: $attributes['preferred_chain'] ?? null,
             createdAt: isset($attributes['created_at'])

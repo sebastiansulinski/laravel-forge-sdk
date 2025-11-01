@@ -5,7 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Actions;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Enums\PaginationMode;
-use SebastianSulinski\LaravelForgeSdk\Payload\ListDeploymentsPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\ListPayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasDeployment;
 use SebastianSulinski\LaravelForgeSdk\Traits\ParsesResponse;
 
@@ -34,7 +34,7 @@ readonly class ListDeployments
     public function handle(
         int $serverId,
         int $siteId,
-        ListDeploymentsPayload $payload = new ListDeploymentsPayload,
+        ListPayload $payload = new ListPayload,
     ): ListResponse {
 
         $path = $this->client->path('/servers/%s/sites/%s/deployments', $serverId, $siteId);
@@ -55,7 +55,7 @@ readonly class ListDeployments
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    private function fetchAll(string $path, int $siteId, ListDeploymentsPayload $payload): ListResponse
+    private function fetchAll(string $path, int $siteId, ListPayload $payload): ListResponse
     {
         $response = $this->fetchAllPages->handle(
             path: $path,
@@ -88,7 +88,7 @@ readonly class ListDeployments
     private function fetchSinglePage(
         string $path,
         int $siteId,
-        ListDeploymentsPayload $payload
+        ListPayload $payload
     ): ListResponse {
         $httpResponse = $this->client->get(
             path: $path,
