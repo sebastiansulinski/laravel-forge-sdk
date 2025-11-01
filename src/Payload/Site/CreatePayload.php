@@ -8,6 +8,7 @@ use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
+use SebastianSulinski\LaravelForgeSdk\Exceptions\InvalidPayload;
 
 /**
  * @implements Arrayable<string, mixed>
@@ -19,13 +20,15 @@ readonly class CreatePayload implements Arrayable
      *
      * @param  array<int, string>|null  $tags
      * @param  array<int, string>|null  $shared_paths
+     *
+     * @throws InvalidPayload When domain_mode is custom and www_redirect_type or allow_wildcard_subdomains are not provided
      */
     public function __construct(
         public Type $type,
         public ?DomainMode $domain_mode = null,
         public ?string $name = null,
         public ?WwwRedirectType $www_redirect_type = null,
-        public ?string $allow_wildcard_subdomains = null,
+        public ?bool $allow_wildcard_subdomains = null,
         public ?string $web_directory = null,
         public ?bool $is_isolated = null,
         public ?string $isolated_user = null,
@@ -51,10 +54,39 @@ readonly class CreatePayload implements Arrayable
         public ?bool $push_to_deploy = null,
         public ?array $tags = null,
         public ?array $shared_paths = null
-    ) {}
+    ) {
+        $this->validateCustomDomainRequirements();
+    }
+
+    /**
+     * Validate conditional requirements for custom domain mode.
+     *
+     * When domain_mode is custom, both www_redirect_type and allow_wildcard_subdomains are required.
+     * When domain_mode is on-forge, these fields are optional.
+     *
+     * @throws InvalidPayload
+     */
+    private function validateCustomDomainRequirements(): void
+    {
+        if ($this->domain_mode === DomainMode::Custom) {
+            if ($this->www_redirect_type === null) {
+                throw new InvalidPayload(
+                    'www_redirect_type is required when domain_mode is custom'
+                );
+            }
+
+            if ($this->allow_wildcard_subdomains === null) {
+                throw new InvalidPayload(
+                    'allow_wildcard_subdomains is required when domain_mode is custom'
+                );
+            }
+        }
+    }
 
     /**
      * {@inheritDoc}
+     *
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {

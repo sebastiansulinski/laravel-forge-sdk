@@ -62,6 +62,7 @@ deptrac:
       - Payload
     Payload:
       - Enums
+      - Exceptions
       - Traits
     Traits:
       - Client

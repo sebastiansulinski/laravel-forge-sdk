@@ -5,6 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk\Actions;
 use Illuminate\Http\Client\Response;
 use SebastianSulinski\LaravelForgeSdk\Client;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
+use SebastianSulinski\LaravelForgeSdk\Exceptions\InvalidPayload;
 use SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 use SebastianSulinski\LaravelForgeSdk\Traits\HasSite;
@@ -26,7 +27,8 @@ readonly class CreateSite
     /**
      * Handle request.
      *
-     * @throws \SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed
+     * @throws InvalidPayload When payload validation fails
+     * @throws RequestFailed When response is unsuccessful
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Exception

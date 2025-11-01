@@ -9,6 +9,8 @@ use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Provider;
 use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
+use SebastianSulinski\LaravelForgeSdk\Exceptions\InvalidPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 
 beforeEach(function () {
@@ -65,14 +67,16 @@ it('creates a site with explicit nginx template id', function () {
 
     $payload = new CreatePayload(
         type: Type::Php,
-        name: 'example.com',
         domain_mode: DomainMode::Custom,
+        name: 'example.com',
+        www_redirect_type: WwwRedirectType::None,
+        allow_wildcard_subdomains: false,
         web_directory: '/public',
         php_version: PhpVersion::Php83,
+        nginx_template_id: 999,
         source_control_provider: Provider::Github,
         repository: 'user/repo',
-        branch: 'main',
-        nginx_template_id: 999
+        branch: 'main'
     );
 
     $site = $action->handle(
@@ -106,6 +110,183 @@ it('creates a site with explicit nginx template id', function () {
     });
 });
 
+it('creates a site with wildcard subdomains enabled', function () {
+    Http::fake([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites' => Http::response([
+            'data' => [
+                'id' => 456,
+                'attributes' => [
+                    'name' => '*.example.com',
+                    'status' => 'installing',
+                    'url' => 'https://*.example.com',
+                    'user' => 'forge',
+                    'https' => true,
+                    'web_directory' => '/public',
+                    'root_directory' => '/home/forge/example.com',
+                    'aliases' => [],
+                    'php_version' => 'php83',
+                    'deployment_status' => null,
+                    'isolated' => false,
+                    'shared_paths' => [],
+                    'zero_downtime_deployments' => false,
+                    'app_type' => 'php',
+                    'uses_envoyer' => false,
+                    'deployment_url' => '',
+                    'repository' => [
+                        'provider' => '',
+                        'url' => null,
+                        'branch' => null,
+                        'status' => null,
+                    ],
+                    'maintenance_mode' => [
+                        'enabled' => false,
+                        'status' => null,
+                    ],
+                    'quick_deploy' => false,
+                    'deployment_script' => '',
+                    'wildcards' => true,
+                    'healthcheck_url' => null,
+                    'created_at' => '2024-01-15T10:30:00.000000Z',
+                    'updated_at' => '2024-01-15T10:30:00.000000Z',
+                ],
+            ],
+        ], 201),
+    ]);
+
+    $client = app(Client::class);
+    $action = new CreateSite($client);
+
+    $payload = new CreatePayload(
+        type: Type::Php,
+        domain_mode: DomainMode::Custom,
+        name: '*.example.com',
+        www_redirect_type: WwwRedirectType::None,
+        allow_wildcard_subdomains: true,
+        web_directory: '/public',
+        php_version: PhpVersion::Php83
+    );
+
+    $site = $action->handle(
+        serverId: 123,
+        payload: $payload
+    );
+
+    expect($site->id)->toBe(456)
+        ->and($site->name)->toBe('*.example.com')
+        ->and($site->status->value)->toBe('installing')
+        ->and($site->wildcards)->toBeTrue();
+
+    Http::assertSent(function (Request $request) {
+        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites'
+            && $request->method() === 'POST'
+            && $request['name'] === '*.example.com'
+            && $request['type'] === 'php'
+            && $request['allow_wildcard_subdomains'] === true
+            && $request->hasHeader('Authorization', 'Bearer test-token')
+            && $request->hasHeader('Accept', 'application/json')
+            && $request->hasHeader('Content-Type', 'application/json');
+    });
+});
+
+it('creates a site with on-forge domain mode without www_redirect_type and allow_wildcard_subdomains', function () {
+    Http::fake([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites' => Http::response([
+            'data' => [
+                'id' => 456,
+                'attributes' => [
+                    'name' => 'mysite',
+                    'status' => 'installing',
+                    'url' => 'https://mysite.on-forge.com',
+                    'user' => 'forge',
+                    'https' => true,
+                    'web_directory' => '/public',
+                    'root_directory' => '/home/forge/mysite',
+                    'aliases' => [],
+                    'php_version' => 'php83',
+                    'deployment_status' => null,
+                    'isolated' => false,
+                    'shared_paths' => [],
+                    'zero_downtime_deployments' => false,
+                    'app_type' => 'php',
+                    'uses_envoyer' => false,
+                    'deployment_url' => '',
+                    'repository' => [
+                        'provider' => '',
+                        'url' => null,
+                        'branch' => null,
+                        'status' => null,
+                    ],
+                    'maintenance_mode' => [
+                        'enabled' => false,
+                        'status' => null,
+                    ],
+                    'quick_deploy' => false,
+                    'deployment_script' => '',
+                    'wildcards' => false,
+                    'healthcheck_url' => null,
+                    'created_at' => '2024-01-15T10:30:00.000000Z',
+                    'updated_at' => '2024-01-15T10:30:00.000000Z',
+                ],
+            ],
+        ], 201),
+    ]);
+
+    $client = app(Client::class);
+    $action = new CreateSite($client);
+
+    $payload = new CreatePayload(
+        type: Type::Php,
+        domain_mode: DomainMode::OnForge,
+        name: 'mysite',
+        web_directory: '/public',
+        php_version: PhpVersion::Php83
+    );
+
+    $site = $action->handle(
+        serverId: 123,
+        payload: $payload
+    );
+
+    expect($site->id)->toBe(456)
+        ->and($site->name)->toBe('mysite')
+        ->and($site->url)->toBe('https://mysite.on-forge.com');
+
+    Http::assertSent(function (Request $request) {
+        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites'
+            && $request->method() === 'POST'
+            && $request['name'] === 'mysite'
+            && $request['type'] === 'php'
+            && $request['domain_mode'] === 'on-forge'
+            && ! isset($request['www_redirect_type'])
+            && ! isset($request['allow_wildcard_subdomains'])
+            && $request->hasHeader('Authorization', 'Bearer test-token')
+            && $request->hasHeader('Accept', 'application/json')
+            && $request->hasHeader('Content-Type', 'application/json');
+    });
+});
+
+it('throws exception when domain_mode is custom and www_redirect_type is missing', function () {
+    new CreatePayload(
+        type: Type::Php,
+        domain_mode: DomainMode::Custom,
+        name: 'example.com',
+        allow_wildcard_subdomains: true,
+        web_directory: '/public',
+        php_version: PhpVersion::Php83
+    );
+})->throws(InvalidPayload::class, 'www_redirect_type is required when domain_mode is custom');
+
+it('throws exception when domain_mode is custom and allow_wildcard_subdomains is missing', function () {
+    new CreatePayload(
+        type: Type::Php,
+        name: 'example.com',
+        domain_mode: DomainMode::Custom,
+        www_redirect_type: WwwRedirectType::None,
+        web_directory: '/public',
+        php_version: PhpVersion::Php83
+    );
+})->throws(InvalidPayload::class, 'allow_wildcard_subdomains is required when domain_mode is custom');
+
 it('throws exception when request fails', function () {
     Http::fake([
         'forge.laravel.com/api/orgs/test-org/servers/123/sites' => Http::response([
@@ -120,6 +301,8 @@ it('throws exception when request fails', function () {
         type: Type::Php,
         name: 'example.com',
         domain_mode: DomainMode::Custom,
+        www_redirect_type: WwwRedirectType::None,
+        allow_wildcard_subdomains: false,
         web_directory: '/public',
         php_version: PhpVersion::Php83,
         source_control_provider: Provider::Github,
