@@ -41,6 +41,7 @@ use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\IncludeOption;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload as ListSitesPayload;
@@ -92,7 +93,7 @@ class DeploySiteJob
         );
 
         // Get a specific site
-        $site = $this->forge->getSite(serverId: 123, siteId: 456);
+        $site = $this->forge->getSite(siteId: 456);
 
         // Create a new site
         $site = $this->forge->createSite(
@@ -101,6 +102,8 @@ class DeploySiteJob
                 type: Type::Laravel,
                 name: 'example.com',
                 domain_mode: DomainMode::Custom,
+                www_redirect_type: WwwRedirectType::None, // Required when domain_mode is Custom
+                allow_wildcard_subdomains: false,         // Required when domain_mode is Custom
                 web_directory: '/public',
                 php_version: PhpVersion::Php84,
                 source_control_provider: Provider::Github,
@@ -131,6 +134,7 @@ use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Provider;
 use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 
 class DeploySiteJob
@@ -148,6 +152,8 @@ class DeploySiteJob
                 type: Type::Laravel,
                 name: 'example.com',
                 domain_mode: DomainMode::Custom,
+                www_redirect_type: WwwRedirectType::None, // Required when domain_mode is Custom
+                allow_wildcard_subdomains: false,         // Required when domain_mode is Custom
                 web_directory: '/public',
                 php_version: PhpVersion::Php84,
                 source_control_provider: Provider::Github,
@@ -178,6 +184,7 @@ use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\IncludeOption;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload as ListSitesPayload;
@@ -215,7 +222,7 @@ $sitesResponse = Forge::listSites(
 );
 
 // Get a specific site
-$site = Forge::getSite(serverId: 123, siteId: 456);
+$site = Forge::getSite(siteId: 456);
 
 // Create a new site
 $site = Forge::createSite(
@@ -224,6 +231,8 @@ $site = Forge::createSite(
         type: Type::Laravel,
         name: 'example.com',
         domain_mode: DomainMode::Custom,
+        www_redirect_type: WwwRedirectType::None, // Required when domain_mode is Custom
+        allow_wildcard_subdomains: false,         // Required when domain_mode is Custom
         web_directory: '/public',
         php_version: PhpVersion::Php84,
         source_control_provider: Provider::Github,
@@ -328,7 +337,7 @@ For easier access to nested values, use the provided accessor methods:
 
 ```php
 $server = Forge::getServer(serverId: 123);
-$site = Forge::getSite(serverId: 123, siteId: 456);
+$site = Forge::getSite(siteId: 456);
 
 // Access nested relationships using dot notation
 $sitesRelatedLink = $server->relationships('sites.links.related');
@@ -621,6 +630,8 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreateLetsEncryptPayload;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\IncludeOption;
+use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
 use SebastianSulinski\LaravelForgeSdk\Enums\Server\PhpVersion;
 use SebastianSulinski\LaravelForgeSdk\Enums\Repository\Provider;
 use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\Type as CertificateType;
@@ -630,6 +641,8 @@ $createSitePayload = new CreatePayload(
     type: Type::Laravel,
     name: 'example.com',
     domain_mode: DomainMode::Custom,
+    www_redirect_type: WwwRedirectType::None, // Required when domain_mode is Custom
+    allow_wildcard_subdomains: false,         // Required when domain_mode is Custom
     web_directory: '/public',
     php_version: PhpVersion::Php84,
     source_control_provider: Provider::Github,
