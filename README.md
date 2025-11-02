@@ -79,9 +79,13 @@ class DeploySiteJob
 
         // Get a specific server
         $server = $this->forge->getServer(serverId: 123);
-        // Access relationships and links
-        $siteRelationships = $server->relationships['sites'] ?? null;
-        $selfLink = $server->links['self'] ?? null;
+        // Check and access relationships and links
+        if ($server->hasRelationships()) {
+            $siteRelationships = $server->relationships('sites.links.related');
+        }
+        if ($server->hasLinks()) {
+            $selfLink = $server->links('self');
+        }
 
         // List sites with includes
         $sitesResponse = $this->forge->listSites(
@@ -352,7 +356,18 @@ $relatedUrl = $site->links('server.related');
 $tagType = $site->relationships('tags.data.0.type', 'default-type');
 $customLink = $server->links('custom.link', 'https://fallback.url');
 
-// Check if relationships or links exist
+// Check if any relationships or links exist
+if ($server->hasRelationships()) {
+    // Server has relationships available
+    $sitesData = $server->relationships('sites');
+}
+
+if ($site->hasLinks()) {
+    // Site has links available
+    $selfLink = $site->links('self');
+}
+
+// Check if a specific relationship or link exists
 if ($server->hasRelationship('sites')) {
     $sitesData = $server->relationships('sites');
 }
@@ -369,8 +384,10 @@ $selfUrl = $site->links('self.href') ?? 'N/A';
 **Available accessor methods:**
 - `relationships(string $key, mixed $default = null): mixed` - Get relationship value with dot notation
 - `links(string $key, mixed $default = null): mixed` - Get link value with dot notation
-- `hasRelationship(string $key): bool` - Check if a relationship exists
-- `hasLink(string $key): bool` - Check if a link exists
+- `hasRelationship(string $key): bool` - Check if a specific relationship exists
+- `hasLink(string $key): bool` - Check if a specific link exists
+- `hasRelationships(): bool` - Check if any relationships exist
+- `hasLinks(): bool` - Check if any links exist
 
 ## Working with ListResponse
 
@@ -522,8 +539,10 @@ The `Server` and `Site` data objects include `relationships` and `links` propert
 
 - `relationships(string $key, mixed $default = null)` - Access nested relationship data with dot notation
 - `links(string $key, mixed $default = null)` - Access nested link data with dot notation
-- `hasRelationship(string $key)` - Check if a relationship exists
-- `hasLink(string $key)` - Check if a link exists
+- `hasRelationship(string $key)` - Check if a specific relationship exists
+- `hasLink(string $key)` - Check if a specific link exists
+- `hasRelationships()` - Check if any relationships exist
+- `hasLinks()` - Check if any links exist
 
 See the "Working with Relationships and Links" section for usage examples.
 
@@ -706,8 +725,10 @@ readonly class YourDataObject
 **Methods:**
 - `relationships(string $key, mixed $default = null): mixed` - Access relationships with dot notation
 - `links(string $key, mixed $default = null): mixed` - Access links with dot notation
-- `hasRelationship(string $key): bool` - Check if relationship exists
-- `hasLink(string $key): bool` - Check if link exists
+- `hasRelationship(string $key): bool` - Check if a specific relationship exists
+- `hasLink(string $key): bool` - Check if a specific link exists
+- `hasRelationships(): bool` - Check if any relationships exist
+- `hasLinks(): bool` - Check if any links exist
 
 ## Testing
 
