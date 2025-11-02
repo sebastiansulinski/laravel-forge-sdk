@@ -41,4 +41,20 @@ trait HasApiMetadata
     {
         return data_get($this->links, $key) !== null;
     }
+
+    /**
+     * Check if response has any relationships.
+     */
+    public function hasRelationships(): bool
+    {
+        return ! empty($this->relationships);
+    }
+
+    /**
+     * Check if response has any links.
+     */
+    public function hasLinks(): bool
+    {
+        return ! empty($this->links);
+    }
 }
