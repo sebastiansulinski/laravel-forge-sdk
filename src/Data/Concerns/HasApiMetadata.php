@@ -12,6 +12,10 @@ trait HasApiMetadata
      */
     public function relationships(string $key, mixed $default = null): mixed
     {
+        if (! property_exists($this, 'relationships')) {
+            return $default;
+        }
+
         return data_get($this->relationships, $key, $default);
     }
 
@@ -23,6 +27,10 @@ trait HasApiMetadata
      */
     public function links(string $key, mixed $default = null): mixed
     {
+        if (! property_exists($this, 'links')) {
+            return $default;
+        }
+
         return data_get($this->links, $key, $default);
     }
 
@@ -31,6 +39,10 @@ trait HasApiMetadata
      */
     public function hasRelationship(string $key): bool
     {
+        if (! property_exists($this, 'relationships')) {
+            return false;
+        }
+
         return data_get($this->relationships, $key) !== null;
     }
 
@@ -39,22 +51,34 @@ trait HasApiMetadata
      */
     public function hasLink(string $key): bool
     {
+        if (! property_exists($this, 'links')) {
+            return false;
+        }
+
         return data_get($this->links, $key) !== null;
     }
 
     /**
-     * Check if response has any relationships.
+     * Check if a response has any relationships.
      */
     public function hasRelationships(): bool
     {
+        if (! property_exists($this, 'relationships')) {
+            return false;
+        }
+
         return ! empty($this->relationships);
     }
 
     /**
-     * Check if response has any links.
+     * Check if a response has any links.
      */
     public function hasLinks(): bool
     {
+        if (! property_exists($this, 'links')) {
+            return false;
+        }
+
         return ! empty($this->links);
     }
 }

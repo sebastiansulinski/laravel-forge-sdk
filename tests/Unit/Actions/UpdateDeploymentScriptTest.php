@@ -14,29 +14,47 @@ beforeEach(function () {
 });
 
 it('updates deployment script', function () {
+    $scriptContent = implode(PHP_EOL, [
+        'cd /home/forge/example.com',
+        'git pull origin production',
+        'composer install --no-dev --optimize-autoloader',
+        'php artisan migrate --force',
+        'php artisan config:cache',
+    ]);
+
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments/script' => Http::response(),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments/script' => Http::response([
+            'data' => [
+                'id' => '12345',
+                'type' => 'deploymentScripts',
+                'attributes' => [
+                    'content' => $scriptContent,
+                    'auto_source' => true,
+                ],
+                'links' => [
+                    'self' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments/script',
+                ],
+            ],
+        ], 200),
     ]);
 
     $client = app(Client::class);
     $action = new UpdateDeploymentScript($client);
 
     $payload = new UpdateScriptPayload(
-        content: implode(PHP_EOL, [
-            'cd /home/forge/example.com',
-            'git pull origin production',
-            'composer install --no-dev --optimize-autoloader',
-            'php artisan migrate --force',
-            'php artisan config:cache',
-        ]),
+        content: $scriptContent,
         auto_source: true
     );
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         siteId: 456,
         payload: $payload
     );
+
+    expect($result->id)->toBe('12345')
+        ->and($result->content)->toBe($scriptContent)
+        ->and($result->autoSource)->toBeTrue();
 
     Http::assertSent(function (Request $request) use ($payload) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/deployments/script'

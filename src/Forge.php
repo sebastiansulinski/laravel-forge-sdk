@@ -32,6 +32,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\UpdateSite;
 use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
+use SebastianSulinski\LaravelForgeSdk\Data\DeploymentScriptResource;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
 use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
@@ -390,13 +391,14 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed
      */
     public function updateDeploymentScript(
         int $serverId,
         int $siteId,
         UpdateScriptPayload $payload
-    ): void {
-        $this->app->make(UpdateDeploymentScript::class)->handle(
+    ): DeploymentScriptResource {
+        return $this->app->make(UpdateDeploymentScript::class)->handle(
             serverId: $serverId,
             siteId: $siteId,
             payload: $payload
