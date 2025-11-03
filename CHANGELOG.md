@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2025-11-03
+
+### Added
+- Added `DeploymentScriptResource` data object to represent deployment script responses
+- Added `HasDeploymentScriptResource` trait for creating deployment script resource instances
+- Added `HasLinks` trait for API metadata access (links only)
+- Added `HasRelationships` trait for API metadata access (relationships only)
+
+### Changed
+- **Breaking:** `HasApiMetadata` trait now composes `HasLinks` and `HasRelationships` traits
+- **Breaking:** `UpdateDeploymentScript` action now returns `DeploymentScriptResource` instead of `void`
+- **Breaking:** `CreateCommand` action now returns `bool` (true on 202 status) instead of `void`
+- **Breaking:** `DeleteDatabaseSchema` action now returns `bool` (true on 202 status) instead of `void`
+- **Breaking:** `DeleteDatabaseUser` action now returns `bool` (true on 202 status) instead of `void`
+- **Breaking:** `DeleteSite` action now returns `bool` (true on 202 status) instead of `void`
+- **Breaking:** `UpdateEnvContent` action now returns `bool` (true on 202 status) instead of `void`
+- **Breaking:** `UpdateSite` action now returns `bool` (true on 202 status) instead of `void`
+- **Breaking:** Removed `siteId` property from `Deployment` data object as it's not returned by the API
+- All async operations now consistently throw `RequestException` with API error messages on failure
+- `DeploymentScriptResource` uses only `HasLinks` trait (only has links, no relationships)
+
+### Fixed
+- Fixed metadata trait handling for data objects that only have links or relationships (not both)
+
 ## [0.7.2] - 2025-11-02
 
 ### Added
