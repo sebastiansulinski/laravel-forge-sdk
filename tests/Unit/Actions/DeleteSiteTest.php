@@ -14,16 +14,18 @@ beforeEach(function () {
 
 it('deletes a site', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456' => Http::response(null, 204),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456' => Http::response(null, 202),
     ]);
 
     $client = app(Client::class);
     $action = new DeleteSite($client);
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         siteId: 456
     );
+
+    expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456'

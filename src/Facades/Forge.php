@@ -36,7 +36,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static Site getSite(int $siteId)
  * @method static Site createSite(int $serverId, CreateSitePayload $payload)
  * @method static void updateSite(int $serverId, int $siteId, UpdateSitePayload $payload)
- * @method static void deleteSite(int $serverId, int $siteId)
+ * @method static bool deleteSite(int $serverId, int $siteId)
  * @method static Collection<int, Command> listCommands(int $serverId, int $siteId, ListCommandsPayload $payload)
  * @method static bool createCommand(int $serverId, int $siteId, string $command)
  * @method static string getEnvContent(int $serverId, int $siteId)

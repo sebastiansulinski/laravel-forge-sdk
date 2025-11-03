@@ -17,12 +17,14 @@ readonly class DeleteSite
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function handle(int $serverId, int $siteId): void
+    public function handle(int $serverId, int $siteId): bool
     {
         $path = $this->client->path(
             '/servers/%s/sites/%s', $serverId, $siteId
         );
 
-        $this->client->delete($path)->throw();
+        $response = $this->client->delete($path)->throw();
+
+        return $response->status() === 202;
     }
 }

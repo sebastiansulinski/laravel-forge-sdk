@@ -155,9 +155,9 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function deleteSite(int $serverId, int $siteId): void
+    public function deleteSite(int $serverId, int $siteId): bool
     {
-        $this->app->make(DeleteSite::class)
+        return $this->app->make(DeleteSite::class)
             ->handle(serverId: $serverId, siteId: $siteId);
     }
 
