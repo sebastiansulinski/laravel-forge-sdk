@@ -2,11 +2,11 @@
 
 namespace SebastianSulinski\LaravelForgeSdk\Data;
 
-use SebastianSulinski\LaravelForgeSdk\Data\Concerns\HasApiMetadata;
+use SebastianSulinski\LaravelForgeSdk\Data\Concerns\HasLinks;
 
 readonly class DeploymentScriptResource
 {
-    use HasApiMetadata;
+    use HasLinks;
 
     /**
      * DeploymentScriptResource constructor.
