@@ -34,6 +34,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\Database;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentScriptResource;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
+use SebastianSulinski\LaravelForgeSdk\Data\Domain;
 use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
@@ -435,8 +436,8 @@ readonly class Forge
         int $serverId,
         int $siteId,
         CreateDomainPayload $payload
-    ): void {
-        $this->app->make(CreateDomain::class)
+    ): Domain {
+        return $this->app->make(CreateDomain::class)
             ->handle(
                 serverId: $serverId,
                 siteId: $siteId,
