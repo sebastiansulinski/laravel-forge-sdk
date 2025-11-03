@@ -184,20 +184,17 @@ readonly class Forge
      * Create site command
      *
      * @throws \Illuminate\Http\Client\ConnectionException
-     * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function createCommand(int $serverId, int $siteId, string $command): bool
     {
-        $this->app->make(CreateCommand::class)->handle(
+        return $this->app->make(CreateCommand::class)->handle(
             serverId: $serverId,
             siteId: $siteId,
             payload: new CreateCommandPayload(
                 command: $command
             )
         );
-
-        return true;
     }
 
     /**

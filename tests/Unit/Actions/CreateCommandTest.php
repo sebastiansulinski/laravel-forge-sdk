@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Client\Request;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateCommand;
 use SebastianSulinski\LaravelForgeSdk\Client;
@@ -15,7 +14,9 @@ beforeEach(function () {
 
 it('creates a command on a site', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/commands' => Http::response(),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/commands' => Http::response([
+            'message' => 'The command has been queued for execution.',
+        ], 202),
     ]);
 
     $client = app(Client::class);
@@ -25,11 +26,13 @@ it('creates a command on a site', function () {
         command: 'php artisan migrate'
     );
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         siteId: 456,
         payload: $payload
     );
+
+    expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/commands'
@@ -41,7 +44,7 @@ it('creates a command on a site', function () {
     });
 });
 
-it('throws exception when request fails', function () {
+it('returns false when request fails', function () {
     Http::fake([
         'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/commands' => Http::response([
             'message' => 'Server error',
@@ -55,9 +58,11 @@ it('throws exception when request fails', function () {
         command: 'php artisan migrate'
     );
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         siteId: 456,
         payload: $payload
     );
-})->throws(RequestException::class);
+
+    expect($result)->toBeFalse();
+});

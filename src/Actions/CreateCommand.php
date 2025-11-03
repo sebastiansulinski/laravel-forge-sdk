@@ -16,15 +16,15 @@ readonly class CreateCommand
      * Handle request.
      *
      * @throws \Illuminate\Http\Client\ConnectionException
-     * @throws \Illuminate\Http\Client\RequestException
-     * @throws \Exception
      */
-    public function handle(int $serverId, int $siteId, CreateCommandPayload $payload): void
+    public function handle(int $serverId, int $siteId, CreateCommandPayload $payload): bool
     {
         $path = $this->client->path(
             '/servers/%s/sites/%s/commands', $serverId, $siteId
         );
 
-        $this->client->post($path, $payload->toArray())->throw();
+        $response = $this->client->post($path, $payload->toArray());
+
+        return $response->status() === 202;
     }
 }
