@@ -17,14 +17,15 @@ readonly class UpdateEnvContent
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
-     * @throws \Exception
      */
-    public function handle(int $serverId, int $siteId, UpdatePayload $payload): void
+    public function handle(int $serverId, int $siteId, UpdatePayload $payload): bool
     {
         $path = $this->client->path(
             '/servers/%s/sites/%s/environment', $serverId, $siteId
         );
 
-        $this->client->put($path, $payload->toArray())->throw();
+        $response = $this->client->put($path, $payload->toArray())->throw();
+
+        return $response->status() === 202;
     }
 }

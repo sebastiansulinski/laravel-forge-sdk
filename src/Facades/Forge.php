@@ -41,7 +41,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static Collection<int, Command> listCommands(int $serverId, int $siteId, ListCommandsPayload $payload)
  * @method static bool createCommand(int $serverId, int $siteId, string $command)
  * @method static string getEnvContent(int $serverId, int $siteId)
- * @method static void updateEnvContent(int $serverId, int $siteId, UpdateEnvPayload $payload)
+ * @method static bool updateEnvContent(int $serverId, int $siteId, UpdateEnvPayload $payload)
  * @method static Deployment createDeployment(int $serverId, int $siteId)
  * @method static DeploymentStatus getDeploymentStatus(int $serverId, int $siteId)
  * @method static Database createDatabaseSchema(int $serverId, CreateSchemaPayload $payload)

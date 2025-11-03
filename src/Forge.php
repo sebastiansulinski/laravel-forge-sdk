@@ -219,9 +219,9 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function updateEnvContent(int $serverId, int $siteId, UpdateEnvPayload $payload): void
+    public function updateEnvContent(int $serverId, int $siteId, UpdateEnvPayload $payload): bool
     {
-        $this->app->make(UpdateEnvContent::class)->handle(
+        return $this->app->make(UpdateEnvContent::class)->handle(
             serverId: $serverId,
             siteId: $siteId,
             payload: $payload

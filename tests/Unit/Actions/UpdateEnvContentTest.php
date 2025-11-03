@@ -15,7 +15,7 @@ beforeEach(function () {
 
 it('updates environment content', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/environment' => Http::response(),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/environment' => Http::response(null, 202),
     ]);
 
     $client = app(Client::class);
@@ -41,11 +41,13 @@ it('updates environment content', function () {
         encryption_key: 'base64:newkey456'
     );
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         siteId: 456,
         payload: $payload
     );
+
+    expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) use ($payload) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/environment'
@@ -62,7 +64,7 @@ it('updates environment content', function () {
 
 it('updates environment content with minimal data', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/environment' => Http::response(),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/environment' => Http::response(null, 202),
     ]);
 
     $client = app(Client::class);
@@ -72,11 +74,13 @@ it('updates environment content with minimal data', function () {
         environment: 'APP_NAME=Laravel'
     );
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         siteId: 456,
         payload: $payload
     );
+
+    expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/environment'
