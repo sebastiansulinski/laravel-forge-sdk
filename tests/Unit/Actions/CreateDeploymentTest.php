@@ -45,7 +45,6 @@ it('creates a deployment', function () {
     );
 
     expect($deployment->id)->toBe(789)
-        ->and($deployment->siteId)->toBe(456)
         ->and($deployment->commit->hash)->toBe('abc123def456')
         ->and($deployment->commit->author)->toBe('John Doe')
         ->and($deployment->commit->message)->toBe('Fix bug in authentication')

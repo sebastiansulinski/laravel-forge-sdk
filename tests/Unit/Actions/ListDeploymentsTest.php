@@ -93,7 +93,6 @@ it('lists deployments', function () {
 
     expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(1)
-        ->and($first->siteId)->toBe(456)
         ->and($first->status->value)->toBe('finished')
         ->and($first->commit->hash)->toBe('abc123')
         ->and($first->commit->message)->toBe('Fix bug')

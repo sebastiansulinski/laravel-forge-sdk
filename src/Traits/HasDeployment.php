@@ -33,14 +33,13 @@ trait HasDeployment
      *
      * @param  DeploymentData  $data
      */
-    protected function makeDeployment(int $siteId, array $data): Deployment
+    protected function makeDeployment(array $data): Deployment
     {
         $attributes = $data['attributes'];
         $commitData = $attributes['commit'];
 
         return new Deployment(
             id: $data['id'],
-            siteId: $siteId,
             commit: new Commit(
                 hash: $commitData['hash'] ?? null,
                 author: $commitData['author'] ?? null,
