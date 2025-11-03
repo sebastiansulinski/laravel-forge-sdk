@@ -138,11 +138,11 @@ readonly class Forge
      *
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
-     * @throws \Exception
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function updateSite(int $serverId, int $siteId, UpdateSitePayload $payload): void
+    public function updateSite(int $serverId, int $siteId, UpdateSitePayload $payload): bool
     {
-        $this->app->make(UpdateSite::class)->handle(
+        return $this->app->make(UpdateSite::class)->handle(
             serverId: $serverId,
             siteId: $siteId,
             payload: $payload

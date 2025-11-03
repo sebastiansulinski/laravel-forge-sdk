@@ -17,7 +17,7 @@ beforeEach(function () {
 
 it('updates site', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456' => Http::response(),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456' => Http::response(null, 202),
     ]);
 
     $client = app(Client::class);
@@ -31,11 +31,13 @@ it('updates site', function () {
         repository_branch: 'production'
     );
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         siteId: 456,
         payload: $payload
     );
+
+    expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456'
@@ -53,7 +55,7 @@ it('updates site', function () {
 
 it('updates site with partial data', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456' => Http::response(),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456' => Http::response(null, 202),
     ]);
 
     $client = app(Client::class);
@@ -64,11 +66,13 @@ it('updates site with partial data', function () {
         push_to_deploy: false
     );
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         siteId: 456,
         payload: $payload
     );
+
+    expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456'
