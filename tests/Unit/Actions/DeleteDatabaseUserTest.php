@@ -14,16 +14,18 @@ beforeEach(function () {
 
 it('deletes a database user', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/database/users/456' => Http::response(null, 204),
+        'forge.laravel.com/api/orgs/test-org/servers/123/database/users/456' => Http::response(null, 202),
     ]);
 
     $client = app(Client::class);
     $action = new DeleteDatabaseUser($client);
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         databaseUserId: 456
     );
+
+    expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/users/456'

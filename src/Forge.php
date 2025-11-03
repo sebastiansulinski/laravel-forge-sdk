@@ -323,9 +323,9 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function deleteDatabaseUser(int $serverId, int $databaseUserId): void
+    public function deleteDatabaseUser(int $serverId, int $databaseUserId): bool
     {
-        $this->app->make(DeleteDatabaseUser::class)
+        return $this->app->make(DeleteDatabaseUser::class)
             ->handle(serverId: $serverId, databaseUserId: $databaseUserId);
     }
 

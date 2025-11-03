@@ -14,12 +14,14 @@ readonly class DeleteDatabaseUser
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function handle(int $serverId, int $databaseUserId): void
+    public function handle(int $serverId, int $databaseUserId): bool
     {
         $path = $this->client->path(
             '/servers/%s/database/users/%s', $serverId, $databaseUserId
         );
 
-        $this->client->delete($path)->throw();
+        $response = $this->client->delete($path)->throw();
+
+        return $response->status() === 202;
     }
 }
