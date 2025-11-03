@@ -38,7 +38,7 @@ readonly class ListDomains
         $domains = $this->parseDataList($httpResponse);
 
         $mappedDomains = array_map(
-            fn (array $domain) => $this->makeDomain($serverId, $siteId, $domain),
+            fn (array $domain) => $this->makeDomain($domain),
             $domains
         );
 

@@ -45,6 +45,6 @@ readonly class CreateDomain
         }
 
         /** @var DomainData $data */
-        return $this->makeDomain($serverId, $siteId, $data);
+        return $this->makeDomain($data);
     }
 }

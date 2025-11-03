@@ -19,7 +19,8 @@ use SebastianSulinski\LaravelForgeSdk\Enums\Site\WwwRedirectType;
  *         allow_wildcard_subdomains: bool,
  *         created_at?: string|null,
  *         updated_at?: string|null
- *     }
+ *     },
+ *     links?: array<string, mixed>
  * }
  */
 trait HasDomain
@@ -29,19 +30,18 @@ trait HasDomain
      *
      * @param  DomainData  $data
      */
-    protected function makeDomain(int $serverId, int $siteId, array $data): Domain
+    protected function makeDomain(array $data): Domain
     {
         $attributes = $data['attributes'];
 
         return new Domain(
             id: $data['id'],
-            serverId: $serverId,
-            siteId: $siteId,
             name: $attributes['name'],
             type: Type::from($attributes['type']),
             status: Status::from($attributes['status']),
             wwwRedirectType: WwwRedirectType::from($attributes['www_redirect_type']),
             allowWildcardSubdomains: $attributes['allow_wildcard_subdomains'],
+            links: $data['links'] ?? [],
             createdAt: isset($attributes['created_at'])
                 ? Carbon::parse($attributes['created_at'])
                 : null,

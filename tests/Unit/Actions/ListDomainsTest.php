@@ -27,6 +27,11 @@ it('lists domains', function () {
                         'created_at' => '2024-01-15T10:30:00.000000Z',
                         'updated_at' => '2024-01-15T10:30:00.000000Z',
                     ],
+                    'links' => [
+                        'self' => [
+                            'href' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/1',
+                        ],
+                    ],
                 ],
                 [
                     'id' => 2,
@@ -38,6 +43,11 @@ it('lists domains', function () {
                         'allow_wildcard_subdomains' => true,
                         'created_at' => '2024-01-16T10:30:00.000000Z',
                         'updated_at' => '2024-01-16T10:30:00.000000Z',
+                    ],
+                    'links' => [
+                        'self' => [
+                            'href' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/2',
+                        ],
                     ],
                 ],
             ],
@@ -62,17 +72,17 @@ it('lists domains', function () {
 
     expect($collection)->toHaveCount(2)
         ->and($first->id)->toBe(1)
-        ->and($first->serverId)->toBe(123)
-        ->and($first->siteId)->toBe(456)
         ->and($first->name)->toBe('example.com')
         ->and($first->type->value)->toBe('primary')
         ->and($first->status->value)->toBe('enabled')
         ->and($first->wwwRedirectType->value)->toBe('none')
         ->and($first->allowWildcardSubdomains)->toBeFalse()
+        ->and($first->links('self.href'))->toBe('https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/1')
         ->and($last->id)->toBe(2)
         ->and($last->name)->toBe('www.example.com')
         ->and($last->type->value)->toBe('alias')
-        ->and($last->allowWildcardSubdomains)->toBeTrue();
+        ->and($last->allowWildcardSubdomains)->toBeTrue()
+        ->and($last->links('self.href'))->toBe('https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/2');
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains'

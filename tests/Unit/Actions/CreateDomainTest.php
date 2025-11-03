@@ -29,6 +29,11 @@ it('creates a domain with default values', function () {
                     'created_at' => '2024-01-15T10:30:00.000000Z',
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
                 ],
+                'links' => [
+                    'self' => [
+                        'href' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789',
+                    ],
+                ],
             ],
         ], 201),
     ]);
@@ -47,13 +52,13 @@ it('creates a domain with default values', function () {
     );
 
     expect($domain->id)->toBe(789)
-        ->and($domain->serverId)->toBe(123)
-        ->and($domain->siteId)->toBe(456)
         ->and($domain->name)->toBe('example.com')
         ->and($domain->type->value)->toBe('alias')
         ->and($domain->status->value)->toBe('pending')
         ->and($domain->wwwRedirectType->value)->toBe('none')
-        ->and($domain->allowWildcardSubdomains)->toBeFalse();
+        ->and($domain->allowWildcardSubdomains)->toBeFalse()
+        ->and($domain->links('self.href'))->toBe('https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789')
+        ->and($domain->hasLinks())->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains'
@@ -80,6 +85,11 @@ it('creates a domain with custom values', function () {
                     'allow_wildcard_subdomains' => true,
                     'created_at' => '2024-01-15T10:30:00.000000Z',
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
+                ],
+                'links' => [
+                    'self' => [
+                        'href' => 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789',
+                    ],
                 ],
             ],
         ], 201),
