@@ -44,7 +44,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static Deployment createDeployment(int $serverId, int $siteId)
  * @method static DeploymentStatus getDeploymentStatus(int $serverId, int $siteId)
  * @method static Database createDatabaseSchema(int $serverId, CreateSchemaPayload $payload)
- * @method static void deleteDatabaseSchema(int $serverId, int $databaseId)
+ * @method static bool deleteDatabaseSchema(int $serverId, int $databaseId)
  * @method static Collection<int, Database> listDatabaseSchemas(int $serverId, ListSchemasPayload $payload)
  * @method static Collection<int, DatabaseUser> listDatabaseUsers(int $serverId, ListUsersPayload $payload)
  * @method static void deleteDatabaseUser(int $serverId, int $databaseUserId)

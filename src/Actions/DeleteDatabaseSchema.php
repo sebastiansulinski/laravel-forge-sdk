@@ -17,12 +17,14 @@ readonly class DeleteDatabaseSchema
      * @throws \Illuminate\Http\Client\ConnectionException
      * @throws \Illuminate\Http\Client\RequestException
      */
-    public function handle(int $serverId, int $databaseId): void
+    public function handle(int $serverId, int $databaseId): bool
     {
         $path = $this->client->path(
             '/servers/%s/database/schemas/%s', $serverId, $databaseId
         );
 
-        $this->client->delete($path)->throw();
+        $response = $this->client->delete($path)->throw();
+
+        return $response->status() === 202;
     }
 }

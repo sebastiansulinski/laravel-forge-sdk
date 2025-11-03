@@ -184,6 +184,7 @@ readonly class Forge
      * Create site command
      *
      * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function createCommand(int $serverId, int $siteId, string $command): bool
@@ -277,9 +278,9 @@ readonly class Forge
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function deleteDatabaseSchema(int $serverId, int $databaseId): void
+    public function deleteDatabaseSchema(int $serverId, int $databaseId): bool
     {
-        $this->app->make(DeleteDatabaseSchema::class)
+        return $this->app->make(DeleteDatabaseSchema::class)
             ->handle(serverId: $serverId, databaseId: $databaseId);
     }
 

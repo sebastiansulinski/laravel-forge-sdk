@@ -16,6 +16,7 @@ readonly class CreateCommand
      * Handle request.
      *
      * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
      */
     public function handle(int $serverId, int $siteId, CreateCommandPayload $payload): bool
     {
@@ -23,7 +24,7 @@ readonly class CreateCommand
             '/servers/%s/sites/%s/commands', $serverId, $siteId
         );
 
-        $response = $this->client->post($path, $payload->toArray());
+        $response = $this->client->post($path, $payload->toArray())->throw();
 
         return $response->status() === 202;
     }

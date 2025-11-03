@@ -14,16 +14,18 @@ beforeEach(function () {
 
 it('deletes a database schema', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/database/schemas/456' => Http::response(null, 204),
+        'forge.laravel.com/api/orgs/test-org/servers/123/database/schemas/456' => Http::response(null, 202),
     ]);
 
     $client = app(Client::class);
     $action = new DeleteDatabaseSchema($client);
 
-    $action->handle(
+    $result = $action->handle(
         serverId: 123,
         databaseId: 456
     );
+
+    expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
         return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/database/schemas/456'
