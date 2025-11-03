@@ -472,6 +472,7 @@ The SDK provides actions for all major Forge operations:
 ### Domains
 
 - `ListDomains` - List domains for a site
+- `GetDomain` - Get a specific domain
 - `CreateDomain` - Add a domain to a site
 
 ### Environment

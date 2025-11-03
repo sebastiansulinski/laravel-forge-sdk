@@ -14,6 +14,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\DeleteDatabaseUser;
 use SebastianSulinski\LaravelForgeSdk\Actions\DeleteSite;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDeploymentScript;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDeploymentStatus;
+use SebastianSulinski\LaravelForgeSdk\Actions\GetDomain;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDomainCertificate;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetEnvContent;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetNginxTemplateByName;
@@ -443,6 +444,23 @@ readonly class Forge
                 siteId: $siteId,
                 payload: $payload
             );
+    }
+
+    /**
+     * Get domain.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed
+     */
+    public function getDomain(int $serverId, int $siteId, int $domainRecordId): Domain
+    {
+        return $this->app->make(GetDomain::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            domainRecordId: $domainRecordId
+        );
     }
 
     /**

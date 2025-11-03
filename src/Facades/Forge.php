@@ -55,6 +55,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static DeploymentScriptResource updateDeploymentScript(int $serverId, int $siteId, UpdateScriptPayload $payload)
  * @method static Collection<int, Deployment> listDeployments(int $serverId, int $siteId, ListDeploymentsPayload $payload)
  * @method static Domain createDomain(int $serverId, int $siteId, CreateDomainPayload $payload)
+ * @method static Domain getDomain(int $serverId, int $siteId, int $domainRecordId)
  * @method static Collection<int, Domain> listDomains(int $serverId, int $siteId)
  * @method static NginxTemplate|null getNginxTemplateByName(int $serverId, string $templateName)
  *
