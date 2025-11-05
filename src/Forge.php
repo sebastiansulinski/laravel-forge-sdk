@@ -5,6 +5,7 @@ namespace SebastianSulinski\LaravelForgeSdk;
 use Illuminate\Contracts\Container\Container;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateCommand;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabaseSchema;
+use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabaseUser;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDeployment;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomain;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomainCertificate;
@@ -32,6 +33,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\UpdateEnvContent;
 use SebastianSulinski\LaravelForgeSdk\Actions\UpdateSite;
 use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
+use SebastianSulinski\LaravelForgeSdk\Data\DatabaseUser;
 use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentScriptResource;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
@@ -43,6 +45,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreatePayload as CreateCertificatePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Command\ListPayload as ListCommandsPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateUserPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListSchemasPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\ListUsersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\ListPayload as ListDeploymentsPayload;
@@ -316,6 +319,21 @@ readonly class Forge
     ): ListResponse {
         return $this->app->make(ListDatabaseUsers::class)->handle(
             serverId: $serverId, payload: $payload
+        );
+    }
+
+    /**
+     * Create a database user.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Exception
+     */
+    public function createDatabaseUser(int $serverId, CreateUserPayload $payload): DatabaseUser
+    {
+        return $this->app->make(CreateDatabaseUser::class)->handle(
+            serverId: $serverId,
+            payload: $payload
         );
     }
 

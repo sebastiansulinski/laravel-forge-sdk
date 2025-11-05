@@ -453,6 +453,7 @@ The SDK provides actions for all major Forge operations:
 - `CreateDatabaseSchema` - Create a database schema
 - `ListDatabaseSchemas` - List database schemas
 - `DeleteDatabaseSchema` - Delete a database schema
+- `CreateDatabaseUser` - Create a database user
 - `ListDatabaseUsers` - List database users
 - `DeleteDatabaseUser` - Delete a database user
 
@@ -614,6 +615,7 @@ Payload classes represent request data for API operations. They are organized by
 
 ### Database Payloads
 - `Database\CreateSchemaPayload` - Data for creating a database schema
+- `Database\CreateUserPayload` - Data for creating a database user
 - `Database\ListSchemasPayload` - Query parameters for listing database schemas
 - `Database\ListUsersPayload` - Query parameters for listing database users
 
@@ -647,6 +649,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateUserPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreateLetsEncryptPayload;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\Type;
 use SebastianSulinski\LaravelForgeSdk\Enums\Site\DomainMode;
@@ -686,11 +689,19 @@ $listSitesPayload = new ListPayload(
     pageSize: 50
 );
 
-// Create a database
+// Create a database schema
 $createDatabasePayload = new CreateSchemaPayload(
     name: 'my_database',
     user: 'db_user',
     password: 'secure_password'
+);
+
+// Create a database user
+$createDatabaseUserPayload = new CreateUserPayload(
+    name: 'app_user',
+    password: 'secure_password',
+    readOnly: false,
+    databaseIds: [456, 457]
 );
 
 // Create Let's Encrypt certificate
