@@ -16,9 +16,6 @@ readonly class Certificate
      */
     public function __construct(
         public int $id,
-        public int $serverId,
-        public int $siteId,
-        public int $domainRecordId,
         public Type $type,
         public RequestStatus $requestStatus,
         public Status $status,

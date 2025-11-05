@@ -42,9 +42,6 @@ it('gets domain certificate', function () {
     );
 
     expect($certificate->id)->toBe(999)
-        ->and($certificate->serverId)->toBe(123)
-        ->and($certificate->siteId)->toBe(456)
-        ->and($certificate->domainRecordId)->toBe(789)
         ->and($certificate->type->value)->toBe('letsencrypt')
         ->and($certificate->requestStatus->value)->toBe('created')
         ->and($certificate->status->value)->toBe('installed')

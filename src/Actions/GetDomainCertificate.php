@@ -46,6 +46,6 @@ readonly class GetDomainCertificate
         }
 
         /** @var CertificateData $data */
-        return $this->makeCertificate($serverId, $siteId, $domainRecordId, $data);
+        return $this->makeCertificate($data);
     }
 }

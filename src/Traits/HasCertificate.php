@@ -32,15 +32,12 @@ trait HasCertificate
      *
      * @param  CertificateData  $data
      */
-    protected function makeCertificate(int $serverId, int $siteId, int $domainRecordId, array $data): Certificate
+    protected function makeCertificate(array $data): Certificate
     {
         $attributes = $data['attributes'];
 
         return new Certificate(
             id: $data['id'],
-            serverId: $serverId,
-            siteId: $siteId,
-            domainRecordId: $domainRecordId,
             type: Type::from($attributes['type']),
             requestStatus: RequestStatus::from($attributes['request_status']),
             status: Status::from($attributes['status']),

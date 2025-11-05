@@ -54,12 +54,7 @@ readonly class CreateDomainCertificate
         /** @var CertificateData $data */
         $data = $this->parseData($response);
 
-        return $this->makeCertificate(
-            serverId: $serverId,
-            siteId: $siteId,
-            domainRecordId: $domainRecordId,
-            data: $data
-        );
+        return $this->makeCertificate($data);
     }
 
     /**
