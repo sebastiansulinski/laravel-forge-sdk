@@ -486,9 +486,10 @@ The SDK provides actions for all major Forge operations:
 - `ListCommands` - List commands executed on a site
 - `CreateCommand` - Execute a command on the server
 
-### Nginx Templates
+### Nginx
 
 - `GetNginxTemplateByName` - Get Nginx template by name
+- `GetNginxConfiguration` - Get Nginx configuration for a site
 
 ## ListResponse Object
 
@@ -533,6 +534,7 @@ The SDK uses typed data objects for all responses:
 - `Repository` - Repository information
 - `MaintenanceMode` - Maintenance mode status
 - `NginxTemplate` - Nginx template
+- `NginxConfiguration` - Nginx configuration
 - `Commit` - Git commit information
 
 **Resources with API Metadata:**

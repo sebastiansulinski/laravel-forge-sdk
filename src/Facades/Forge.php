@@ -12,6 +12,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentScriptResource;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
 use SebastianSulinski\LaravelForgeSdk\Data\Domain;
+use SebastianSulinski\LaravelForgeSdk\Data\NginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
@@ -58,6 +59,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static Domain getDomain(int $serverId, int $siteId, int $domainRecordId)
  * @method static Collection<int, Domain> listDomains(int $serverId, int $siteId)
  * @method static NginxTemplate|null getNginxTemplateByName(int $serverId, string $templateName)
+ * @method static NginxConfiguration getNginxConfiguration(int $serverId, int $siteId)
  *
  * @see \SebastianSulinski\LaravelForgeSdk\Forge
  */

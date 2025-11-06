@@ -18,6 +18,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\GetDeploymentStatus;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDomain;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDomainCertificate;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetEnvContent;
+use SebastianSulinski\LaravelForgeSdk\Actions\GetNginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetNginxTemplateByName;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetServer;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetSite;
@@ -39,6 +40,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\DeploymentScriptResource;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
 use SebastianSulinski\LaravelForgeSdk\Data\Domain;
 use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
+use SebastianSulinski\LaravelForgeSdk\Data\NginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
@@ -508,5 +510,19 @@ readonly class Forge
     {
         return $this->app->make(GetNginxTemplateByName::class)
             ->handle(serverId: $serverId, templateName: $templateName);
+    }
+
+    /**
+     * Get nginx configuration for a site.
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed
+     */
+    public function getNginxConfiguration(int $serverId, int $siteId): NginxConfiguration
+    {
+        return $this->app->make(GetNginxConfiguration::class)
+            ->handle(serverId: $serverId, siteId: $siteId);
     }
 }
