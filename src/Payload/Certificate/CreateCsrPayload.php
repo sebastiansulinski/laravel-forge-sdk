@@ -26,16 +26,18 @@ readonly class CreateCsrPayload extends CreatePayload
      */
     public function toArray(): array
     {
-        return array_filter([
+        return [
             'type' => $this->type()->value,
-            'domain' => $this->domain,
-            'country' => $this->country,
-            'state' => $this->state,
-            'city' => $this->city,
-            'organization' => $this->organization,
-            'department' => $this->department,
-            'sans' => $this->sans,
-        ], fn ($value) => $value !== null);
+            'csr' => [
+                'domain' => $this->domain,
+                'sans' => $this->sans,
+                'country' => $this->country,
+                'state' => $this->state,
+                'city' => $this->city,
+                'organization' => $this->organization,
+                'department' => $this->department,
+            ],
+        ];
     }
 
     /**

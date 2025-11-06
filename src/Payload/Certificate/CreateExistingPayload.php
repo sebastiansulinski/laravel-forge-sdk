@@ -21,8 +21,10 @@ readonly class CreateExistingPayload extends CreatePayload
     {
         return [
             'type' => $this->type()->value,
-            'key' => $this->key,
-            'certificate' => $this->certificate,
+            'existing' => [
+                'key' => $this->key,
+                'certificate' => $this->certificate,
+            ],
         ];
     }
 
