@@ -12,6 +12,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomainCertificate;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateSite;
 use SebastianSulinski\LaravelForgeSdk\Actions\DeleteDatabaseSchema;
 use SebastianSulinski\LaravelForgeSdk\Actions\DeleteDatabaseUser;
+use SebastianSulinski\LaravelForgeSdk\Actions\DeleteDomainCertificate;
 use SebastianSulinski\LaravelForgeSdk\Actions\DeleteSite;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDeploymentScript;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDeploymentStatus;
@@ -388,6 +389,26 @@ readonly class Forge
     ): Certificate {
 
         return $this->app->make(GetDomainCertificate::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            domainRecordId: $domainRecordId,
+        );
+    }
+
+    /**
+     * Delete domain certificate.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function deleteDomainCertificate(
+        int $serverId,
+        int $siteId,
+        int $domainRecordId
+    ): bool {
+
+        return $this->app->make(DeleteDomainCertificate::class)->handle(
             serverId: $serverId,
             siteId: $siteId,
             domainRecordId: $domainRecordId,

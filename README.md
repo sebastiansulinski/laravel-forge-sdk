@@ -469,6 +469,7 @@ The SDK provides actions for all major Forge operations:
 
 - `CreateDomainCertificate` - Create an SSL certificate
 - `GetDomainCertificate` - Get certificate details
+- `DeleteDomainCertificate` - Delete a domain certificate
 
 ### Domains
 

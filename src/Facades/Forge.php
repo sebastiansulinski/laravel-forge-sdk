@@ -52,6 +52,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static bool deleteDatabaseUser(int $serverId, int $databaseUserId)
  * @method static Certificate createDomainCertificate(int $serverId, int $siteId, int $domainRecordId, CreateCertificatePayload $payload)
  * @method static Certificate getDomainCertificate(int $serverId, int $siteId, int $domainRecordId)
+ * @method static bool deleteDomainCertificate(int $serverId, int $siteId, int $domainRecordId)
  * @method static string getDeploymentScript(int $serverId, int $siteId)
  * @method static DeploymentScriptResource updateDeploymentScript(int $serverId, int $siteId, UpdateScriptPayload $payload)
  * @method static Collection<int, Deployment> listDeployments(int $serverId, int $siteId, ListDeploymentsPayload $payload)
