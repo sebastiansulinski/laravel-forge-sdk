@@ -470,6 +470,7 @@ The SDK provides actions for all major Forge operations:
 - `CreateDomainCertificate` - Create an SSL certificate
 - `GetDomainCertificate` - Get certificate details
 - `DeleteDomainCertificate` - Delete a domain certificate
+- `CreateDomainCertificateAction` - Enable or disable a domain certificate
 
 ### Domains
 
@@ -575,6 +576,7 @@ Type-safe enums for all Forge constants:
 - `Certificate\KeyType` - Certificate key types (`Ecdsa`, `Rsa`)
 - `Certificate\VerificationMethod` - Verification methods (`Http01`, `Dns01`)
 - `Certificate\RequestStatus` - Certificate request status values
+- `Certificate\Action` - Certificate actions (`Enable`, `Disable`)
 
 ### Command
 - `Command\Status` - Command status values (`Waiting`, `Running`, `Finished`, `Timeout`, `Failed`)
@@ -615,6 +617,7 @@ Payload classes represent request data for API operations. They are organized by
 - `Certificate\CreateLetsEncryptPayload` - Create Let's Encrypt certificate
 - `Certificate\CreateCsrPayload` - Create certificate from CSR
 - `Certificate\CreateExistingPayload` - Install existing certificate
+- `Certificate\CreateActionPayload` - Data for performing actions on certificates (enable/disable)
 
 ### Database Payloads
 - `Database\CreateSchemaPayload` - Data for creating a database schema
@@ -711,6 +714,21 @@ $createDatabaseUserPayload = new CreateUserPayload(
 $createCertificatePayload = new CreateLetsEncryptPayload(
     type: CertificateType::LetsEncrypt,
     domains: ['example.com', 'www.example.com']
+);
+
+// Enable or disable a certificate
+use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreateActionPayload;
+use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\Action;
+
+$certificateActionPayload = new CreateActionPayload(
+    action: Action::Enable
+);
+
+Forge::createDomainCertificateAction(
+    serverId: 123,
+    siteId: 456,
+    domainRecordId: 789,
+    payload: $certificateActionPayload
 );
 ```
 

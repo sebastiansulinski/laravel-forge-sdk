@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added `Certificate\Action` enum to represent certificate actions (`Enable`, `Disable`)
+- Added `Certificate\CreateActionPayload` payload class for performing actions on domain certificates
+- Added `CreateDomainCertificateAction` action to enable or disable domain certificates
+- Added `createDomainCertificateAction()` method to Forge service and facade
+
 ## [0.10.0] - 2025-11-11
 
 ### Added

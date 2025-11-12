@@ -17,6 +17,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
 use SebastianSulinski\LaravelForgeSdk\Forge as ForgeService;
+use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreateActionPayload as CreateCertificateActionPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreatePayload as CreateCertificatePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Command\ListPayload as ListCommandsPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
@@ -53,6 +54,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static Certificate createDomainCertificate(int $serverId, int $siteId, int $domainRecordId, CreateCertificatePayload $payload)
  * @method static Certificate getDomainCertificate(int $serverId, int $siteId, int $domainRecordId)
  * @method static bool deleteDomainCertificate(int $serverId, int $siteId, int $domainRecordId)
+ * @method static bool createDomainCertificateAction(int $serverId, int $siteId, int $domainRecordId, CreateCertificateActionPayload $payload)
  * @method static string getDeploymentScript(int $serverId, int $siteId)
  * @method static DeploymentScriptResource updateDeploymentScript(int $serverId, int $siteId, UpdateScriptPayload $payload)
  * @method static Collection<int, Deployment> listDeployments(int $serverId, int $siteId, ListDeploymentsPayload $payload)

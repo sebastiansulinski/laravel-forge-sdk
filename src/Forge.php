@@ -9,6 +9,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\CreateDatabaseUser;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDeployment;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomain;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomainCertificate;
+use SebastianSulinski\LaravelForgeSdk\Actions\CreateDomainCertificateAction;
 use SebastianSulinski\LaravelForgeSdk\Actions\CreateSite;
 use SebastianSulinski\LaravelForgeSdk\Actions\DeleteDatabaseSchema;
 use SebastianSulinski\LaravelForgeSdk\Actions\DeleteDatabaseUser;
@@ -45,6 +46,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\NginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
 use SebastianSulinski\LaravelForgeSdk\Data\Site;
+use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreateActionPayload as CreateCertificateActionPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Certificate\CreatePayload as CreateCertificatePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Command\ListPayload as ListCommandsPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Database\CreateSchemaPayload;
@@ -412,6 +414,28 @@ readonly class Forge
             serverId: $serverId,
             siteId: $siteId,
             domainRecordId: $domainRecordId,
+        );
+    }
+
+    /**
+     * Perform action on a domain certificate.
+     *
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function createDomainCertificateAction(
+        int $serverId,
+        int $siteId,
+        int $domainRecordId,
+        CreateCertificateActionPayload $payload
+    ): bool {
+
+        return $this->app->make(CreateDomainCertificateAction::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            domainRecordId: $domainRecordId,
+            payload: $payload,
         );
     }
 
