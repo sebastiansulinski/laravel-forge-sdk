@@ -7,11 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2025-11-27
+
 ### Added
 - Added `Certificate\Action` enum to represent certificate actions (`Enable`, `Disable`)
 - Added `Certificate\CreateActionPayload` payload class for performing actions on domain certificates
 - Added `CreateDomainCertificateAction` action to enable or disable domain certificates
 - Added `createDomainCertificateAction()` method to Forge service and facade
+
+### Fixed
+- Made `connectionStatus` property nullable in `Server` data object to handle cases where the Forge API returns null
 
 ## [0.10.0] - 2025-11-11
 
@@ -194,7 +199,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.9.1...v0.10.0
 [0.9.1]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.8.0...v0.9.0
