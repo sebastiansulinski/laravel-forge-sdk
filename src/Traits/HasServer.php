@@ -16,14 +16,14 @@ use SebastianSulinski\LaravelForgeSdk\Data\Server;
  *         private_ip_address: string,
  *         php_version: string,
  *         database_type: string,
- *         connection_status: string,
  *         is_ready: bool,
  *         type: string,
  *         created_at: string,
  *         updated_at: string,
  *         size?: string|null,
  *         ubuntu_version?: string|null,
- *         php_cli_version?: string|null
+ *         php_cli_version?: string|null,
+ *         connection_status?: string|null
  *     },
  *     relationships?: array<string, mixed>,
  *     links?: array<string, mixed>
@@ -51,7 +51,6 @@ trait HasServer
             privateIpAddress: $attributes['private_ip_address'],
             phpVersion: $attributes['php_version'],
             databaseType: $attributes['database_type'],
-            connectionStatus: $attributes['connection_status'],
             isReady: $attributes['is_ready'],
             type: $attributes['type'],
             createdAt: Carbon::parse($attributes['created_at']),
@@ -60,7 +59,8 @@ trait HasServer
             links: $links,
             size: $attributes['size'] ?? null,
             ubuntuVersion: $attributes['ubuntu_version'] ?? null,
-            phpCliVersion: $attributes['php_cli_version'] ?? null
+            phpCliVersion: $attributes['php_cli_version'] ?? null,
+            connectionStatus: $attributes['connection_status'] ?? null
         );
     }
 }

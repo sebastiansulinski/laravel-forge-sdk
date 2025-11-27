@@ -24,7 +24,6 @@ readonly class Server
         public string $privateIpAddress,
         public string $phpVersion,
         public string $databaseType,
-        public string $connectionStatus,
         public bool $isReady,
         public string $type,
         public Carbon $createdAt,
@@ -34,5 +33,6 @@ readonly class Server
         public ?string $size = null,
         public ?string $ubuntuVersion = null,
         public ?string $phpCliVersion = null,
+        public ?string $connectionStatus = null,
     ) {}
 }
