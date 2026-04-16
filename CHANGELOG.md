@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-04-16
+
+### Added
+- Added `root_directory` optional property to `CreatePayload` for specifying the site root directory
+- Added `frontend_package_manager` optional property to `CreatePayload` for specifying the frontend package manager
+- Added `frontend_build_command` optional property to `CreatePayload` for specifying the frontend build command
+
+### Changed
+- **Breaking:** `domain_mode` in `CreatePayload` is now non-nullable with a default value of `DomainMode::Custom` (previously nullable `?DomainMode`); passing `null` explicitly is no longer supported
+- **Breaking:** Removed `nuxt_next_build_command` from `CreatePayload`; use `frontend_build_command` instead
+
 ## [0.12.0] - 2026-04-15
 
 ### Changed
@@ -206,7 +217,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.9.1...v0.10.0
