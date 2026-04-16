@@ -265,6 +265,19 @@ it('creates a site with on-forge domain mode without www_redirect_type and allow
     });
 });
 
+it('defaults domain_mode to custom', function () {
+    $payload = new CreatePayload(
+        type: Type::Php,
+        name: 'example.com',
+        www_redirect_type: WwwRedirectType::None,
+        allow_wildcard_subdomains: false,
+    );
+
+    $data = $payload->toArray();
+
+    expect($data['domain_mode'])->toBe('custom');
+});
+
 it('throws exception when domain_mode is custom and www_redirect_type is missing', function () {
     new CreatePayload(
         type: Type::Php,

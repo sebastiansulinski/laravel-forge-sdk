@@ -25,10 +25,11 @@ readonly class CreatePayload implements Arrayable
      */
     public function __construct(
         public Type $type,
-        public ?DomainMode $domain_mode = null,
+        public DomainMode $domain_mode = DomainMode::Custom,
         public ?string $name = null,
         public ?WwwRedirectType $www_redirect_type = null,
         public ?bool $allow_wildcard_subdomains = null,
+        public ?string $root_directory = null,
         public ?string $web_directory = null,
         public ?bool $is_isolated = null,
         public ?string $isolated_user = null,
@@ -49,8 +50,9 @@ readonly class CreatePayload implements Arrayable
         public ?string $public_deploy_key = null,
         public ?string $private_deploy_key = null,
         public ?string $nuxt_next_mode = null,
-        public ?string $nuxt_next_build_command = null,
         public ?int $nuxt_next_port = null,
+        public ?string $frontend_package_manager = null,
+        public ?string $frontend_build_command = null,
         public ?bool $push_to_deploy = null,
         public ?array $tags = null,
         public ?array $shared_paths = null
@@ -92,10 +94,11 @@ readonly class CreatePayload implements Arrayable
     {
         return array_filter([
             'type' => $this->type->value,
-            'domain_mode' => $this->domain_mode?->value,
+            'domain_mode' => $this->domain_mode->value,
             'name' => $this->name,
             'www_redirect_type' => $this->www_redirect_type?->value,
             'allow_wildcard_subdomains' => $this->allow_wildcard_subdomains,
+            'root_directory' => $this->root_directory,
             'web_directory' => $this->web_directory,
             'is_isolated' => $this->is_isolated,
             'isolated_user' => $this->isolated_user,
@@ -116,8 +119,9 @@ readonly class CreatePayload implements Arrayable
             'public_deploy_key' => $this->public_deploy_key,
             'private_deploy_key' => $this->private_deploy_key,
             'nuxt_next_mode' => $this->nuxt_next_mode,
-            'nuxt_next_build_command' => $this->nuxt_next_build_command,
             'nuxt_next_port' => $this->nuxt_next_port,
+            'frontend_package_manager' => $this->frontend_package_manager,
+            'frontend_build_command' => $this->frontend_build_command,
             'push_to_deploy' => $this->push_to_deploy,
             'tags' => $this->tags,
             'shared_paths' => $this->shared_paths,
