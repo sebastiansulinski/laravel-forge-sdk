@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-04-17
+
 ### Added
 - Added `UpdateNginxConfiguration` action to update the Nginx configuration of a site
 - Added `GetDomainNginxConfiguration` action to retrieve the Nginx configuration of a domain
@@ -224,7 +226,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Additional actions will be added as the Forge API documentation is updated
 - Breaking changes may occur in 0.x versions before 1.0.0 stable release
 
-[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/sebastiansulinski/laravel-forge-sdk/compare/v0.10.0...v0.11.0
