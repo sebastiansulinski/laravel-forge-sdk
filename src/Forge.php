@@ -19,6 +19,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\GetDeploymentScript;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDeploymentStatus;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDomain;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetDomainCertificate;
+use SebastianSulinski\LaravelForgeSdk\Actions\GetDomainNginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetEnvContent;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetNginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Actions\GetNginxTemplateByName;
@@ -32,7 +33,9 @@ use SebastianSulinski\LaravelForgeSdk\Actions\ListDomains;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListServers;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListSites;
 use SebastianSulinski\LaravelForgeSdk\Actions\UpdateDeploymentScript;
+use SebastianSulinski\LaravelForgeSdk\Actions\UpdateDomainNginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Actions\UpdateEnvContent;
+use SebastianSulinski\LaravelForgeSdk\Actions\UpdateNginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Actions\UpdateSite;
 use SebastianSulinski\LaravelForgeSdk\Data\Certificate;
 use SebastianSulinski\LaravelForgeSdk\Data\Database;
@@ -57,6 +60,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\ListPayload as ListDepl
 use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\UpdateScriptPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Domain\CreatePayload as CreateDomainPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Env\UpdatePayload as UpdateEnvPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Nginx\UpdatePayload as UpdateNginxPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Server\CreateCommandPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload as CreateSitePayload;
@@ -569,5 +573,65 @@ readonly class Forge
     {
         return $this->app->make(GetNginxConfiguration::class)
             ->handle(serverId: $serverId, siteId: $siteId);
+    }
+
+    /**
+     * Update nginx configuration for a site.
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    public function updateNginxConfiguration(
+        int $serverId,
+        int $siteId,
+        UpdateNginxPayload $payload
+    ): bool {
+        return $this->app->make(UpdateNginxConfiguration::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            payload: $payload
+        );
+    }
+
+    /**
+     * Get nginx configuration for a domain.
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     * @throws \SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed
+     */
+    public function getDomainNginxConfiguration(
+        int $serverId,
+        int $siteId,
+        int $domainRecordId
+    ): NginxConfiguration {
+        return $this->app->make(GetDomainNginxConfiguration::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            domainRecordId: $domainRecordId
+        );
+    }
+
+    /**
+     * Update nginx configuration for a domain.
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    public function updateDomainNginxConfiguration(
+        int $serverId,
+        int $siteId,
+        int $domainRecordId,
+        UpdateNginxPayload $payload
+    ): bool {
+        return $this->app->make(UpdateDomainNginxConfiguration::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            domainRecordId: $domainRecordId,
+            payload: $payload
+        );
     }
 }

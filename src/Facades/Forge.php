@@ -27,6 +27,7 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\ListPayload as ListDepl
 use SebastianSulinski\LaravelForgeSdk\Payload\Deployment\UpdateScriptPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Domain\CreatePayload as CreateDomainPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Env\UpdatePayload as UpdateEnvPayload;
+use SebastianSulinski\LaravelForgeSdk\Payload\Nginx\UpdatePayload as UpdateNginxPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Server\ListPayload as ListServersPayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\CreatePayload as CreateSitePayload;
 use SebastianSulinski\LaravelForgeSdk\Payload\Site\ListPayload as ListSitesPayload;
@@ -63,6 +64,9 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static Collection<int, Domain> listDomains(int $serverId, int $siteId)
  * @method static NginxTemplate|null getNginxTemplateByName(int $serverId, string $templateName)
  * @method static NginxConfiguration getNginxConfiguration(int $serverId, int $siteId)
+ * @method static bool updateNginxConfiguration(int $serverId, int $siteId, UpdateNginxPayload $payload)
+ * @method static NginxConfiguration getDomainNginxConfiguration(int $serverId, int $siteId, int $domainRecordId)
+ * @method static bool updateDomainNginxConfiguration(int $serverId, int $siteId, int $domainRecordId, UpdateNginxPayload $payload)
  *
  * @see \SebastianSulinski\LaravelForgeSdk\Forge
  */

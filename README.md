@@ -492,6 +492,9 @@ The SDK provides actions for all major Forge operations:
 
 - `GetNginxTemplateByName` - Get Nginx template by name
 - `GetNginxConfiguration` - Get Nginx configuration for a site
+- `UpdateNginxConfiguration` - Update Nginx configuration for a site
+- `GetDomainNginxConfiguration` - Get Nginx configuration for a domain
+- `UpdateDomainNginxConfiguration` - Update Nginx configuration for a domain
 
 ## ListResponse Object
 
@@ -643,6 +646,9 @@ Payload classes represent request data for API operations. They are organized by
 
 ### Environment Payloads
 - `Env\UpdatePayload` - Data for updating environment file content
+
+### Nginx Payloads
+- `Nginx\UpdatePayload` - Data for updating Nginx configuration (site or domain)
 
 ### Pagination
 - `PaginationParameters` - Reusable pagination parameters used by all List payloads

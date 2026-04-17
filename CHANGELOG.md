@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added `UpdateNginxConfiguration` action to update the Nginx configuration of a site
+- Added `GetDomainNginxConfiguration` action to retrieve the Nginx configuration of a domain
+- Added `UpdateDomainNginxConfiguration` action to update the Nginx configuration of a domain
+- Added `Nginx\UpdatePayload` payload class for Nginx configuration updates
+- Added `updateNginxConfiguration()`, `getDomainNginxConfiguration()`, and `updateDomainNginxConfiguration()` methods to the Forge service and facade
+
 ## [0.13.0] - 2026-04-16
 
 ### Added
