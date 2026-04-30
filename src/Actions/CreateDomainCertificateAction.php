@@ -22,14 +22,16 @@ readonly class CreateDomainCertificateAction
         int $serverId,
         int $siteId,
         int $domainRecordId,
+        int $certificateId,
         CreateActionPayload $payload
     ): bool {
 
         $path = $this->client->path(
-            '/servers/%s/sites/%s/domains/%s/certificate/actions',
+            '/servers/%s/sites/%s/domains/%s/certificates/%s/actions',
             $serverId,
             $siteId,
-            $domainRecordId
+            $domainRecordId,
+            $certificateId
         );
 
         $response = $this->client->post($path, $payload->toArray())->throw();

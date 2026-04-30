@@ -17,7 +17,7 @@ beforeEach(function () {
 
 it('creates a lets encrypt certificate', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates' => Http::response([
             'data' => [
                 'id' => 999,
                 'attributes' => [
@@ -27,6 +27,7 @@ it('creates a lets encrypt certificate', function () {
                     'verification_method' => 'http-01',
                     'key_type' => 'rsa',
                     'preferred_chain' => 'ISRG Root X1',
+                    'active' => true,
                     'created_at' => '2024-01-15T10:30:00.000000Z',
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
                 ],
@@ -56,10 +57,11 @@ it('creates a lets encrypt certificate', function () {
         ->and($certificate->status->value)->toBe('installing')
         ->and($certificate->verificationMethod->value)->toBe('http-01')
         ->and($certificate->keyType->value)->toBe('rsa')
-        ->and($certificate->preferredChain)->toBe('ISRG Root X1');
+        ->and($certificate->preferredChain)->toBe('ISRG Root X1')
+        ->and($certificate->active)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
-        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate'
+        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates'
             && $request->method() === 'POST'
             && $request['type'] === 'letsencrypt'
             && $request['letsencrypt']['verification_method'] === 'http-01'
@@ -73,7 +75,7 @@ it('creates a lets encrypt certificate', function () {
 
 it('creates a lets encrypt certificate with dns verification', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates' => Http::response([
             'data' => [
                 'id' => 999,
                 'attributes' => [
@@ -106,7 +108,8 @@ it('creates a lets encrypt certificate with dns verification', function () {
     );
 
     expect($certificate->verificationMethod->value)->toBe('dns-01')
-        ->and($certificate->keyType->value)->toBe('ecdsa');
+        ->and($certificate->keyType->value)->toBe('ecdsa')
+        ->and($certificate->active)->toBeNull();
 
     Http::assertSent(function (Request $request) {
         return $request['letsencrypt']['verification_method'] === 'dns-01'
@@ -116,7 +119,7 @@ it('creates a lets encrypt certificate with dns verification', function () {
 
 it('throws exception when request fails', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates' => Http::response([
             'message' => 'Server error',
         ], 500),
     ]);

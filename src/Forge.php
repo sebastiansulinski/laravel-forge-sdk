@@ -29,6 +29,7 @@ use SebastianSulinski\LaravelForgeSdk\Actions\ListCommands;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseSchemas;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDatabaseUsers;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDeployments;
+use SebastianSulinski\LaravelForgeSdk\Actions\ListDomainCertificates;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListDomains;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListServers;
 use SebastianSulinski\LaravelForgeSdk\Actions\ListSites;
@@ -391,10 +392,31 @@ readonly class Forge
     public function getDomainCertificate(
         int $serverId,
         int $siteId,
-        int $domainRecordId
+        int $domainRecordId,
+        int $certificateId
     ): Certificate {
 
         return $this->app->make(GetDomainCertificate::class)->handle(
+            serverId: $serverId,
+            siteId: $siteId,
+            domainRecordId: $domainRecordId,
+            certificateId: $certificateId,
+        );
+    }
+
+    /**
+     * List domain certificates.
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Http\Client\ConnectionException
+     * @throws \Illuminate\Http\Client\RequestException
+     */
+    public function listDomainCertificates(
+        int $serverId,
+        int $siteId,
+        int $domainRecordId
+    ): ListResponse {
+        return $this->app->make(ListDomainCertificates::class)->handle(
             serverId: $serverId,
             siteId: $siteId,
             domainRecordId: $domainRecordId,
@@ -411,13 +433,15 @@ readonly class Forge
     public function deleteDomainCertificate(
         int $serverId,
         int $siteId,
-        int $domainRecordId
+        int $domainRecordId,
+        int $certificateId
     ): bool {
 
         return $this->app->make(DeleteDomainCertificate::class)->handle(
             serverId: $serverId,
             siteId: $siteId,
             domainRecordId: $domainRecordId,
+            certificateId: $certificateId,
         );
     }
 
@@ -432,6 +456,7 @@ readonly class Forge
         int $serverId,
         int $siteId,
         int $domainRecordId,
+        int $certificateId,
         CreateCertificateActionPayload $payload
     ): bool {
 
@@ -439,6 +464,7 @@ readonly class Forge
             serverId: $serverId,
             siteId: $siteId,
             domainRecordId: $domainRecordId,
+            certificateId: $certificateId,
             payload: $payload,
         );
     }

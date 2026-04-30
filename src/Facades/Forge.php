@@ -12,6 +12,7 @@ use SebastianSulinski\LaravelForgeSdk\Data\Deployment;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentScriptResource;
 use SebastianSulinski\LaravelForgeSdk\Data\DeploymentStatus;
 use SebastianSulinski\LaravelForgeSdk\Data\Domain;
+use SebastianSulinski\LaravelForgeSdk\Data\ListResponse;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxConfiguration;
 use SebastianSulinski\LaravelForgeSdk\Data\NginxTemplate;
 use SebastianSulinski\LaravelForgeSdk\Data\Server;
@@ -53,9 +54,10 @@ use SebastianSulinski\LaravelForgeSdk\Payload\Site\UpdatePayload as UpdateSitePa
  * @method static Collection<int, DatabaseUser> listDatabaseUsers(int $serverId, ListUsersPayload $payload)
  * @method static bool deleteDatabaseUser(int $serverId, int $databaseUserId)
  * @method static Certificate createDomainCertificate(int $serverId, int $siteId, int $domainRecordId, CreateCertificatePayload $payload)
- * @method static Certificate getDomainCertificate(int $serverId, int $siteId, int $domainRecordId)
- * @method static bool deleteDomainCertificate(int $serverId, int $siteId, int $domainRecordId)
- * @method static bool createDomainCertificateAction(int $serverId, int $siteId, int $domainRecordId, CreateCertificateActionPayload $payload)
+ * @method static Certificate getDomainCertificate(int $serverId, int $siteId, int $domainRecordId, int $certificateId)
+ * @method static ListResponse listDomainCertificates(int $serverId, int $siteId, int $domainRecordId)
+ * @method static bool deleteDomainCertificate(int $serverId, int $siteId, int $domainRecordId, int $certificateId)
+ * @method static bool createDomainCertificateAction(int $serverId, int $siteId, int $domainRecordId, int $certificateId, CreateCertificateActionPayload $payload)
  * @method static string getDeploymentScript(int $serverId, int $siteId)
  * @method static DeploymentScriptResource updateDeploymentScript(int $serverId, int $siteId, UpdateScriptPayload $payload)
  * @method static Collection<int, Deployment> listDeployments(int $serverId, int $siteId, ListDeploymentsPayload $payload)

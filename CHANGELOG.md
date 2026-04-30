@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-04-30
+
+### Added
+- Added `ListDomainCertificates` action and `listDomainCertificates()` method to the Forge service and facade for discovering certificates attached to a domain
+- Added nullable `active` (bool) attribute to the `Certificate` data object, exposed by the new Forge response payload
+- `Certificate` data object now exposes `links()`/`hasLink()`/`hasLinks()` via the `HasLinks` trait
+
+### Changed
+- **Breaking:** Realigned certificate endpoints with Forge's current API — paths now use `certificates` (plural) and a specific certificate ID is required for get/delete/action operations
+- **Breaking:** `getDomainCertificate(int $serverId, int $siteId, int $domainRecordId, int $certificateId)` now requires a `$certificateId` parameter
+- **Breaking:** `deleteDomainCertificate(int $serverId, int $siteId, int $domainRecordId, int $certificateId)` now requires a `$certificateId` parameter
+- **Breaking:** `createDomainCertificateAction(int $serverId, int $siteId, int $domainRecordId, int $certificateId, CreateActionPayload $payload)` now requires a `$certificateId` parameter
+
+### Migration
+- Capture the certificate ID from the `Certificate` returned by `createDomainCertificate(...)`, or call `listDomainCertificates(...)` to discover existing certificate IDs, and pass it to get/delete/action calls
+
 ## [0.14.0] - 2026-04-17
 
 ### Added

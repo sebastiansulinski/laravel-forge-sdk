@@ -14,7 +14,7 @@ beforeEach(function () {
 
 it('deletes a domain certificate', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response(null, 202),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999' => Http::response(null, 202),
     ]);
 
     $client = app(Client::class);
@@ -23,13 +23,14 @@ it('deletes a domain certificate', function () {
     $result = $action->handle(
         serverId: 123,
         siteId: 456,
-        domainRecordId: 789
+        domainRecordId: 789,
+        certificateId: 999
     );
 
     expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
-        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate'
+        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999'
             && $request->method() === 'DELETE'
             && $request->hasHeader('Authorization', 'Bearer test-token')
             && $request->hasHeader('Accept', 'application/json')
@@ -39,7 +40,7 @@ it('deletes a domain certificate', function () {
 
 it('returns false when response status is not 202', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response(null, 200),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999' => Http::response(null, 200),
     ]);
 
     $client = app(Client::class);
@@ -48,7 +49,8 @@ it('returns false when response status is not 202', function () {
     $result = $action->handle(
         serverId: 123,
         siteId: 456,
-        domainRecordId: 789
+        domainRecordId: 789,
+        certificateId: 999
     );
 
     expect($result)->toBeFalse();
@@ -56,7 +58,7 @@ it('returns false when response status is not 202', function () {
 
 it('throws exception when request fails with 500 error', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999' => Http::response([
             'message' => 'Server error',
         ], 500),
     ]);
@@ -67,13 +69,14 @@ it('throws exception when request fails with 500 error', function () {
     $action->handle(
         serverId: 123,
         siteId: 456,
-        domainRecordId: 789
+        domainRecordId: 789,
+        certificateId: 999
     );
 })->throws(RequestException::class);
 
 it('throws exception when certificate is not found', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999' => Http::response([
             'message' => 'Not found',
         ], 404),
     ]);
@@ -84,13 +87,14 @@ it('throws exception when certificate is not found', function () {
     $action->handle(
         serverId: 123,
         siteId: 456,
-        domainRecordId: 789
+        domainRecordId: 789,
+        certificateId: 999
     );
 })->throws(RequestException::class);
 
 it('throws exception when unauthorized', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999' => Http::response([
             'message' => 'Unauthorized',
         ], 403),
     ]);
@@ -101,6 +105,7 @@ it('throws exception when unauthorized', function () {
     $action->handle(
         serverId: 123,
         siteId: 456,
-        domainRecordId: 789
+        domainRecordId: 789,
+        certificateId: 999
     );
 })->throws(RequestException::class);

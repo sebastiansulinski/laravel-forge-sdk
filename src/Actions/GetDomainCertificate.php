@@ -28,13 +28,18 @@ readonly class GetDomainCertificate
      * @throws \Illuminate\Http\Client\RequestException
      * @throws \SebastianSulinski\LaravelForgeSdk\Exceptions\RequestFailed
      */
-    public function handle(int $serverId, int $siteId, int $domainRecordId): Certificate
-    {
+    public function handle(
+        int $serverId,
+        int $siteId,
+        int $domainRecordId,
+        int $certificateId
+    ): Certificate {
         $path = $this->client->path(
-            '/servers/%s/sites/%s/domains/%s/certificate',
+            '/servers/%s/sites/%s/domains/%s/certificates/%s',
             $serverId,
             $siteId,
-            $domainRecordId
+            $domainRecordId,
+            $certificateId
         );
 
         $response = $this->client->get($path)->throw();

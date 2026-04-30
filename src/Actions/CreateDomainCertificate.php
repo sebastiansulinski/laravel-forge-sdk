@@ -39,7 +39,7 @@ readonly class CreateDomainCertificate
     ): Certificate {
 
         $path = $this->client->path(
-            '/servers/%s/sites/%s/domains/%s/certificate',
+            '/servers/%s/sites/%s/domains/%s/certificates',
             $serverId,
             $siteId,
             $domainRecordId

@@ -15,7 +15,7 @@ beforeEach(function () {
 
 it('gets domain certificate', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999' => Http::response([
             'data' => [
                 'id' => 999,
                 'attributes' => [
@@ -25,6 +25,7 @@ it('gets domain certificate', function () {
                     'verification_method' => 'http-01',
                     'key_type' => 'rsa',
                     'preferred_chain' => 'ISRG Root X1',
+                    'active' => true,
                     'created_at' => '2024-01-15T10:30:00.000000Z',
                     'updated_at' => '2024-01-15T10:30:00.000000Z',
                 ],
@@ -38,7 +39,8 @@ it('gets domain certificate', function () {
     $certificate = $action->handle(
         serverId: 123,
         siteId: 456,
-        domainRecordId: 789
+        domainRecordId: 789,
+        certificateId: 999
     );
 
     expect($certificate->id)->toBe(999)
@@ -47,10 +49,11 @@ it('gets domain certificate', function () {
         ->and($certificate->status->value)->toBe('installed')
         ->and($certificate->verificationMethod->value)->toBe('http-01')
         ->and($certificate->keyType->value)->toBe('rsa')
-        ->and($certificate->preferredChain)->toBe('ISRG Root X1');
+        ->and($certificate->preferredChain)->toBe('ISRG Root X1')
+        ->and($certificate->active)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
-        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate'
+        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999'
             && $request->method() === 'GET'
             && $request->hasHeader('Authorization', 'Bearer test-token')
             && $request->hasHeader('Accept', 'application/json')
@@ -60,7 +63,7 @@ it('gets domain certificate', function () {
 
 it('throws RequestFailed exception when response data is empty', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999' => Http::response([
             'data' => [],
         ]),
     ]);
@@ -71,13 +74,14 @@ it('throws RequestFailed exception when response data is empty', function () {
     $action->handle(
         serverId: 123,
         siteId: 456,
-        domainRecordId: 789
+        domainRecordId: 789,
+        certificateId: 999
     );
 })->throws(RequestFailed::class, 'Unable to get domain certificate.');
 
 it('throws exception when request fails', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999' => Http::response([
             'message' => 'Server error',
         ], 500),
     ]);
@@ -88,6 +92,7 @@ it('throws exception when request fails', function () {
     $action->handle(
         serverId: 123,
         siteId: 456,
-        domainRecordId: 789
+        domainRecordId: 789,
+        certificateId: 999
     );
 })->throws(RequestException::class);

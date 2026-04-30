@@ -20,9 +20,11 @@ use SebastianSulinski\LaravelForgeSdk\Enums\Certificate\VerificationMethod;
  *         verification_method?: string|null,
  *         key_type?: string|null,
  *         preferred_chain?: string|null,
+ *         active?: bool|null,
  *         created_at?: string|null,
  *         updated_at?: string|null
- *     }
+ *     },
+ *     links?: array<string, mixed>
  * }
  */
 trait HasCertificate
@@ -48,6 +50,8 @@ trait HasCertificate
                 ? KeyType::from($attributes['key_type'])
                 : null,
             preferredChain: $attributes['preferred_chain'] ?? null,
+            active: $attributes['active'] ?? null,
+            links: $data['links'] ?? [],
             createdAt: isset($attributes['created_at'])
                 ? Carbon::parse($attributes['created_at'])
                 : null,

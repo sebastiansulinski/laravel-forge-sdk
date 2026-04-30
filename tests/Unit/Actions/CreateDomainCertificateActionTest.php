@@ -16,7 +16,7 @@ beforeEach(function () {
 
 it('enables a domain certificate', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response(null, 200),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response(null, 200),
     ]);
 
     $client = app(Client::class);
@@ -27,13 +27,14 @@ it('enables a domain certificate', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 
     expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
-        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions'
+        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions'
             && $request->method() === 'POST'
             && $request->hasHeader('Authorization', 'Bearer test-token')
             && $request->hasHeader('Accept', 'application/json')
@@ -44,7 +45,7 @@ it('enables a domain certificate', function () {
 
 it('disables a domain certificate', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response(null, 200),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response(null, 200),
     ]);
 
     $client = app(Client::class);
@@ -55,13 +56,14 @@ it('disables a domain certificate', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 
     expect($result)->toBeTrue();
 
     Http::assertSent(function (Request $request) {
-        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions'
+        return $request->url() === 'https://forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions'
             && $request->method() === 'POST'
             && $request->data() === ['action' => 'disable'];
     });
@@ -69,7 +71,7 @@ it('disables a domain certificate', function () {
 
 it('returns true when response is successful with 201 status', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response(null, 201),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response(null, 201),
     ]);
 
     $client = app(Client::class);
@@ -80,6 +82,7 @@ it('returns true when response is successful with 201 status', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 
@@ -88,7 +91,7 @@ it('returns true when response is successful with 201 status', function () {
 
 it('returns true when response is successful with 204 status', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response(null, 204),
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response(null, 204),
     ]);
 
     $client = app(Client::class);
@@ -99,6 +102,7 @@ it('returns true when response is successful with 204 status', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 
@@ -107,7 +111,7 @@ it('returns true when response is successful with 204 status', function () {
 
 it('throws exception when request fails with 500 error', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response([
             'message' => 'Server error',
         ], 500),
     ]);
@@ -120,13 +124,14 @@ it('throws exception when request fails with 500 error', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 })->throws(RequestException::class);
 
 it('throws exception when certificate is not found', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response([
             'message' => 'Not found',
         ], 404),
     ]);
@@ -139,13 +144,14 @@ it('throws exception when certificate is not found', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 })->throws(RequestException::class);
 
 it('throws exception when unauthorized', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response([
             'message' => 'Unauthorized',
         ], 403),
     ]);
@@ -158,13 +164,14 @@ it('throws exception when unauthorized', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 })->throws(RequestException::class);
 
 it('throws exception when bad request', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response([
             'message' => 'Invalid action',
         ], 400),
     ]);
@@ -177,13 +184,14 @@ it('throws exception when bad request', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 })->throws(RequestException::class);
 
 it('throws exception when unprocessable entity', function () {
     Http::fake([
-        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificate/actions' => Http::response([
+        'forge.laravel.com/api/orgs/test-org/servers/123/sites/456/domains/789/certificates/999/actions' => Http::response([
             'message' => 'Validation failed',
             'errors' => [
                 'action' => ['The action field is required.'],
@@ -199,6 +207,7 @@ it('throws exception when unprocessable entity', function () {
         serverId: 123,
         siteId: 456,
         domainRecordId: 789,
+        certificateId: 999,
         payload: $payload
     );
 })->throws(RequestException::class);
